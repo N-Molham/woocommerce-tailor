@@ -26,6 +26,9 @@ class WC_Tailor_Admin_Pages
 	{
 		// hook list
 		$this->pages_hooks = array();
+
+		// Setup admin pages
+		add_action( 'admin_menu', array( &$this, 'setup_admin_pages' ) );
 	}
 
 	/**

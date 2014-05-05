@@ -7,7 +7,7 @@ Author: Nabeel Molham
 Author URI: http://nabeel.molham.me/
 Version: 1.0
 Text Domain: wc-tailor
-License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+License: GPL version 3 or later
 */
 
 // Exit if accessed directly
@@ -56,8 +56,18 @@ function wc_tailor_autoload( $class_name )
 	}
 }
 
+/**
+ * Get WooCommerce Tailor instance
+ * 
+ * @return WC_Tailor
+ */
+function WC_Tailor()
+{
+	return WC_Tailor::get_instance();
+}
+
 // start the whole thing
-$woocommerce_tailor = new WC_Tailor();
+$woocommerce_tailor = WC_Tailor();
 
 // trigger plugin ready action
 do_action( 'woocommerce_tailor_loaded' );
