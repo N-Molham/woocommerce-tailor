@@ -3,39 +3,39 @@
  * Utils functions
  */
 
-function woo_tailor_get_value( $key, $query_var = '', $session = false, $encoded = false, $html = false, $allowed = null )
+function wc_tailor_get_value( $key, $query_var = '', $session = false, $encoded = false, $html = false, $allowed = null )
 {
-	return Woo_Tailor_Utiles::get_value( $key, $query_var, $session, $encoded, $html, $allowed );
+	return WC_Tailor_Utiles::get_value( $key, $query_var, $session, $encoded, $html, $allowed );
 }
 
-function woo_tailor_sanitize_digit( $target, $negative = false )
+function wc_tailor_sanitize_digit( $target, $negative = false )
 {
-	return Woo_Tailor_Utiles::sanitize_digit( $target, $negative );
+	return WC_Tailor_Utiles::sanitize_digit( $target, $negative );
 }
 
-function woo_tailor_redirect( $target = '', $status = 302 )
+function wc_tailor_redirect( $target = '', $status = 302 )
 {
-	Woo_Tailor_Utiles::redirect( $target, $status );
+	WC_Tailor_Utiles::redirect( $target, $status );
 }
 
-function woo_tailor_get_page_by_slug( $page_slug, $output = OBJECT, $post_type = 'page' )
+function wc_tailor_get_page_by_slug( $page_slug, $output = OBJECT, $post_type = 'page' )
 {
-	return Woo_Tailor_Utiles::get_page_by_slug( $page_slug, $output, $post_type );
+	return WC_Tailor_Utiles::get_page_by_slug( $page_slug, $output, $post_type );
 }
 
-function woo_tailor_form_input( $field, $args, $echo = false )
+function wc_tailor_form_input( $field, $args, $echo = false )
 {
-	return Woo_Tailor_Utiles::form_input( $field, $args, $echo );
+	return WC_Tailor_Utiles::form_input( $field, $args, $echo );
 }
 
-function woo_tailor_parse_input( $field, $args = array(), $query_var = false, $session = false, $encoded = false, $html = false, $allowed = null )
+function wc_tailor_parse_input( $field, $args = array(), $query_var = false, $session = false, $encoded = false, $html = false, $allowed = null )
 {
-	return Woo_Tailor_Utiles::parse_input( $field, $args, $query_var, $session, $encoded, $html, $allowed );
+	return WC_Tailor_Utiles::parse_input( $field, $args, $query_var, $session, $encoded, $html, $allowed );
 }
 
-class Woo_Tailor_Utiles
+class WC_Tailor_Utiles
 {
-	static $text_domain = WOOT_DOMAIN;
+	static $text_domain = WCT_DOMAIN;
 
 	public static function wp_datetime_format( $datetime, $str_format = '%s %s' )
 	{
