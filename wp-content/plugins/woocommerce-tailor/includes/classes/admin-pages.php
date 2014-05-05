@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Woo_Tailor_Admin_Pages
+class WC_Tailor_Admin_Pages
 {
 	/**
 	 * Pages hooks
@@ -37,10 +37,10 @@ class Woo_Tailor_Admin_Pages
 	public function setup_admin_pages()
 	{
 		// parent menu
-		$this->pages_hooks['parent'] = add_menu_page( __( 'WooCommerce Tailor', WOOT_DOMAIN ), __( 'WooCommerce Tailor', WOOT_DOMAIN ), 'manage_options', 'woo_tailor_menu', array( &$this, 'load_page_layout' ), 'dashicons-universal-access' );
+		$this->pages_hooks['parent'] = add_menu_page( __( 'WooCommerce Tailor', WCT_DOMAIN ), __( 'WooCommerce Tailor', WCT_DOMAIN ), 'manage_options', 'wc_tailor_menu', array( &$this, 'load_page_layout' ), 'dashicons-universal-access' );
 
 		// options page
-		$this->pages_hooks['options'] = add_submenu_page( 'woo_tailor_menu', __( 'Fabrics Options', WOOT_DOMAIN ), __( 'Fabrics Options', WOOT_DOMAIN ), 'manage_options', 'woo_tailor_menu', array( &$this, 'load_page_layout' ) );
+		$this->pages_hooks['options'] = add_submenu_page( 'wc_tailor_menu', __( 'Fabrics Options', WCT_DOMAIN ), __( 'Fabrics Options', WCT_DOMAIN ), 'manage_options', 'wc_tailor_menu', array( &$this, 'load_page_layout' ) );
 	}
 
 	/**

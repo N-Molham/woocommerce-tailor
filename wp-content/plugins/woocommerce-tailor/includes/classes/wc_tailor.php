@@ -10,12 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Woo_Tailor
+class WC_Tailor
 {
 	/**
 	 * Admin pages class
 	 *
-	 * @var Woo_Tailor_Admin_Pages
+	 * @var WC_Tailor_Admin_Pages
 	 */
 	protected $admin_pages;
 
@@ -25,10 +25,10 @@ class Woo_Tailor
 	public function __construct()
 	{
 		// admin pages instance
-		$this->admin_pages = new Woo_Tailor_Admin_Pages();
+		$this->admin_pages = new WC_Tailor_Admin_Pages();
 
 		// plugin activation hook
-		register_activation_hook( WOO_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
+		register_activation_hook( WC_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
 
 		// Setip admin pages
 		add_action( 'admin_menu', array( &$this->admin_pages, 'setup_admin_pages' ) );
@@ -48,7 +48,7 @@ class Woo_Tailor
 		if ( !class_exists( 'WooCommerce' ) )
 		{
 			// deactivate plugin
-			deactivate_plugins( basename( WOO_TAILOR_PLUGIN_FILE ), true );
+			deactivate_plugins( basename( WC_TAILOR_PLUGIN_FILE ), true );
 
 			// error message
 			wp_die( __( 'WooCommerce Plugin must be installed and activated first.', WOOT_DOMAIN ), 
