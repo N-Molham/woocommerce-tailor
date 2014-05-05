@@ -35,7 +35,7 @@ function woo_tailor_parse_input( $field, $args = array(), $query_var = false, $s
 
 class Woo_Tailor_Utiles
 {
-	static $text_domain = WOO_TAILOR_TEXT_DOMAIN;
+	static $text_domain = WOOT_DOMAIN;
 
 	public static function wp_datetime_format( $datetime, $str_format = '%s %s' )
 	{
