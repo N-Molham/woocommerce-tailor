@@ -11,8 +11,9 @@ License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
-	exit;
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 /* @var $woocommerce_tailor Woo_Tailor */
 global $woocommerce_tailor;
