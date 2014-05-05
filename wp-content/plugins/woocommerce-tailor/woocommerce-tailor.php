@@ -9,14 +9,21 @@ Version: 1.0
 Text Domain: woo-tailor
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/* @var $woocommerce_tailor Woo_Tailor */
 global $woocommerce_tailor;
 
 /**
  * Constants
  */
-define( 'WOO_TAILOR_DIR', plugin_dir_path( __FILE__ ) );
-define( 'WOO_TAILOR_URL', plugin_dir_url( __FILE__ ) );
-define( 'WOO_TAILOR_TEXT_DOMAIN', 'woo-tailor' );
+define( 'WOO_TAILOR_PLUGIN_FILE', __FILE__ );
+define( 'WOO_TAILOR_DIR', plugin_dir_path( WOO_TAILOR_PLUGIN_FILE ) );
+define( 'WOO_TAILOR_URL', plugin_dir_url( WOO_TAILOR_PLUGIN_FILE ) );
+define( 'WOOT_DOMAIN', 'woo-tailor' );
 
 /**
  * Includes
@@ -35,9 +42,11 @@ spl_autoload_register( 'woo_tailor_autoload' );
  */
 function woo_tailor_autoload( $class_name )
 {
-	if ( stripos( $class_name, 'Woo_Tailor_' ) !== false )
+	$prefix = 'Woo_Tailor';
+
+	if ( stripos( $class_name, $prefix ) !== false )
 	{
-		$class_name = str_replace( array( 'Woo_Tailor_', '_' ), array( '', '-' ), $class_name );
+		$class_name = $prefix == $class_name ? $class_name : str_replace( array( $prefix .'_', '_' ), array( '', '-' ), $class_name );
 		$file_path = WOO_TAILOR_DIR . 'includes/classes/' . strtolower( $class_name ) . '.php';
 
 		// check class file, include it
@@ -47,7 +56,7 @@ function woo_tailor_autoload( $class_name )
 }
 
 // start the whole thing
-$woocommerce_tailor = new Woo_Tailor_Initialize();
+$woocommerce_tailor = new Woo_Tailor();
 
 // trigger plugin ready action
 do_action( 'woocommerce_tailor_loaded' );
