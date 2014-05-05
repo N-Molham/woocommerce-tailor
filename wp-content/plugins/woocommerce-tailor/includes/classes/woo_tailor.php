@@ -5,6 +5,11 @@
  * @since 1.0
  */
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Woo_Tailor
 {
 	/**
@@ -22,11 +27,14 @@ class Woo_Tailor
 		// admin pages instance
 		$this->admin_pages = new Woo_Tailor_Admin_Pages();
 
-		// admin pages setup
+		// plugin activation hook
+		register_activation_hook( WOO_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
+
+		// Setip admin pages
 		add_action( 'admin_menu', array( &$this->admin_pages, 'setup_admin_pages' ) );
 
-		// plugin activation
-		register_activation_hook( WOO_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
+		// Redirect new customer to edit account page
+		add_filter( 'woocommerce_registration_redirect', 'wc_customer_edit_account_url' );
 	}
 
 	/**

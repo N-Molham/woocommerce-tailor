@@ -5,6 +5,11 @@
  * @since 1.0
  */
 
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 class Woo_Tailor_Admin_Pages
 {
 	/**
