@@ -40,14 +40,25 @@ class WC_Tailor
 		// load languages
 		add_action( 'plugins_loaded', array( &$this, 'load_languages' ) );
 
+		// init
+		add_action( 'init', array( &$this, 'init' ) );
+
+		// plugin activation hook
+		register_activation_hook( WC_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
+	}
+
+	/**
+	 * init
+	 * 
+	 * @return void
+	 */
+	public function init()
+	{
 		// admin pages instance
 		$this->admin_pages = new WC_Tailor_Admin_Pages();
 
 		// account updates instance
 		$this->account_updates = new WC_Tailor_Account_Updates();
-
-		// plugin activation hook
-		register_activation_hook( WC_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
 	}
 
 	/**

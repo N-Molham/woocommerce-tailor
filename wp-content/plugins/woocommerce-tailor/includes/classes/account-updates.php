@@ -57,10 +57,56 @@ class WC_Tailor_Account_Updates
 		add_filter( 'woocommerce_registration_redirect', 'wc_customer_edit_account_url' );
 
 		// save account updates
-		add_action( 'woocommerce_save_account_details', array( &$this, 'save_account_details' ) );
+		add_action( 'user_profile_update_errors', array( &$this, 'save_account_details_errors' ), 10, 3 );
+
+		// redirect after account update success to same form
+		add_action( 'woocommerce_save_account_details', function() {
+			wp_safe_redirect( wc_customer_edit_account_url() );
+			exit;
+		});
 
 		// additional fields render
 		add_action( 'woocommerce_tailor_account_fields', array( &$this, 'render_account_details' ) );
+	}
+
+	/**
+	 * Save user account details errors
+	 *
+	 * @param WP_Error $errors
+	 * @param boolean $update
+	 * @param stdClass $user
+	 * @return void
+	 */
+	public function save_account_details_errors( $errors, $update, $user )
+	{
+		// loop fields
+		foreach ( $this->account_details as $field_name => $field_args )
+		{
+			// sanitizing value
+			$value = wc_clean( filter_input( INPUT_POST, $field_name ) );
+
+			// check required
+			if ( empty( $value ) && $field_args['required'] )
+			{
+				$errors->add( $field_name .'_required', sprintf( __( '%s is required', WCT_DOMAIN ), $field_args['label'] ) );
+				continue;
+			}
+
+			// data validation
+			switch( $field_args['input'] )
+			{
+				case 'radio':
+					if ( !isset( $field_args['values'][$value] ) )
+					{
+						$errors->add( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
+						continue;
+					}
+					break;
+			}
+
+			// update values
+			update_user_meta( $user->ID, $field_args['meta_key'], apply_filters( 'woocommerce_tailor_account_field_value', $value ) );
+		}
 	}
 
 	/**
@@ -111,7 +157,7 @@ class WC_Tailor_Account_Updates
 			switch ( $field_args['input'] )
 			{
 				case 'text':
-					$output .= '<input type="text" class="'. $field_args['input_class'] .'" name="'. $field_name .'" id="'. $field_name .'" value="'. esc_attr_e( $field_args['value'] ) .'" />';
+					$output .= '<input type="text" class="'. $field_args['input_class'] .'" name="'. $field_name .'" id="'. $field_name .'" value="'. esc_attr( $field_args['value'] ) .'" />';
 					break;
 
 				case 'radio':
@@ -131,18 +177,6 @@ class WC_Tailor_Account_Updates
 			echo apply_filters( 'woocommerce_tailor_edit_account_fields', $output, $user );
 		else
 			return apply_filters( 'woocommerce_tailor_edit_account_fields', $output, $user );
-	}
-
-	/**
-	 * Save user account details
-	 * 
-	 * @param int $user_id
-	 * @return void
-	 */
-	public function save_account_details( $user_id )
-	{
-		dump_data( $_REQUEST );
-		die();
 	}
 
 	/**
