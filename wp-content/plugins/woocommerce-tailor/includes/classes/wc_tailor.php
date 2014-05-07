@@ -45,9 +45,6 @@ class WC_Tailor
 
 		// plugin activation hook
 		register_activation_hook( WC_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
-
-		// templates override
-		add_filter( 'woocommerce_locate_template', array( $this, 'template_override' ), 10, 3 );
 	}
 
 	/**
@@ -62,6 +59,13 @@ class WC_Tailor
 
 		// account updates instance
 		$this->account_updates = new WC_Tailor_Account_Updates();
+
+		// templates override
+		add_filter( 'woocommerce_locate_template', array( $this, 'template_override' ), 10, 3 );
+
+		// register js & css enqueues
+		wp_register_style( 'wct-style', WC_TAILOR_URL .'css/style.css' );
+		wp_register_script( 'wct-shared-js', WC_TAILOR_URL .'js/shared.js', array( 'jquery' ), false, true );
 	}
 
 	/**

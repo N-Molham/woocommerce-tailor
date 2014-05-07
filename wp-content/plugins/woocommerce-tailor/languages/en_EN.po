@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Tailor Store\n"
-"POT-Creation-Date: 2014-05-07 14:49+0200\n"
-"PO-Revision-Date: 2014-05-07 14:49+0200\n"
+"POT-Creation-Date: 2014-05-07 18:17+0200\n"
+"PO-Revision-Date: 2014-05-07 18:17+0200\n"
 "Last-Translator: \n"
 "Language-Team: Nabeel Molham <n.molham@gmail.com>\n"
 "Language: en\n"
@@ -15,28 +15,188 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../includes/classes/account-updates.php:30
+#: ../includes/classes/account-updates.php:65
+msgid "Your Personal Details"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:66
+msgid ""
+"Our website makes ordering easy for you. We remember your measurements for "
+"next time you login. This is handy when you simply can't live without a few "
+"more finely crafted My Bespoke Tailor custom shirts."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:69
+msgid "Measurements"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:73
+msgid "Body Profile"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:74
+#: ../includes/classes/account-updates.php:213
+msgid ""
+"Place the tape measure around your bicep over the largest part of your upper "
+"arm. To ensure a comfortable fit take the bicep measurement with one finger "
+"inside the tape measure."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:81
+msgid "First name"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:91
+msgid "Last name"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:101
+msgid "Email address"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:111
+msgid "Password (leave blank to leave unchanged)"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:121
+msgid "Confirm new password"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:131
 msgid "Telephone Number"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:40
+#: ../includes/classes/account-updates.php:141
 msgid "Gender"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:47
-msgid "Male"
+#: ../includes/classes/account-updates.php:148
+msgid "male,female"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:48
+#: ../includes/classes/account-updates.php:149
 msgid "Female"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:123
+#: ../includes/classes/account-updates.php:183
+msgid ""
+"Place the tape measure around the body over the largest part of the chest as "
+"shown in the diagram. To ensure the right fit take the chest measurement "
+"with one finger inside the tape measure."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:188
+msgid ""
+"Place the tape measure around the body over the smallest part of the waist "
+"area as shown in the diagram. To ensure a comfortable fit, take the "
+"measurement with one finger inside the tape measure."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:193
+msgid ""
+"Place the tape measure around the body at the point where you would like the "
+"shirt length to finish. To ensure a more comfortable fit, take the hip "
+"measurement with one finger inside the tape measure. Remember to use this as "
+"the reference point when entering your shirt length."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:198
+msgid ""
+"Place the tape measure at the top of the shirt level with the collar seam, "
+"and then measure the length of the shirt. This measurement will determine "
+"how long your shirt is, so simply select the required length. If you intend "
+"on wearing your shirts tucked in, we recommend the shirt length measurement "
+"be taken at point level with the base of the trouser crotch."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:203
+msgid ""
+"Place the tape measure across the top of the shoulders and measure from one "
+"shoulder edge to the other, ensuring you take the curved contour over the "
+"top of the shoulders as seen in the diagram."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:208
+msgid ""
+"Place the tape measure at the top of the sleeve level with the edge of the "
+"shoulder, and then measure the length of the sleeve. This measurement will "
+"determine where the sleeve will come to on the hand, so simply select your "
+"preferred length. We recommend the sleeve length be at a point approximately "
+"level with the top of the V between the thumb and forefinger."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:218
+msgid ""
+"Place the tape measure around the entire wrist. To ensure the right fit, "
+"take the wrist measurement with one finger inside the tape measure."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:223
+msgid ""
+"Place the tape measure around the entire neck. To ensure a comfortable fit "
+"take the neck measurement with one finger inside the tape measure, ensuring "
+"the tape is at the base of the neck where the neck and shoulders meet as "
+"seen in the diagram."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:228
+msgid ""
+"Place the tape measure at the crease in the top of the arm where the arm and "
+"chest meet. Measure the length across the chest to the equal and opposite "
+"point on the body. There is no need to place the tape in the armpit, just on "
+"the crease where the relevant body parts meet."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:233
+msgid ""
+"Place the tape measure at the crease in the top of the arm where the arm and "
+"back meet. Measure the length across the back to the equal and opposite "
+"point on the body. There is no need to place the tape in the armpit, just on "
+"the crease where the relevant body parts meet."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:238
+msgid ""
+"Place the tape measure around the entire forearm and take the forearm "
+"measurement. To ensure the best fit, take the measurement with one finger "
+"inside the tape measure."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:243
+msgid ""
+"Place the tape measure at the top of the shirt level with the collar seam, "
+"then measure the distance down to the bust point as shown above. If possible "
+"ensure you are wearing a bra that you would normally wear under your shirts."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:248
+msgid ""
+"Place the tape measure on the left bust point and measure across to the "
+"equal and opposite bust point as shown."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:253
+msgid ""
+"Place the tape measure at the top of the shirt level with the collar seam, "
+"then measure the distance over the bust point down to the high waistline as "
+"shown. Please ensure you follow the diagram as this line is higher than the "
+"actual waist itself."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:258
+msgid ""
+"Place the tape measure at the top of the shirt level with the collar seam, "
+"then measure the distance down the back to the high waistline as shown. "
+"Please ensure you follow the diagram as this line is higher than the actual "
+"waist itself."
+msgstr ""
+
+#: ../includes/classes/account-updates.php:332
 #, php-format
 msgid "%s is required"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:133
+#: ../includes/classes/account-updates.php:342
 #, php-format
 msgid "%s is not valid"
 msgstr ""
@@ -49,15 +209,15 @@ msgstr ""
 msgid "Fabrics Options"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:122
+#: ../includes/classes/wc_tailor.php:126
 msgid "WooCommerce Plugin must be installed and activated first."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:123
+#: ../includes/classes/wc_tailor.php:127
 msgid "Required Plugin"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:124
+#: ../includes/classes/wc_tailor.php:128
 msgid "Back"
 msgstr ""
 
@@ -130,30 +290,6 @@ msgstr ""
 msgid "Resize path invalid"
 msgstr ""
 
-#: ../templates/myaccount/form-edit-account.php:19
-msgid "Your Personal Details"
-msgstr ""
-
-#: ../templates/myaccount/form-edit-account.php:22
-msgid "First name"
-msgstr ""
-
 #: ../templates/myaccount/form-edit-account.php:26
-msgid "Last name"
-msgstr ""
-
-#: ../templates/myaccount/form-edit-account.php:30
-msgid "Email address"
-msgstr ""
-
-#: ../templates/myaccount/form-edit-account.php:34
-msgid "Password (leave blank to leave unchanged)"
-msgstr ""
-
-#: ../templates/myaccount/form-edit-account.php:38
-msgid "Confirm new password"
-msgstr ""
-
-#: ../templates/myaccount/form-edit-account.php:49
 msgid "Save changes"
 msgstr ""

@@ -14,10 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php wc_print_notices(); ?>
 
-<form action="" method="post">
+<form action="" method="post" id="account-details">
 
 	<?php
-	// additional account fields 
+	// account details sections & fields
 	do_action( 'woocommerce_tailor_account_fields', $user );
 	?>
 
