@@ -34,6 +34,7 @@ class WC_Tailor_Account_Updates
 						'wrapper_class' => 'form-row form-row-first',
 						'data_type' => 'text',
 						'required' => true,
+						'section' => 'general',
 				),
 				'account_gender' => array ( 
 						'label' => __( 'Gender', WCT_DOMAIN ),
@@ -47,9 +48,40 @@ class WC_Tailor_Account_Updates
 								'female' => __( 'Female', WCT_DOMAIN ),
 						 ),
 						'required' => true,
+						'section' => 'general',
 				),
 		);
-
+		/*$measurements		= array( cm inches
+				"Chest",
+				"Waist",
+				"Hips",
+				"Length",
+				"Shoulders",
+				"Sleeve",
+				"Bicep",
+				"Wrist",
+				"Neck",
+				"Front Arm to Arm",
+				"Back Arm to Arm", // male
+				"Forearm Circumference", // female
+				"Bust Point",
+				"Bust Point to Bust Point",
+				"Front Waistline",
+				"Back Waistline"
+		);*/
+		/*
+		Body Profile
+		male
+			Chest 		> Muscular		Large				Average
+ 			Body Shape 	> Average		Flat				Large
+ 			Shoulders 	> Square		Sloping				Average
+ 		Female
+ 			Shoulders 	> Square		Sloping				Average
+ 			Figure 		> Apple			Pear				Hour Glass
+ 			Body Shape 	> Slim			Fuller Midriff		Fuller Bottom
+ 		both
+ 			Height cm   Weight kg
+		 */
 		// apply filter
 		$this->account_details = apply_filters( 'woocommerce_tailor_account_details', $this->account_details );
 
@@ -63,7 +95,7 @@ class WC_Tailor_Account_Updates
 		add_action( 'woocommerce_save_account_details', function() {
 			wp_safe_redirect( wc_customer_edit_account_url() );
 			exit;
-		});
+		} );
 
 		// additional fields render
 		add_action( 'woocommerce_tailor_account_fields', array( &$this, 'render_account_details' ) );
