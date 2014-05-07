@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Tailor Store\n"
-"POT-Creation-Date: 2014-05-05 21:51+0200\n"
-"PO-Revision-Date: 2014-05-05 21:51+0200\n"
+"POT-Creation-Date: 2014-05-07 14:49+0200\n"
+"PO-Revision-Date: 2014-05-07 14:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: Nabeel Molham <n.molham@gmail.com>\n"
 "Language: en\n"
@@ -19,16 +19,26 @@ msgstr ""
 msgid "Telephone Number"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:38
+#: ../includes/classes/account-updates.php:40
 msgid "Gender"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:45
+#: ../includes/classes/account-updates.php:47
 msgid "Male"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:46
+#: ../includes/classes/account-updates.php:48
 msgid "Female"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:123
+#, php-format
+msgid "%s is required"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:133
+#, php-format
+msgid "%s is not valid"
 msgstr ""
 
 #: ../includes/classes/admin-pages.php:43
@@ -39,15 +49,15 @@ msgstr ""
 msgid "Fabrics Options"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:87
+#: ../includes/classes/wc_tailor.php:122
 msgid "WooCommerce Plugin must be installed and activated first."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:88
+#: ../includes/classes/wc_tailor.php:123
 msgid "Required Plugin"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:89
+#: ../includes/classes/wc_tailor.php:124
 msgid "Back"
 msgstr ""
 
@@ -118,4 +128,32 @@ msgstr ""
 #: ../includes/utils.php:1120 ../includes/utils.php:1123
 #: ../includes/utils.php:1131
 msgid "Resize path invalid"
+msgstr ""
+
+#: ../templates/myaccount/form-edit-account.php:19
+msgid "Your Personal Details"
+msgstr ""
+
+#: ../templates/myaccount/form-edit-account.php:22
+msgid "First name"
+msgstr ""
+
+#: ../templates/myaccount/form-edit-account.php:26
+msgid "Last name"
+msgstr ""
+
+#: ../templates/myaccount/form-edit-account.php:30
+msgid "Email address"
+msgstr ""
+
+#: ../templates/myaccount/form-edit-account.php:34
+msgid "Password (leave blank to leave unchanged)"
+msgstr ""
+
+#: ../templates/myaccount/form-edit-account.php:38
+msgid "Confirm new password"
+msgstr ""
+
+#: ../templates/myaccount/form-edit-account.php:49
+msgid "Save changes"
 msgstr ""

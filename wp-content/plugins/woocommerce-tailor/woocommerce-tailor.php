@@ -15,9 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-/* @var $woocommerce_tailor WC_Tailor */
-global $woocommerce_tailor;
-
 /**
  * Constants
  */
@@ -67,7 +64,7 @@ function WC_Tailor()
 }
 
 // start the whole thing
-$woocommerce_tailor = WC_Tailor();
+$GLOBALS['woocommerce_tailor'] = WC_Tailor();
 
 // trigger plugin ready action
 do_action( 'woocommerce_tailor_loaded' );
