@@ -16,6 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <form action="" method="post">
 
+	<h3><?php _e( 'Your Personal Details', BRETHEON_CHILD_DOMAIN ); ?></h3>
+
 	<p class="form-row form-row-first">
 		<label for="account_first_name"><?php _e( 'First name', BRETHEON_CHILD_DOMAIN ); ?> <span class="required">*</span></label>
 		<input type="text" class="input-text" name="account_first_name" id="account_first_name" value="<?php esc_attr_e( $user->first_name ); ?>" />

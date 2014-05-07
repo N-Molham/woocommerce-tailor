@@ -45,6 +45,9 @@ class WC_Tailor
 
 		// plugin activation hook
 		register_activation_hook( WC_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
+
+		// templates override
+		add_filter( 'woocommerce_locate_template', array( $this, 'template_override' ), 10, 3 );
 	}
 
 	/**
@@ -59,6 +62,27 @@ class WC_Tailor
 
 		// account updates instance
 		$this->account_updates = new WC_Tailor_Account_Updates();
+	}
+
+	/**
+	 * Override templates to load custom ones
+	 * 
+	 * @param string $template
+	 * @param string $template_name
+	 * @param string $template_path
+	 * @return string
+	 */
+	public function template_override( $original_template, $template_name, $template_path )
+	{
+		// possible template location
+		$new_template = WC_TAILOR_DIR .'templates/'. $template_name;
+
+		// check template existence
+		if ( file_exists( $new_template ) )
+			return apply_filters( 'woocommerce_tailor_template_override', $new_template, $original_template, $template_name );
+
+		// return original template location
+		return $original_template;
 	}
 
 	/**
