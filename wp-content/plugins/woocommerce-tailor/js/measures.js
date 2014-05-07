@@ -8,14 +8,25 @@
 			// gender value holder
 			var selected_gender = '',
 				$measures = $account_details.find( '.measures-inputs' ),
-				$measures_inputs = $measures.find( '.inputs-holder' );
+				$measures_inputs = $measures.find( '.inputs-holder' ),
+				$img_loading = $measures.find( '.loading' ),
+				last_measure_key = '',
+				$instructions_img = $measures.find( '.measure-img' ),
+				$instructions = $measures.find( '.instructions' );
 
 			// gender change
 			$account_details.find( 'input[name=account_gender]' ).on( 'change wct-change', function( e ) {
 				// save selected
 				selected_gender = e.target.value;
 
-				// 
+				// show all
+				$measures_inputs.show()
+								// filter the unwanted fields to hide
+								.filter( ':not([data-gender~="'+ selected_gender +'"])' ).hide();
+
+				// reset instructions
+				$instructions_img.attr( 'src', $instructions_img.data( 'default' ) );
+				$instructions.css( 'display', 'none' );
 			} ).filter( ':checked' ).trigger( 'wct-change' );
 
 			// unit converting
@@ -34,10 +45,26 @@
 				}
 
 				// update other input
-				$other_input.val( round( converted_value, 2 ) );
+				$other_input.val( round( isNaN( converted_value ) ? 0 : converted_value, 2 ) );
+			} ).on( 'focusin', function( e ) {
+				var $this = $( this ).parent(),
+					measure_key = $this.data( 'key' );
+
+				// not the same key
+				if ( last_measure_key !== measure_key ) {
+					// instructions image
+					$img_loading.css( 'display', 'block' );
+					$instructions_img.attr( 'src', wct_measures.measure_url + selected_gender + '_' + measure_key + '.jpg' ).on( 'load', function() {
+						$img_loading.css( 'display', 'none' );
+					} );
+
+					// instructions text content
+					$instructions.css( 'display', 'block' ).find( '.content-holder' ).text( $this.data( 'instructions' ) );
+
+					// catch last one
+					last_measure_key = measure_key;
+				}
 			} );
 		}
-		// cm to inch = cm / 2.54
-		// inch to cm = inch * 2.54
 	} );
 } )( window );

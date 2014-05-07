@@ -1,5 +1,19 @@
 @CHARSET "UTF-8";
 
+.measures-inputs .column {
+	position: relative;
+}
+
+.measures-inputs .loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5) url("../images/ajax-loader.gif") center center no-repeat;
+	display: none;
+}
+
 .measures-inputs > .column:first-child {
 	text-align: center;
 }
@@ -17,4 +31,8 @@
 
 .measures-inputs .inputs-holder .input-text {
 	width: 5em !important;
+}
+
+.measures-inputs .instructions {
+	display: none;
 }

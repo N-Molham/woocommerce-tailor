@@ -162,6 +162,7 @@ class WC_Tailor_Account_Updates
 						'data_type' => 'float',
 						'required' => true,
 						'section' => 'measurements',
+						'after' => '<div class="clear"></div>',
 				),
 				'body_profile_inputs' => array ( 
 						'label' => 'none',
@@ -181,57 +182,57 @@ class WC_Tailor_Account_Updates
 				'chest' => array ( 
 						'label' => 'Chest',
 						'instructions' => __( 'Place the tape measure around the body over the largest part of the chest as shown in the diagram. To ensure the right fit take the chest measurement with one finger inside the tape measure.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'waist' => array ( 
 						'label' => 'Waist',
 						'instructions' => __( 'Place the tape measure around the body over the smallest part of the waist area as shown in the diagram. To ensure a comfortable fit, take the measurement with one finger inside the tape measure.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'hips' => array ( 
 						'label' => 'Hips',
 						'instructions' => __( 'Place the tape measure around the body at the point where you would like the shirt length to finish. To ensure a more comfortable fit, take the hip measurement with one finger inside the tape measure. Remember to use this as the reference point when entering your shirt length.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'length' => array ( 
 						'label' => 'Length',
 						'instructions' => __( 'Place the tape measure at the top of the shirt level with the collar seam, and then measure the length of the shirt. This measurement will determine how long your shirt is, so simply select the required length. If you intend on wearing your shirts tucked in, we recommend the shirt length measurement be taken at point level with the base of the trouser crotch.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'shoulders' => array ( 
 						'label' => 'Shoulders',
 						'instructions' => __( 'Place the tape measure across the top of the shoulders and measure from one shoulder edge to the other, ensuring you take the curved contour over the top of the shoulders as seen in the diagram.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'sleeve' => array ( 
 						'label' => 'Sleeve',
 						'instructions' => __( 'Place the tape measure at the top of the sleeve level with the edge of the shoulder, and then measure the length of the sleeve. This measurement will determine where the sleeve will come to on the hand, so simply select your preferred length. We recommend the sleeve length be at a point approximately level with the top of the V between the thumb and forefinger.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'bicep' => array ( 
 						'label' => 'Bicep',
 						'instructions' => __( 'Place the tape measure around your bicep over the largest part of your upper arm. To ensure a comfortable fit take the bicep measurement with one finger inside the tape measure.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'wrist' => array ( 
 						'label' => 'Wrist',
 						'instructions' => __( 'Place the tape measure around the entire wrist. To ensure the right fit, take the wrist measurement with one finger inside the tape measure.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'neck' => array ( 
 						'label' => 'Neck',
 						'instructions' => __( 'Place the tape measure around the entire neck. To ensure a comfortable fit take the neck measurement with one finger inside the tape measure, ensuring the tape is at the base of the neck where the neck and shoulders meet as seen in the diagram.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'frontarmhole' => array ( 
 						'label' => 'Front Arm to Arm',
 						'instructions' => __( 'Place the tape measure at the crease in the top of the arm where the arm and chest meet. Measure the length across the chest to the equal and opposite point on the body. There is no need to place the tape in the armpit, just on the crease where the relevant body parts meet.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'backarmhole' => array ( 
 						'label' => 'Back Arm to Arm',
 						'instructions' => __( 'Place the tape measure at the crease in the top of the arm where the arm and back meet. Measure the length across the back to the equal and opposite point on the body. There is no need to place the tape in the armpit, just on the crease where the relevant body parts meet.', WCT_DOMAIN ),
-						'gender' => 'male,female',
+						'gender' => 'male female',
 				),
 				'forearm' => array ( 
 						'label' => 'Forearm Circumference',
@@ -444,8 +445,10 @@ class WC_Tailor_Account_Updates
 							if ( !is_array( $field_value ) )
 								$field_value = array();
 
-							// meaure image
-							$input_layout .= '<div class="column two-third"><img src="'. WC_TAILOR_URL .'images/measurements/default.jpg" alt="" id="measure-img" /></div>';
+							// measure image
+							$input_layout .= '<div class="column two-third">';
+							$input_layout .= '<div class="loading"></div>';
+							$input_layout .= '<img src="" data-default="'. WC_TAILOR_URL .'images/measurements/default.jpg" alt="" class="measure-img" /></div>';
 
 							// inputs
 							$input_layout .= '<div class="column one-third">';
@@ -455,7 +458,7 @@ class WC_Tailor_Account_Updates
 							{
 								$field_value[$meausre_name] = wp_parse_args( $field_value, array( 'cm' => 0, 'inches' => 0 ) );
 
-								// data attrs
+								// data attributes
 								$input_layout .= '<p class="inputs-holder" data-key="'. $meausre_name .'" data-gender="'. $meausre_args['gender'] .'" data-instructions="'. esc_attr( $meausre_args['instructions'] ) .'">';
 
 								// label
@@ -469,9 +472,19 @@ class WC_Tailor_Account_Updates
 							// inputs end
 							$input_layout .= '</div>';
 
+							// instructions
+							$input_layout .= '<div class="clear"></div><div class="instructions">';
+							$input_layout .= '<h3>'. __( 'Instructions', WCT_DOMAIN ) .'</h3>';
+							$input_layout .= '<p class="content-holder"></p></div>';
+
 							// enqueues
 							wp_enqueue_style( 'wct-style' );
 							wp_enqueue_script( 'wct-measures-js' );
+
+							// js localize
+							wp_localize_script( 'wct-measures-js', 'wct_measures', array ( 
+									'measure_url' => WC_TAILOR_URL .'images/measurements/',
+							) );
 							break;
 					}
 					break;
