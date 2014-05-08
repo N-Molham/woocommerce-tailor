@@ -63,9 +63,23 @@ class WC_Tailor
 		// templates override
 		add_filter( 'woocommerce_locate_template', array( $this, 'template_override' ), 10, 3 );
 
-		// register js & css enqueues
+		/**
+		 * Register js & css enqueues
+		 */
+		// global style
 		wp_register_style( 'wct-style', WC_TAILOR_URL .'css/style.css' );
+
+		// fancybox css
+		wp_register_style( 'jquery-fancybox-css', WC_TAILOR_URL .'js/fancybox/jquery.fancybox-1.3.4.css' );
+
+		// shared js utils
 		wp_register_script( 'wct-shared-js', WC_TAILOR_URL .'js/shared.js', array( 'jquery' ), false, true );
+
+		// fancybox js
+		wp_register_script( 'jquery-fancybox', WC_TAILOR_URL .'js/fancybox/jquery.fancybox-1.3.4.pack.js', array( 'wct-shared-js' ), false, true );
+
+		// body profile js
+		wp_register_script( 'wct-body-profile-js', WC_TAILOR_URL .'js/body-profile.js', array( 'jquery-fancybox' ), false, true );
 	}
 
 	/**
