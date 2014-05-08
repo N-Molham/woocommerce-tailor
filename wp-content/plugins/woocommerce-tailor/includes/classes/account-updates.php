@@ -160,7 +160,7 @@ class WC_Tailor_Account_Updates
 						'wrapper_tag' => 'div',
 						'wrapper_class' => 'form-row measures-inputs',
 						'data_type' => 'float',
-						'required' => true,
+						'required' => false,
 						'section' => 'measurements',
 						'after' => '<div class="clear"></div>',
 				),
@@ -172,7 +172,7 @@ class WC_Tailor_Account_Updates
 						'wrapper_tag' => 'div',
 						'wrapper_class' => 'form-row body-profile-inputs',
 						'data_type' => 'float',
-						'required' => true,
+						'required' => false,
 						'section' => 'body_profile',
 				),
 		) );
@@ -346,9 +346,50 @@ class WC_Tailor_Account_Updates
 					break;
 			}
 
+			// specific field handling
+			switch ( $field_name )
+			{
+				case 'measures_inputs':
+					if ( !isset( $_REQUEST[$field_name] ) || !is_array( $_REQUEST[$field_name] ) )
+					{
+						$errors->add( $field_name .'_required', sprintf( __( '%s is required', WCT_DOMAIN ), $field_args['label'] ) );
+						continue;
+					}
+
+					// check keys
+					$value = $_REQUEST[$field_name];
+					if ( array_keys( $value ) !== array_keys( $this->body_measurements ) )
+					{
+						$errors->add( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
+						continue;
+					}
+
+					// parse values
+					$value = array_map( array( &$this, 'parse_meausre' ), $_REQUEST[$field_name] );
+					break;
+			}
+
 			// update values
-			update_user_meta( $user->ID, $field_args['meta_key'], apply_filters( 'woocommerce_tailor_account_field_value', $value ) );
+			update_user_meta( $user->ID, $field_args['meta_key'], apply_filters( 'woocommerce_tailor_account_field_value', $value, $field_name, $field_args ) );
 		}
+	}
+
+	/**
+	 * Parse body measure values
+	 * 
+	 * @param mixed $measure
+	 * @return array
+	 */
+	public function parse_meausre( $measure )
+	{
+		// default values
+		$measure  = wp_parse_args( $measure, array( 'cm' => 0, 'inches' => 0 ) );
+
+		// needed values only
+		return array ( 
+				'cm' => floatval( $measure['cm'] ), 
+				'inches' => floatval( $measure['inches'] ) 
+		);
 	}
 
 	/**
@@ -456,7 +497,10 @@ class WC_Tailor_Account_Updates
 							// measurements loop
 							foreach ( $this->body_measurements as $meausre_name => $meausre_args )
 							{
-								$field_value[$meausre_name] = wp_parse_args( $field_value, array( 'cm' => 0, 'inches' => 0 ) );
+								if ( !isset( $field_value[$meausre_name] ) )
+									$field_value[$meausre_name] = array();
+
+								$field_value[$meausre_name] = wp_parse_args( $field_value[$meausre_name], array( 'cm' => 0, 'inches' => 0 ) );
 
 								// data attributes
 								$input_layout .= '<p class="inputs-holder" data-key="'. $meausre_name .'" data-gender="'. $meausre_args['gender'] .'" data-instructions="'. esc_attr( $meausre_args['instructions'] ) .'">';
