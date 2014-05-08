@@ -19,7 +19,8 @@
 }
 
 .measures-inputs .inputs-holder label,
-.measures-inputs .inputs-holder .input-text {
+.measures-inputs .inputs-holder .input-text,
+.woocommerce-page form .form-row input.input-small {
 	display: inline-block !important;
 	width: 8em;
 }
@@ -36,3 +37,4 @@
 .measures-inputs .instructions {
 	display: none;
 }
+

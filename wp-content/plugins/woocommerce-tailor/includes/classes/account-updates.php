@@ -55,10 +55,20 @@ class WC_Tailor_Account_Updates
 	var $body_measurements;
 
 	/**
+	 * Body Profile
+	 * 
+	 * @var array
+	 */
+	var $body_profile;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
+		// images directory
+		$image_dir = WC_TAILOR_URL .'images/';
+
 		// set sections
 		$this->account_details_sections = apply_filters( 'woocommerce_tailor_account_details_sections', array (
 				'personal_info' => array ( 
@@ -71,7 +81,11 @@ class WC_Tailor_Account_Updates
 				),
 				'body_profile' => array ( 
 						'title' => __( 'Body Profile', WCT_DOMAIN ),
-						'description' => __( 'Place the tape measure around your bicep over the largest part of your upper arm. To ensure a comfortable fit take the bicep measurement with one finger inside the tape measure.', WCT_DOMAIN ),
+						'description' => '',
+						'enqueues' => array ( 
+								'js' => array( 'wct-body-profile-js' ),
+								'css' => array( 'jquery-fancybox-css' )
+						),
 				),
 		) );
 
@@ -143,8 +157,8 @@ class WC_Tailor_Account_Updates
 						'input' => 'radio',
 						'input_class' => 'input-radio',
 						'wrapper_class' => 'form-row form-row-last',
-						'data_type' => 'text',
-						'values' => array ( 
+						'data_type' => 'key',
+						'options' => array ( 
 								'male' => __( 'Male', WCT_DOMAIN ), 
 								'female' => __( 'Female', WCT_DOMAIN ),
 						 ),
@@ -164,16 +178,102 @@ class WC_Tailor_Account_Updates
 						'section' => 'measurements',
 						'after' => '<div class="clear"></div>',
 				),
-				'body_profile_inputs' => array ( 
-						'label' => 'none',
-						'meta_key' => 'body_profile',
-						'input' => 'html',
+				'body_profile_chest' => array ( 
+						'label' => __( 'Chest', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/chest.gif' ), __( 'Chest', WCT_DOMAIN ) ),
+						'meta_key' => array( 'body_profile', 'chest' ),
+						'input' => 'radio',
+						'input_class' => 'input-radio',
+						'wrapper_class' => 'form-row form-row-wide gender-male body-profile',
+						'data_type' => 'key',
+						'options' => array ( 
+								'muscular' => __( 'Muscular', WCT_DOMAIN ),
+								'large' => __( 'Large', WCT_DOMAIN ),
+								'average' => __( 'Average', WCT_DOMAIN ),
+						),
+						'required' => false,
+						'section' => 'body_profile',
+				),
+				'body_profile_bshape' => array ( 
+						'label' => __( 'Body Shape', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/bodyshape_m.gif' ), __( 'Body Shape', WCT_DOMAIN ) ),
+						'meta_key' => array( 'body_profile', 'body_shape' ),
+						'input' => 'radio',
+						'input_class' => 'input-radio',
+						'wrapper_class' => 'form-row form-row-wide gender-male body-profile',
+						'data_type' => 'key',
+						'options' => array ( 
+								'average' => __( 'Average', WCT_DOMAIN ),
+								'flat' => __( 'Flat', WCT_DOMAIN ),
+								'large' => __( 'Large', WCT_DOMAIN ),
+						),
+						'required' => false,
+						'section' => 'body_profile',
+				),
+				'body_profile_shoulders' => array ( 
+						'label' => __( 'Shoulders', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/shoulders.gif' ), __( 'Shoulders', WCT_DOMAIN ) ),
+						'meta_key' => array( 'body_profile', 'shoulders' ),
+						'input' => 'radio',
+						'input_class' => 'input-radio',
+						'wrapper_class' => 'form-row form-row-wide gender-male gender-female body-profile',
+						'data_type' => 'key',
+						'options' => array ( 
+								'square' => __( 'Square', WCT_DOMAIN ),
+								'sloping' => __( 'Sloping', WCT_DOMAIN ),
+								'average' => __( 'Average', WCT_DOMAIN ),
+						),
+						'required' => false,
+						'section' => 'body_profile',
+				),
+				'body_profile_figure' => array ( 
+						'label' => __( 'Figure', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/figure.gif' ), __( 'Figure', WCT_DOMAIN ) ),
+						'meta_key' => array( 'body_profile', 'figure' ),
+						'input' => 'radio',
+						'input_class' => 'input-radio',
+						'wrapper_class' => 'form-row form-row-wide gender-female body-profile',
+						'data_type' => 'key',
+						'options' => array ( 
+								'apple' => __( 'Apple', WCT_DOMAIN ),
+								'pear' => __( 'Pear', WCT_DOMAIN ),
+								'hourglass' => __( 'Hour Glass', WCT_DOMAIN ),
+						),
+						'required' => false,
+						'section' => 'body_profile',
+				),
+				'body_profile_bshapef' => array (
+						'label' => __( 'Body Shape', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/bodyshape_f.gif' ), __( 'Body Shape ( Female )', WCT_DOMAIN ) ),
+						'meta_key' => array( 'body_profile', 'body_shapef' ),
+						'input' => 'radio',
+						'input_class' => 'input-radio',
+						'wrapper_class' => 'form-row form-row-wide gender-female body-profile',
+						'data_type' => 'key',
+						'options' => array (
+								'slim' => __( 'Slim', WCT_DOMAIN ),
+								'fullermidriff' => __( 'Fuller Midriff', WCT_DOMAIN ),
+								'fullerbottom' => __( 'Fuller Bottom', WCT_DOMAIN ),
+						),
+						'required' => false,
+						'section' => 'body_profile',
+				),
+				'body_profile_height' => array (
+						'label' => __( 'Height', WCT_DOMAIN ),
+						'meta_key' => array( 'body_profile', 'height' ),
+						'input' => 'text',
 						'input_class' => 'input-text input-small',
-						'wrapper_tag' => 'div',
-						'wrapper_class' => 'form-row body-profile-inputs',
+						'wrapper_class' => 'form-row column one-fourth',
 						'data_type' => 'float',
 						'required' => false,
 						'section' => 'body_profile',
+						'description' => '&nbsp;&nbsp;cm',
+				),
+				'body_profile_weight' => array (
+						'label' => __( 'Weight', WCT_DOMAIN ),
+						'meta_key' => array( 'body_profile', 'weight' ),
+						'input' => 'text',
+						'input_class' => 'input-text input-small',
+						'wrapper_class' => 'form-row column one-fourth',
+						'data_type' => 'float',
+						'required' => false,
+						'section' => 'body_profile',
+						'description' => '&nbsp;&nbsp;kg',
 				),
 		) );
 
@@ -294,13 +394,16 @@ class WC_Tailor_Account_Updates
 				'meta_key' => '',
 				'input' => 'text',
 				'input_class' => 'input-text',
+				'wrapper_attrs' => '',
 				'wrapper_tag' => 'p',
 				'wrapper_class' => 'form-row form-row-wide',
 				'data_type' => 'text',
 				'required' => false,
-				'values' => array(),
+				'options' => array(),
+				'option_class' => 'column one-fourth',
 				'value' => '',
 				'after' => '',
+				'description' => '',
 		) );
 
 		// register js & css enqueues
@@ -327,6 +430,27 @@ class WC_Tailor_Account_Updates
 			// sanitizing value
 			$value = wc_clean( filter_input( INPUT_POST, $field_name ) );
 
+			// data type sanitizing
+			switch ( $field_args['data_type'] )
+			{
+				case 'int':
+				case 'integer':
+					$value = intval( $value );
+					break;
+
+				case 'float':
+					$value = floatval( $value );
+					break;
+
+				case 'email':
+					$value = is_email( sanitize_email( $value ) );
+					break;
+
+				case 'key':
+					$value = sanitize_key( $value );
+					break;
+			}
+
 			// check required
 			if ( empty( $value ) && $field_args['required'] )
 			{
@@ -334,13 +458,15 @@ class WC_Tailor_Account_Updates
 				continue;
 			}
 
-			// data validation
+			// data input validation
 			switch( $field_args['input'] )
 			{
 				case 'radio':
-					if ( !isset( $field_args['values'][$value] ) )
+					if ( !isset( $field_args['options'][$value] ) )
 					{
-						$errors->add( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
+						if ( $field_args['required'] )
+							$errors->add( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
+
 						continue;
 					}
 					break;
@@ -369,8 +495,21 @@ class WC_Tailor_Account_Updates
 					break;
 			}
 
+			// meta key
+			$meta_key = $field_args['meta_key'];
+			if ( is_array( $meta_key ) && count( $meta_key ) == 2 )
+			{
+				// array value
+				$meta_value = (array) get_user_meta( $user->ID, $meta_key[0], true );
+				$meta_value[$meta_key[1]] = $value;
+
+				// meta info
+				$meta_key = $meta_key[0];
+				$value = $meta_value;
+			}
+
 			// update values
-			update_user_meta( $user->ID, $field_args['meta_key'], apply_filters( 'woocommerce_tailor_account_field_value', $value, $field_name, $field_args ) );
+			update_user_meta( $user->ID, $meta_key, apply_filters( 'woocommerce_tailor_account_field_value', $value, $field_name, $field_args ) );
 		}
 	}
 
@@ -427,6 +566,27 @@ class WC_Tailor_Account_Updates
 
 				// set as handled
 				$handled_sections[] = $field_section;
+
+				// enqueues
+				$enqueues = isset( $this->account_details_sections[$field_section]['enqueues'] ) ? (array) $this->account_details_sections[$field_section]['enqueues'] : array();
+				if ( ! empty( $enqueues ) )
+				{
+					// scripts
+					if ( isset( $enqueues['js'] ) )
+					{
+						array_walk( $enqueues['js'], function( $handle ) {
+							wp_enqueue_script( $handle );
+						} );
+					}
+
+					// styles
+					if ( isset( $enqueues['css'] ) )
+					{
+						array_walk( $enqueues['css'], function( $handle ) {
+							wp_enqueue_style( $handle );
+						} );
+					}
+				}
 			}
 
 			// field value
@@ -456,7 +616,7 @@ class WC_Tailor_Account_Updates
 			$field_value = apply_filters( 'woocommerce_tailor_account_field_value', $field_value, $field_name, $field_args );
 
 			// wrapper
-			$output .= '<'. $field_args['wrapper_tag'] .' class="'. $field_args['wrapper_class'] .'">';
+			$output .= '<'. $field_args['wrapper_tag'] .' class="'. $field_args['wrapper_class'] .'" '. $field_args['wrapper_attrs'] .'>';
 
 			// label
 			$output .= 'none' == $field_args['label'] ? '' : '<label for="'. $field_name .'">'. $field_args['label'] . ( $field_args['required'] ? ' <span class="required">*</span>' : '' ) .'</label>';
@@ -473,9 +633,9 @@ class WC_Tailor_Account_Updates
 
 				case 'radio':
 					// loop values
-					foreach ( $field_args['values'] as $option_value => $option_label )
+					foreach ( $field_args['options'] as $option_value => $option_label )
 					{
-						$input_layout .= '<label><input type="radio" class="'. $field_args['input_class'] .'" name="'. $field_name .'" value="'. $option_value .'"'. checked( $field_value, $option_value, false ) .'/> '. $option_label .'</label>';
+						$input_layout .= '<label class="'. $field_args['option_class'] .'"><input type="radio" class="'. $field_args['input_class'] .'" name="'. $field_name .'" value="'. $option_value .'"'. checked( $field_value, $option_value, false ) .'/> '. $option_label .'</label>';
 					}
 					break;
 
@@ -534,25 +694,14 @@ class WC_Tailor_Account_Updates
 					break;
 			}
 
-			/*
-			 Body Profile
-			male
-			Chest 		> Muscular		Large				Average
-			Body Shape 	> Average		Flat				Large
-			Shoulders 	> Square		Sloping				Average
-			Female
-			Shoulders 	> Square		Sloping				Average
-			Figure 		> Apple			Pear				Hour Glass
-			Body Shape 	> Slim			Fuller Midriff		Fuller Bottom
-			both
-			Height cm   Weight kg
-			*/
-
 			// input layout filter
 			$input_layout = apply_filters( 'woocommerce_tailor_account_field_input', $input_layout, $field_name, $field_value, $field_args );
 
-			// input + wrapper end + after field
-			$output .= $input_layout .'</'. $field_args['wrapper_tag'] .'>'. $field_args['after'];
+			// input + description
+			$output .= $input_layout .'<span class="description">'. $field_args['description'] .'</span>';
+
+			// wrapper end + after field
+			$output .= '</'. $field_args['wrapper_tag'] .'>'. $field_args['after'];
 		}
 
 		if ( $echo )
