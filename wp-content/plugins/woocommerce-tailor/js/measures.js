@@ -30,7 +30,7 @@
 			} ).filter( ':checked' ).trigger( 'wct-change' );
 
 			// unit converting
-			$measures_inputs.find( '.input-text' ).on( 'keyup focusout', function() {
+			$measures_inputs.find( '.input-text' ).on( 'keyup', function() {
 				var $this = $( this ),
 					$other_input, converted_value;
 
