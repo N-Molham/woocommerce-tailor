@@ -15,19 +15,25 @@
 				$instructions = $measures.find( '.instructions' );
 
 			// gender change
-			$account_details.find( 'input[name=account_gender]' ).on( 'change wct-change', function( e ) {
+			var $genders = $account_details.find( 'input[name=account_gender]' ).on( 'change measure-change', function( e ) {
 				// save selected
 				selected_gender = e.target.value;
 
 				// show all
 				$measures_inputs.show()
-								// filter the unwanted fields to hide
-								.filter( ':not([data-gender~="'+ selected_gender +'"])' ).hide();
+					// filter the unwanted fields to hide
+					.filter( ':not([data-gender~="'+ selected_gender +'"])' ).hide();
 
 				// reset instructions
 				$instructions_img.attr( 'src', $instructions_img.data( 'default' ) );
 				$instructions.css( 'display', 'none' );
-			} ).filter( ':checked' ).trigger( 'wct-change' );
+			} );
+
+			// trigger selected/first gender
+			if ( $genders.filter( ':checked' ).length )
+				$genders.filter( ':checked' ).trigger( 'measure-change' );
+			else
+				$genders.filter( ':first' ).trigger( 'measure-change' );
 
 			// unit converting
 			$measures_inputs.find( '.input-text' ).on( 'keyup', function() {

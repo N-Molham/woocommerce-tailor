@@ -10,7 +10,7 @@
 				$profile_inputs = $account_details.find( '.body-profile' );
 
 			// gender change
-			$account_details.find( 'input[name=account_gender]' ).on( 'change wct-change', function( e ) {
+			var $genders = $account_details.find( 'input[name=account_gender]' ).on( 'change profile-change', function( e ) {
 				// save selected
 				selected_gender = e.target.value;
 
@@ -18,7 +18,13 @@
 				$profile_inputs.show()
 								// filter the unwanted fields to hide
 								.filter( ':not(.gender-'+ selected_gender +')' ).hide();
-			} ).filter( ':checked' ).trigger( 'wct-change' );
+			} );
+
+			// trigger selected/first gender
+			if ( $genders.filter( ':checked' ).length )
+				$genders.filter( ':checked' ).trigger( 'profile-change' );
+			else
+				$genders.filter( ':first' ).trigger( 'profile-change' );
 
 			// image fancybox ( lightbox )
 			$account_details.find( 'a.bp-image' ).fancybox( {
