@@ -1,11 +1,29 @@
 @CHARSET "UTF-8";
 
-.form-table textarea {
-	height: 12em;
+.shirt-chars .form-table textarea {
+	height: 8em;
 }
 
-textarea.regular-text {
+.shirt-chars textarea.regular-text {
 	width: 25em;
+}
+
+.shirt-chars .list-item {
+	width: 58em;
+}
+
+.shirt-chars .form-table th {
+	width: 160px;
+}
+
+.shirt-chars .form-table th,
+.shirt-chars .form-table td {
+	padding: 5px;
+}
+
+.shirt-chars .option-values .value-label {
+	display: inline-block;
+	width: 8em;
 }
 
 /* Code & Pre */

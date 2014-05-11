@@ -40,16 +40,49 @@ class WC_Tailor_Admin_Pages
 	public function setup_admin_pages()
 	{
 		// parent menu
-		$this->pages_hooks['parent'] = add_menu_page( __( 'WooCommerce Tailor', WCT_DOMAIN ), __( 'WooCommerce Tailor', WCT_DOMAIN ), 'manage_options', 'wc_tailor_shirt_characteristics', array( &$this, 'load_page_layout' ), 'dashicons-universal-access' );
+		add_menu_page( __( 'WooCommerce Tailor', WCT_DOMAIN ), __( 'WooCommerce Tailor', WCT_DOMAIN ), 'manage_options', 'wc_tailor_shirt_characteristics', array( &$this, 'load_page_layout' ), 'dashicons-universal-access' );
 
-		// options page
+		// shirt characteristics page
 		$this->pages_hooks['shirt_chars'] = add_submenu_page( 'wc_tailor_shirt_characteristics', __( 'Shirt\'s Characteristics', WCT_DOMAIN ), __( 'Shirt\'s Characteristics', WCT_DOMAIN ), 'manage_options', 'wc_tailor_shirt_characteristics', array( &$this, 'load_page_layout' ) );
 
-		// enqueue scripts & styles
-		array_map( function( $hook ) {
+		foreach ( $this->pages_hooks as $page_name => $page_hook )
+		{
 			// enqueue styles
-			add_action( 'admin_print_styles-'.$hook, array( &$this, 'enqueue_scripts_styles' ) );
-		}, $this->pages_hooks );
+			add_action( 'admin_print_styles-'.$page_hook, array( &$this, 'enqueue_scripts_styles' ) );
+
+			// actions
+			add_action( 'load-'. $page_hook, array( &$this, 'page_action_'. $page_name ) );
+		}
+	}
+
+	/**
+	 * Pages forms action handler
+	 * 
+	 * @return void
+	 */
+	public function page_action_shirt_chars()
+	{
+		if ( isset( $_POST['wct_shirt_save'], $_POST['chars'] ) && check_admin_referer( 'wc_tailor_shirt_chars', 'nonce' ) )
+		{
+			$target_gender = filter_input( INPUT_POST, 'gender' );
+			if ( in_array( $target_gender, array( 'male', 'female' ) ) )
+			{
+				// get option
+				$shirt_characters = get_option( 'wc_tailor_shirt_chars', array( 'male' => array(), 'female' => array() ) );
+
+				// clean values
+				$new_characters = WC_Tailor_Utiles::array_map_recursive( $_POST['chars'], 'wc_tailor_clean_string_basic' );
+
+				// set new values
+				$shirt_characters[$target_gender] = apply_filters( 'woocommerce_tailor_shirt_characteristics', $new_characters, $target_gender, $shirt_characters[$target_gender] );
+
+				// update option
+				update_option( 'wc_tailor_shirt_chars', $shirt_characters );
+
+				// redirect
+				wc_tailor_redirect( add_query_arg( 'message', 'success' ) );
+			}
+		}
 	}
 
 	/**
@@ -110,7 +143,7 @@ class WC_Tailor_Admin_Pages
 		 * Scripts
 		 */
 		wp_enqueue_media();
-		wp_enqueue_script( 'wct-repeatable', WC_TAILOR_URL .'js/jquery.repeatable.item.min.js', array( 'wct-shared-js', 'jquery-ui-sortable' ), false, true );
+		wp_enqueue_script( 'wct-repeatable', WC_TAILOR_URL .'js/jquery.repeatable.item.js', array( 'wct-shared-js', 'jquery-ui-sortable' ), false, true );
 		wp_enqueue_script( 'wct-shirt-chars', WC_TAILOR_URL .'js/admin-shirts.js', array( 'wct-shared-js' ), false, true );
 	}
 }
