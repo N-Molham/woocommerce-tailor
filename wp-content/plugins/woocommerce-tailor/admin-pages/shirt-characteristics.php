@@ -42,6 +42,7 @@ if ( isset( $_GET['message'] ) )
 			break;
 	}
 }
+
 ?>
 
 <h2 class="nav-tab-wrapper">
