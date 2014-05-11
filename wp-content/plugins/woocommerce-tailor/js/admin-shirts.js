@@ -61,7 +61,7 @@
 			}
 
 			// clear quote escaping
-			$new_item.find( 'textarea' ).val( data.desc.replace( /\\'/g, "'" ) );
+			$new_item.find( 'textarea' ).val( data.desc.replace( /\\'/g, "'" ).replace( /<br(\s?)+\/?>/g, "\n" ) );
 		} ).repeatable_item();
 
 		// option value remove
