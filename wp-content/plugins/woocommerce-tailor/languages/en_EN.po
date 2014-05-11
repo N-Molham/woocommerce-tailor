@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Tailor Store\n"
-"POT-Creation-Date: 2014-05-10 20:39+0200\n"
-"PO-Revision-Date: 2014-05-10 20:39+0200\n"
+"POT-Creation-Date: 2014-05-11 15:23+0200\n"
+"PO-Revision-Date: 2014-05-11 15:23+0200\n"
 "Last-Translator: \n"
 "Language-Team: Nabeel Molham <n.molham@gmail.com>\n"
 "Language: en\n"
@@ -28,6 +28,10 @@ msgstr ""
 msgid "Women"
 msgstr ""
 
+#: ../admin-pages/shirt-characteristics.php:38
+msgid "Are Your Sure ?"
+msgstr ""
+
 #: ../admin-pages/shirt-characteristics.php:39
 msgid "Not option added yet."
 msgstr ""
@@ -36,8 +40,33 @@ msgstr ""
 msgid "Option Label"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:49
+#: ../admin-pages/shirt-characteristics.php:48
+#, php-format
+msgid "Option Price (%s)"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:52
+msgid "Option Picture"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:55
+msgid "Select option image"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:55
+msgid "Media Library"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:59
+msgid "Option Description"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:64
 msgid "Remove"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:73
+msgid "Save Changes"
 msgstr ""
 
 #: ../includes/classes/account-updates.php:75

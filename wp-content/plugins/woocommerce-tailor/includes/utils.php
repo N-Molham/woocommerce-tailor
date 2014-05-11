@@ -3,6 +3,11 @@
  * Utils functions
  */
 
+function wc_tailor_clean_string_basic( $str )
+{
+	return WC_Tailor_Utiles::clean_string_basic( $str );
+}
+
 function wc_tailor_get_value( $key, $query_var = '', $session = false, $encoded = false, $html = false, $allowed = null )
 {
 	return WC_Tailor_Utiles::get_value( $key, $query_var, $session, $encoded, $html, $allowed );
@@ -492,6 +497,20 @@ class WC_Tailor_Utiles
 	public static function is_array_assoc( $arr )
 	{
 		return array_keys( $arr) !== range(0, count($arr) - 1 );
+	}
+
+	public static function array_map_recursive( $array, $callback ) 
+	{
+		$new = array();
+		foreach ( $array as $key => $val ) 
+		{
+			if ( is_array( $val ) )
+				$new[$key] = self::array_map_recursive( $val, $callback );
+			else
+				$new[$key] = call_user_func( $callback, $val );
+		}
+
+		return $new;
 	}
 
 	public static function uniord( $u )
@@ -1343,16 +1362,32 @@ class WC_Tailor_Utiles
 			$value = nl2br( $value );
 			$value = self::remove_extra_space( $value );
 			$value = force_balance_tags( $value );
-			if( is_array($allowed) )
+			if( is_array( $allowed ) )
 				$value = wp_kses( $value, $allowed );
-			elseif( is_null($allowed) )
-			$value = wp_kses_data( $value );
+			elseif( is_null( $allowed ) )
+				$value = wp_kses_data( $value );
 		}
 		else
 		{
 			$value = sanitize_text_field( $value );
 		}
+
 		return str_ireplace( '\\', '', $value );
+	}
+
+	public static function clean_string_basic( $value )
+	{
+		return self::clean_string( $value, false, true, array ( 
+				'dl' => array(),
+				'dt' => array(),
+				'ol' => array(),
+				'ul' => array(),
+				'il' => array(),
+				'b' => array(),
+				'strong' => array(),
+				'br' => array(),
+				'a' => array( 'href', 'title', 'target' ),
+		) );
 	}
 
 	public static function remove_extra_space( $string )
