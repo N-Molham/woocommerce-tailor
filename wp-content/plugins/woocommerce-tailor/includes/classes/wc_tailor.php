@@ -45,6 +45,23 @@ class WC_Tailor
 
 		// plugin activation hook
 		register_activation_hook( WC_TAILOR_PLUGIN_FILE, array( &$this, 'plugin_activation' ) );
+
+		// override product price
+		// add_action( 'woocommerce_before_calculate_totals', array( &$this, 'product_price_override_test' ) );
+	}
+
+	/**
+	 * Product price override to add options selected
+	 * 
+	 * @param WC_Cart $cart
+	 */
+	public function product_price_override_test( $cart )
+	{
+		foreach ( $cart->cart_contents as $cart_item_key => $cart_item )
+		{
+			// set price
+			$cart_item['data']->price = 20;
+		}
 	}
 
 	/**
@@ -68,6 +85,7 @@ class WC_Tailor
 		 */
 		// global style
 		wp_register_style( 'wct-style', WC_TAILOR_URL .'css/style.css' );
+		wp_register_style( 'chosen-styles', WC()->plugin_url() . '/assets/css/chosen.css' );
 
 		// fancybox css
 		wp_register_style( 'jquery-fancybox-css', WC_TAILOR_URL .'js/fancybox/jquery.fancybox-1.3.4.css' );
@@ -101,6 +119,58 @@ class WC_Tailor
 
 		// return original template location
 		return $original_template;
+	}
+
+	/**
+	 * Get shirt characteristics settings
+	 * 
+	 * @return array
+	 */
+	public function get_shirt_charaters_settings()
+	{
+		$defaults = array ( 
+				'male' => array(), 
+				'female' => array() 
+		);
+
+		// get option
+		$shirt_characters = get_option( 'wc_tailor_shirt_chars' );
+		if ( false === $shirt_characters )
+		{
+			// default value
+			$shirt_characters = $defaults;
+
+			// set option
+			add_option( 'wc_tailor_shirt_chars', $shirt_characters, '', 'no' );
+		}
+
+		return apply_filters( 'woocommerce_tailor_shirt_characteristics', wp_parse_args( $shirt_characters, $defaults ) );
+	}
+
+	/**
+	 * Get design wizard settings
+	 * 
+	 * @return array
+	 */
+	public function get_design_wizard_settings()
+	{
+		// defaults
+		$defaults = array ( 
+				'category' => 0,
+		);
+
+		// get option
+		$design_wizard = get_option( 'wc_tailor_design_wizard' );
+		if ( false === $design_wizard )
+		{
+			// default value
+			$design_wizard = $defaults;
+
+			// set option
+			add_option( 'wc_tailor_design_wizard', $design_wizard, '', 'no' );
+		}
+
+		return apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( $design_wizard, $defaults ) );
 	}
 
 	/**

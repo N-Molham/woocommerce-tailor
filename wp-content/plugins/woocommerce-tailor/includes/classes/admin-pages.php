@@ -45,24 +45,51 @@ class WC_Tailor_Admin_Pages
 		// shirt characteristics page
 		$this->pages_hooks['shirt_chars'] = add_submenu_page( 'wc_tailor_shirt_characteristics', __( 'Shirt\'s Characteristics', WCT_DOMAIN ), __( 'Shirt\'s Characteristics', WCT_DOMAIN ), 'manage_options', 'wc_tailor_shirt_characteristics', array( &$this, 'load_page_layout' ) );
 
+		// design wizard options
+		$this->pages_hooks['design_wizard'] = add_submenu_page( 'wc_tailor_shirt_characteristics', __( 'Design Wizard', WCT_DOMAIN ), __( 'Design Wizard', WCT_DOMAIN ), 'manage_options', 'wc_tailor_design_wizard', array( &$this, 'load_page_layout' ) );
+
 		foreach ( $this->pages_hooks as $page_name => $page_hook )
 		{
-			// enqueue styles
+			// global enqueue styles
 			add_action( 'admin_print_styles-'.$page_hook, array( &$this, 'enqueue_scripts_styles' ) );
 
-			// actions
-			add_action( 'load-'. $page_hook, array( &$this, 'page_action_'. $page_name ) );
+			// page actions
+			if ( method_exists( $this, 'page_action_'. $page_name ) )
+				add_action( 'load-'. $page_hook, array( &$this, 'page_action_'. $page_name ) );
 		}
 	}
 
 	/**
-	 * Pages forms action handler
+	 * Design wizard options action handler
+	 * 
+	 * @return void
+	 */
+	public function page_action_design_wizard()
+	{
+		if ( isset( $_POST['wct_wizard_save'], $_POST['wizard'] ) && check_admin_referer( 'wc_tailor_admin_design_wizard', 'nonce' ) )
+		{
+			// sanitize data
+			$wizard = array_map( 'wc_clean', (array) $_POST['wizard'] );
+
+			// old values
+			$old_wizard = WC_Tailor()->get_design_wizard_settings();
+
+			// update option
+			update_option( 'wc_tailor_design_wizard', apply_filters( 'woocommerce_tailor_update_design_wizard', $wizard, $old_wizard ) );
+
+			// redirect
+			wc_tailor_redirect( add_query_arg( 'message', 'success' ) );
+		}
+	}
+
+	/**
+	 * Shirt characteristics page action handler
 	 * 
 	 * @return void
 	 */
 	public function page_action_shirt_chars()
 	{
-		if ( isset( $_POST['wct_shirt_save'], $_POST['chars'] ) && check_admin_referer( 'wc_tailor_shirt_chars', 'nonce' ) )
+		if ( isset( $_POST['wct_shirt_save'], $_POST['chars'] ) && check_admin_referer( 'wc_tailor_admin_shirt_chars', 'nonce' ) )
 		{
 			$target_gender = filter_input( INPUT_POST, 'gender' );
 			if ( in_array( $target_gender, array( 'male', 'female' ) ) )
@@ -74,7 +101,7 @@ class WC_Tailor_Admin_Pages
 				$new_characters = WC_Tailor_Utiles::array_map_recursive( $_POST['chars'], 'wc_tailor_clean_string_basic' );
 
 				// set new values
-				$shirt_characters[$target_gender] = apply_filters( 'woocommerce_tailor_shirt_characteristics', $new_characters, $target_gender, $shirt_characters[$target_gender] );
+				$shirt_characters[$target_gender] = apply_filters( 'woocommerce_tailor_update_shirt_characteristics', $new_characters, $target_gender, $shirt_characters[$target_gender] );
 
 				// update option
 				update_option( 'wc_tailor_shirt_chars', $shirt_characters );
@@ -137,14 +164,23 @@ class WC_Tailor_Admin_Pages
 		 * Styles
 		 */
 		// admin pages style
-		wp_enqueue_style( 'wct-admin-style', WC_TAILOR_URL .'css/admin.css' );
+		wp_enqueue_style( 'wct-admin-style', WC_TAILOR_URL .'css/admin.css', array( 'chosen-styles' ) );
 
 		/**
 		 * Scripts
 		 */
-		wp_enqueue_media();
-		wp_enqueue_script( 'wct-repeatable', WC_TAILOR_URL .'js/jquery.repeatable.item.js', array( 'wct-shared-js', 'jquery-ui-sortable' ), false, true );
-		wp_enqueue_script( 'wct-shirt-chars', WC_TAILOR_URL .'js/admin-shirts.js', array( 'wct-shared-js' ), false, true );
+		switch ( $_GET['page'] )
+		{
+			case 'wc_tailor_design_wizard':
+				wp_enqueue_script( 'chosen' );
+				break;
+
+			case 'wc_tailor_shirt_characteristics':
+				wp_enqueue_media();
+				wp_enqueue_script( 'wct-repeatable', WC_TAILOR_URL .'js/jquery.repeatable.item.js', array( 'wct-shared-js' ), false, true );
+				wp_enqueue_script( 'wct-shirt-chars', WC_TAILOR_URL .'js/admin-shirts.js', array( 'wct-shared-js' ), false, true );
+				break;
+		}
 	}
 }
 

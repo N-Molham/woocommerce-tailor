@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Tailor Store\n"
-"POT-Creation-Date: 2014-05-11 15:23+0200\n"
-"PO-Revision-Date: 2014-05-11 15:23+0200\n"
+"POT-Creation-Date: 2014-05-12 17:45+0200\n"
+"PO-Revision-Date: 2014-05-12 17:45+0200\n"
 "Last-Translator: \n"
 "Language-Team: Nabeel Molham <n.molham@gmail.com>\n"
 "Language: en\n"
@@ -15,57 +15,81 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../admin-pages/shirt-characteristics.php:26
+#: ../admin-pages/shirt-characteristics.php:33
 #: ../includes/classes/admin-pages.php:46
 msgid "Shirt's Characteristics"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:29
+#: ../admin-pages/shirt-characteristics.php:41
+msgid "Data saved."
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:49
 msgid "Men"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:30
+#: ../admin-pages/shirt-characteristics.php:50
 msgid "Women"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:38
+#: ../admin-pages/shirt-characteristics.php:59
 msgid "Are Your Sure ?"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:39
+#: ../admin-pages/shirt-characteristics.php:60
 msgid "Not option added yet."
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:44
+#: ../admin-pages/shirt-characteristics.php:65
 msgid "Option Label"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:48
-#, php-format
-msgid "Option Price (%s)"
+#: ../admin-pages/shirt-characteristics.php:69
+msgid "Option Values"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:52
+#: ../admin-pages/shirt-characteristics.php:74
+msgid "Remove Value"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:75
+msgid "Are You Sure ?"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:76
+msgid "Value Label"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:77
+#, php-format
+msgid "Value Price (%s)"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:78
+msgid "Add New"
+msgstr ""
+
+#: ../admin-pages/shirt-characteristics.php:82
 msgid "Option Picture"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:55
+#: ../admin-pages/shirt-characteristics.php:87
 msgid "Select option image"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:55
+#: ../admin-pages/shirt-characteristics.php:88
 msgid "Media Library"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:59
+#: ../admin-pages/shirt-characteristics.php:92
 msgid "Option Description"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:64
+#: ../admin-pages/shirt-characteristics.php:97
 msgid "Remove"
 msgstr ""
 
-#: ../admin-pages/shirt-characteristics.php:73
+#: ../admin-pages/shirt-characteristics.php:109
 msgid "Save Changes"
 msgstr ""
 
@@ -355,88 +379,88 @@ msgstr ""
 msgid "WooCommerce Tailor"
 msgstr ""
 
-#: ../includes/classes/admin-pages.php:90
+#: ../includes/classes/admin-pages.php:123
 msgid "Target page not found."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:140
+#: ../includes/classes/wc_tailor.php:160
 msgid "WooCommerce Plugin must be installed and activated first."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:141
+#: ../includes/classes/wc_tailor.php:161
 msgid "Required Plugin"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:142
+#: ../includes/classes/wc_tailor.php:162
 msgid "Back"
 msgstr ""
 
-#: ../includes/utils.php:223
+#: ../includes/utils.php:228
 #, php-format
 msgid "%s is not valid numeric value"
 msgstr ""
 
-#: ../includes/utils.php:226
+#: ../includes/utils.php:231
 #, php-format
 msgid "%s must be must be at least %s"
 msgstr ""
 
-#: ../includes/utils.php:238
+#: ../includes/utils.php:243
 msgid "Passwords does not match"
 msgstr ""
 
-#: ../includes/utils.php:245
+#: ../includes/utils.php:250
 msgid "Invalid email address"
 msgstr ""
 
-#: ../includes/utils.php:259
+#: ../includes/utils.php:264
 msgid "Error saving uploaded file, please try again later"
 msgstr ""
 
-#: ../includes/utils.php:264
+#: ../includes/utils.php:269
 msgid "Invalid file type"
 msgstr ""
 
-#: ../includes/utils.php:267
+#: ../includes/utils.php:272
 #, php-format
 msgid "%s size is too big"
 msgstr ""
 
-#: ../includes/utils.php:286
+#: ../includes/utils.php:291
 #, php-format
 msgid "%s is not a valid selection"
 msgstr ""
 
-#: ../includes/utils.php:292
+#: ../includes/utils.php:297
 #, php-format
 msgid "%s required"
 msgstr ""
 
-#: ../includes/utils.php:297
+#: ../includes/utils.php:302
 #, php-format
 msgid "%s character length must be between %d and %d"
 msgstr ""
 
-#: ../includes/utils.php:299
+#: ../includes/utils.php:304
 #, php-format
 msgid "%s character length must be at least %d"
 msgstr ""
 
-#: ../includes/utils.php:301
+#: ../includes/utils.php:306
 #, php-format
 msgid "%s character length must be less than %d"
 msgstr ""
 
-#: ../includes/utils.php:1088
+#: ../includes/utils.php:1107
 msgid "Could not read image size"
 msgstr ""
 
-#: ../includes/utils.php:1093
+#: ../includes/utils.php:1112
 msgid "Could not calculate resized image dimensions"
 msgstr ""
 
-#: ../includes/utils.php:1120 ../includes/utils.php:1123
-#: ../includes/utils.php:1131
+#: ../includes/utils.php:1139 ../includes/utils.php:1142
+#: ../includes/utils.php:1150
 msgid "Resize path invalid"
 msgstr ""
 
