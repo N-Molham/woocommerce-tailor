@@ -10,16 +10,8 @@ $gender = filter_input( INPUT_GET, 'gender' );
 if ( !$gender || !in_array( $gender, array( 'male', 'female' ) ) )
 	$gender = 'male';
 
-// get option
-$shirt_characters = get_option( 'wc_tailor_shirt_chars' );
-if ( false === $shirt_characters )
-{
-	// default value
-	$shirt_characters = array( 'male' => array(), 'female' => array() );
-
-	// set option
-	add_option( 'wc_tailor_shirt_chars', $shirt_characters, '', 'no' );
-}
+// get settings
+$shirt_characters = WC_Tailor()->get_shirt_charaters_settings();
 
 // json data build
 $json_data = array();
@@ -103,7 +95,7 @@ if ( isset( $_GET['message'] ) )
 	</ul>
 
 	<!-- Hidden fields -->
-	<?php wp_nonce_field( 'wc_tailor_shirt_chars', 'nonce' ); ?>
+	<?php wp_nonce_field( 'wc_tailor_admin_shirt_chars', 'nonce' ); ?>
 	<input type="hidden" name="gender" id="gender" value="<?php echo $gender; ?>" />
 
 	<p class="submit"><input type="submit" name="wct_shirt_save" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', WCT_DOMAIN ); ?>" /></p>
