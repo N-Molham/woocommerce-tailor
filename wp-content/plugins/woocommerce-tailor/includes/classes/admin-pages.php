@@ -164,7 +164,7 @@ class WC_Tailor_Admin_Pages
 		 * Styles
 		 */
 		// admin pages style
-		wp_enqueue_style( 'wct-admin-style', WC_TAILOR_URL .'css/admin.css', array( 'chosen-styles' ) );
+		wp_enqueue_style( 'wct-admin-style' );
 
 		/**
 		 * Scripts

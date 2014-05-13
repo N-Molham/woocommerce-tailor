@@ -26,6 +26,13 @@ class WC_Tailor
 	protected $admin_pages;
 
 	/**
+	 * Admin Meta boxes
+	 *
+	 * @var WC_Tailor_Meta_Boxes
+	 */
+	protected $meta_boxes;
+
+	/**
 	 * Account Updates
 	 *
 	 * @var WC_Tailor_Account_Updates
@@ -74,6 +81,9 @@ class WC_Tailor
 		// admin pages instance
 		$this->admin_pages = new WC_Tailor_Admin_Pages();
 
+		// meta box instance
+		$this->meta_boxes = new WC_Tailor_Meta_Boxes();
+
 		// account updates instance
 		$this->account_updates = new WC_Tailor_Account_Updates();
 
@@ -81,15 +91,23 @@ class WC_Tailor
 		add_filter( 'woocommerce_locate_template', array( $this, 'template_override' ), 10, 3 );
 
 		/**
-		 * Register js & css enqueues
+		 * Styles
 		 */
-		// global style
+		// front-end
 		wp_register_style( 'wct-style', WC_TAILOR_URL .'css/style.css' );
+
+		// jQuery Chosen plugin
 		wp_register_style( 'chosen-styles', WC()->plugin_url() . '/assets/css/chosen.css' );
+
+		// wp-admin
+		wp_register_style( 'wct-admin-style', WC_TAILOR_URL .'css/admin.css', array( 'chosen-styles' ) );
 
 		// fancybox css
 		wp_register_style( 'jquery-fancybox-css', WC_TAILOR_URL .'js/fancybox/jquery.fancybox-1.3.4.css' );
 
+		/**
+		 * JavaScript
+		 */
 		// shared js utils
 		wp_register_script( 'wct-shared-js', WC_TAILOR_URL .'js/shared.js', array( 'jquery' ), false, true );
 
@@ -153,9 +171,10 @@ class WC_Tailor
 	/**
 	 * Get design wizard settings
 	 * 
-	 * @return array
+	 * @param boolean $return_object
+	 * @return array|stdClass
 	 */
-	public function get_design_wizard_settings()
+	public function get_design_wizard_settings( $return_object = false )
 	{
 		// defaults
 		$defaults = array ( 
@@ -204,7 +223,21 @@ class WC_Tailor
 			add_option( 'wc_tailor_design_wizard', $design_wizard, '', 'no' );
 		}
 
-		return apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( $design_wizard, $defaults ) );
+		// filtered
+		$design_wizard = apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( $design_wizard, $defaults ) );
+		return $return_object ? (object) $design_wizard : $design_wizard;
+	}
+
+	/**
+	 * 
+	 * @return array
+	 */
+	public function wizard_filters_labels()
+	{
+		return array ( 
+				'color' => __( 'Color', WCT_DOMAIN ),
+				'pattern' => __( 'Pattern', WCT_DOMAIN ),
+		);
 	}
 
 	/**

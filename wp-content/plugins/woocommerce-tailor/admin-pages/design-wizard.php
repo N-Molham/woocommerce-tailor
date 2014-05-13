@@ -7,10 +7,7 @@
 
 $desing_wizard = WC_Tailor()->get_design_wizard_settings();
 
-$filters_labels = array ( 
-		'color' => __( 'Color', WCT_DOMAIN ),
-		'pattern' => __( 'Pattern', WCT_DOMAIN ),
-);
+$filters_labels = WC_Tailor()->wizard_filters_labels();
 
 ?>
 
