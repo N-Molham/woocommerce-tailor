@@ -51,7 +51,7 @@ if ( isset( $_GET['message'] ) )
 			data-confirm-remove-message="<?php esc_attr_e( 'Are Your Sure ?', WCT_DOMAIN ); ?>" 
 			data-empty-list-message="<?php echo esc_attr( '<p class="error">'. __( 'Not option added yet.' ) .'</p>' ); ?>">
 		<li data-template="yes" class="list-item">
-			<table class="form-table">
+			<table class="form-table wc-tailor-table">
 				<tbody>
 					<tr>
 						<th scope="row"><label for="option_{index}_label"><?php _e( 'Option Label', WCT_DOMAIN ); ?></label></th>

@@ -69,7 +69,7 @@ class WC_Tailor_Admin_Pages
 		if ( isset( $_POST['wct_wizard_save'], $_POST['wizard'] ) && check_admin_referer( 'wc_tailor_admin_design_wizard', 'nonce' ) )
 		{
 			// sanitize data
-			$wizard = array_map( 'wc_clean', (array) $_POST['wizard'] );
+			$wizard = WC_Tailor_Utiles::array_map_recursive( (array) $_POST['wizard'], 'wc_clean' );
 
 			// old values
 			$old_wizard = WC_Tailor()->get_design_wizard_settings();
@@ -172,13 +172,12 @@ class WC_Tailor_Admin_Pages
 		switch ( $_GET['page'] )
 		{
 			case 'wc_tailor_design_wizard':
-				wp_enqueue_script( 'chosen' );
+				wp_enqueue_script( 'wct-design-wizard', WC_TAILOR_URL .'js/admin-wizard.js', array( 'chosen', 'wct-repeatable' ), false, true );
 				break;
 
 			case 'wc_tailor_shirt_characteristics':
 				wp_enqueue_media();
-				wp_enqueue_script( 'wct-repeatable', WC_TAILOR_URL .'js/jquery.repeatable.item.js', array( 'wct-shared-js' ), false, true );
-				wp_enqueue_script( 'wct-shirt-chars', WC_TAILOR_URL .'js/admin-shirts.js', array( 'wct-shared-js' ), false, true );
+				wp_enqueue_script( 'wct-shirt-chars', WC_TAILOR_URL .'js/admin-shirts.js', array( 'wct-repeatable' ), false, true );
 				break;
 		}
 	}

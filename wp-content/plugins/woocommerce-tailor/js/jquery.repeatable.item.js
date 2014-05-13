@@ -21,12 +21,22 @@
 						// add new index
 						var item_content = $new_item.html().replace( new RegExp( '{'+ $list.settings.indexKeyName +'}', 'g' ), index );
 
+						// fix: non-object item data
 						// check data
-						if ( typeof data === 'object' ) {
-							// refill fields data
-							for( var field in data ) {
-								item_content = item_content.replace( new RegExp( '{'+ field +'}', 'g' ), data[field] );
-							}
+						switch( typeof data ) {
+							case 'undefined':
+								break;
+
+							case 'object':
+								// refill fields data
+								for( var field in data ) {
+									item_content = item_content.replace( new RegExp( '{'+ field +'}', 'g' ), data[field] );
+								}
+								break;
+
+							default:
+								item_content = item_content.replace( new RegExp( '{'+ $list.settings.valueKeyName +'}', 'g' ), data );
+								break;
 						}
 
 						// clear placeholder left overs
@@ -34,6 +44,10 @@
 
 						// replace HTML and append to list
 						$new_item.html( item_content ).appendTo( $list );
+
+						// fix: next index
+						// index increment
+						$list.settings.startIndex = parseInt( index ) + 1;
 
 						// trigger event: add new
 						$list.trigger( 'repeatable-new-item', [ $new_item, index, data ] );
@@ -172,8 +186,9 @@
 				// settings
 				$list.settings = $.extend( {
 					startIndex: 0,
-					// fix: dynamic index key name
 					indexKeyName: 'index',
+					// fix: dynamic value key name
+					valueKeyName: 'value',
 					addButtonLabel: 'Add New',
 					addButtonClass: 'btn btn-primary',
 					wrapperClass: 'repeatable-wrapper',
@@ -207,27 +222,16 @@
 
 					// add new item
 					methods.add_item( $list.item_template, $list, $list.settings.startIndex );
-
-					// index increment
-					$list.settings.startIndex++;
 				} );
 
 				// add values if any
 				if ( typeof $list.settings.values === 'object' ) {
-
 					// loop items for appending
 					$.each( $list.settings.values, function( item_index, item_data ) {
 						// add new item
 						methods.add_item( $list.item_template, $list, item_index, item_data );
-
-						// fix: values data type "object"
 						$list.settings.is_empty = false;
 					} );
-
-					// new index to start with based
-					if ( !$list.settings.is_empty ) {
-						$list.settings.startIndex = parseInt( methods.array_max( methods.array_keys( $list.settings.values ) ) ) + 1;
-					}
 				}
 
 				// empty list label if is set
@@ -257,7 +261,7 @@
 				$list.trigger( 'repeatable-completed', [ $list.settings ] );
 			} );
 
-			// fix: chaining
+			// chaining
 			return this;
 		};
 	});
