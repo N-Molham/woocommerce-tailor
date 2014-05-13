@@ -96,6 +96,9 @@ class WC_Tailor
 		// fancybox js
 		wp_register_script( 'jquery-fancybox', WC_TAILOR_URL .'js/fancybox/jquery.fancybox-1.3.4.pack.js', array( 'wct-shared-js' ), false, true );
 
+		// repeatable item js
+		wp_register_script( 'wct-repeatable', WC_TAILOR_URL .'js/jquery.repeatable.item.js', array( 'wct-shared-js' ), false, true );
+
 		// body profile js
 		wp_register_script( 'wct-body-profile-js', WC_TAILOR_URL .'js/body-profile.js', array( 'jquery-fancybox' ), false, true );
 	}
@@ -157,6 +160,37 @@ class WC_Tailor
 		// defaults
 		$defaults = array ( 
 				'category' => 0,
+				'columns' => 3,
+				'filters' => array ( 
+						'color' => array ( 
+								'compare' => '=',
+								'options' => array ( 
+										__( 'Black', WCT_DOMAIN ),
+										__( 'Blue', WCT_DOMAIN ),
+										__( 'Purple', WCT_DOMAIN ),
+										__( 'Grey', WCT_DOMAIN ),
+										__( 'Light Blue', WCT_DOMAIN ),
+										__( 'Navy', WCT_DOMAIN ),
+										__( 'Orange', WCT_DOMAIN ),
+										__( 'Pink', WCT_DOMAIN ),
+										__( 'Red', WCT_DOMAIN ),
+										__( 'White', WCT_DOMAIN ),
+										__( 'Yellow', WCT_DOMAIN ),
+										__( 'Green', WCT_DOMAIN ),
+										__( 'Brown', WCT_DOMAIN ),
+										__( 'Dark Purple', WCT_DOMAIN ),
+										__( 'Aqua', WCT_DOMAIN ),
+								),
+						),
+						'pattern' => array ( 
+								'compare' => '=',
+								'options' => array ( 
+										__( 'Check', WCT_DOMAIN ),
+										__( 'Plain', WCT_DOMAIN ),
+										__( 'Stripe', WCT_DOMAIN ),
+								),
+						),
+				),
 		);
 
 		// get option

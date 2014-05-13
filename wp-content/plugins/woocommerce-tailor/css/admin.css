@@ -12,18 +12,28 @@
 	width: 58em;
 }
 
-.shirt-chars .form-table th {
+.wc-tailor-table th,
+.wc-filters td label {
 	width: 160px;
 }
 
-.shirt-chars .form-table th,
-.shirt-chars .form-table td {
+.wc-tailor-table th,
+.wc-tailor-table td {
 	padding: 5px;
 }
 
 .shirt-chars .option-values .value-label {
 	display: inline-block;
 	width: 8em;
+}
+
+.wc-filters td label {
+	display: inline-block;
+}
+
+.wc-filters .options-list {
+	display: inline-block;
+	vertical-align: top;
 }
 
 /* Code & Pre */
