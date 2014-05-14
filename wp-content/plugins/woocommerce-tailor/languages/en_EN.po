@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Tailor Store\n"
-"POT-Creation-Date: 2014-05-13 17:56+0200\n"
-"PO-Revision-Date: 2014-05-13 17:56+0200\n"
+"POT-Creation-Date: 2014-05-14 15:50+0200\n"
+"PO-Revision-Date: 2014-05-14 15:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: Nabeel Molham <n.molham@gmail.com>\n"
 "Language: en\n"
@@ -23,19 +23,73 @@ msgstr ""
 msgid "Settings saved."
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:32
+#: ../admin-pages/design-wizard.php:29
+msgid "Products View"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:33
 msgid "Products Category"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:53
+#: ../admin-pages/design-wizard.php:54
 msgid "The materials"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:57
-msgid "Product Filters"
+#: ../admin-pages/design-wizard.php:58
+msgid "Number of Columns"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:68
+#: ../admin-pages/design-wizard.php:66
+msgid "Products Filters"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:72
+msgid "Equal to"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:73
+msgid "Not Equal to"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:74
+msgid "Greater Than"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:75
+msgid "Greater Than or Equal"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:76
+msgid "Less Than"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:77
+msgid "Less Than or Equal"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:90
+msgid "Comparison"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:103
+msgid "Options"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:107
+#: ../admin-pages/shirt-characteristics.php:51
+msgid "Are Your Sure ?"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:110
+msgid "Option Name"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:111
+#: ../admin-pages/shirt-characteristics.php:89
+msgid "Remove"
+msgstr ""
+
+#: ../admin-pages/design-wizard.php:128
 #: ../admin-pages/shirt-characteristics.php:101
 msgid "Save Changes"
 msgstr ""
@@ -55,10 +109,6 @@ msgstr ""
 
 #: ../admin-pages/shirt-characteristics.php:42
 msgid "Women"
-msgstr ""
-
-#: ../admin-pages/shirt-characteristics.php:51
-msgid "Are Your Sure ?"
 msgstr ""
 
 #: ../admin-pages/shirt-characteristics.php:52
@@ -108,10 +158,6 @@ msgstr ""
 
 #: ../admin-pages/shirt-characteristics.php:84
 msgid "Option Description"
-msgstr ""
-
-#: ../admin-pages/shirt-characteristics.php:89
-msgid "Remove"
 msgstr ""
 
 #: ../includes/classes/account-updates.php:75
@@ -408,79 +454,103 @@ msgstr ""
 msgid "Target page not found."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:162
-msgid "Color"
-msgstr ""
-
-#: ../includes/classes/wc_tailor.php:165
+#: ../includes/classes/design-wizard.php:39
 msgid "Black"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:166
+#: ../includes/classes/design-wizard.php:40
 msgid "Blue"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:167
+#: ../includes/classes/design-wizard.php:41
 msgid "Purple"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:168
+#: ../includes/classes/design-wizard.php:42
 msgid "Grey"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:169
+#: ../includes/classes/design-wizard.php:43
 msgid "Light Blue"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:170
+#: ../includes/classes/design-wizard.php:44
 msgid "Navy"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:171
+#: ../includes/classes/design-wizard.php:45
 msgid "Orange"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:172
+#: ../includes/classes/design-wizard.php:46
 msgid "Pink"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:173
+#: ../includes/classes/design-wizard.php:47
 msgid "Red"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:174
+#: ../includes/classes/design-wizard.php:48
 msgid "White"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:175
+#: ../includes/classes/design-wizard.php:49
 msgid "Yellow"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:176
+#: ../includes/classes/design-wizard.php:50
 msgid "Green"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:177
+#: ../includes/classes/design-wizard.php:51
 msgid "Brown"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:178
+#: ../includes/classes/design-wizard.php:52
 msgid "Dark Purple"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:179
+#: ../includes/classes/design-wizard.php:53
 msgid "Aqua"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:233
+#: ../includes/classes/design-wizard.php:59
+msgid "Check"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:60
+msgid "Plain"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:61
+msgid "Stripe"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:91
+msgid "Color"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:92
+msgid "Pattern"
+msgstr ""
+
+#: ../includes/classes/meta-boxes.php:98
+msgid "Product Filter Options"
+msgstr ""
+
+#: ../includes/classes/meta-boxes.php:125
+msgid "Meta box not found."
+msgstr ""
+
+#: ../includes/classes/wc_tailor.php:248
 msgid "WooCommerce Plugin must be installed and activated first."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:234
+#: ../includes/classes/wc_tailor.php:249
 msgid "Required Plugin"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:235
+#: ../includes/classes/wc_tailor.php:250
 msgid "Back"
 msgstr ""
 

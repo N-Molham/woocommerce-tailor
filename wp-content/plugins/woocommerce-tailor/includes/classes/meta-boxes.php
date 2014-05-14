@@ -49,12 +49,13 @@ class WC_Tailor_Meta_Boxes
 				$selected_values = isset( $_POST['wc_tailor_filters'] ) ? (array) $_POST['wc_tailor_filters'] : array();
 				$selected_values = WC_Tailor_Utiles::array_map_recursive( $selected_values, 'intval' );
 
+				// meta keys
+				$meta_keys = WC_Tailor()->wizard_filters_meta_keys();
+
 				foreach ( $design_wizard_filters as $filter_name => $filter_data )
 				{
-					$meta_key = 'wc_filter_'. $filter_name;
-
 					// clean old values
-					delete_post_meta( $post_id, $meta_key );
+					delete_post_meta( $post_id, $meta_keys[$filter_name] );
 
 					// check filter
 					if ( !isset( $selected_values[$filter_name] ) )
@@ -68,7 +69,7 @@ class WC_Tailor_Meta_Boxes
 							continue;
 
 						// add value to meta
-						add_post_meta( $post_id, $meta_key, $value );
+						add_post_meta( $post_id, $meta_keys[$filter_name], $value );
 					}
 				}
 				break;
