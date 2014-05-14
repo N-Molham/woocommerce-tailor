@@ -97,8 +97,8 @@ class WC_Tailor
 		// design wizard instance
 		$this->design_wizard = new WC_Tailor_Design_Wizard();
 
-		// templates override
-		add_filter( 'woocommerce_locate_template', array( $this, 'template_override' ), 10, 3 );
+		// woocommerce templates override
+		add_filter( 'woocommerce_locate_template', array( $this, 'wc_template_override' ), 10, 3 );
 
 		/**
 		 * Styles
@@ -129,17 +129,36 @@ class WC_Tailor
 
 		// body profile js
 		wp_register_script( 'wct-body-profile-js', WC_TAILOR_URL .'js/body-profile.js', array( 'jquery-fancybox' ), false, true );
+
+		// wizard steps
+		wp_register_script( 'jquery-steps', WC_TAILOR_URL .'js/jquery.steps.min.js', array( 'wct-shared-js' ), false, true );
+
+		// front-end global enqueues
+		add_action( 'template_redirect', array( &$this, 'frontend_global_enqueues' ) );
 	}
 
 	/**
-	 * Override templates to load custom ones
+	 * Front-end Global enqueues
+	 * 
+	 * @return void
+	 */
+	public function frontend_global_enqueues()
+	{
+		/**
+		 * Styles
+		 */
+		wp_enqueue_style( 'wct-style' );
+	}
+
+	/**
+	 * Override woocommerce templates
 	 * 
 	 * @param string $template
 	 * @param string $template_name
 	 * @param string $template_path
 	 * @return string
 	 */
-	public function template_override( $original_template, $template_name, $template_path )
+	public function wc_template_override( $original_template, $template_name, $template_path )
 	{
 		// possible template location
 		$new_template = WC_TAILOR_DIR .'templates/'. $template_name;

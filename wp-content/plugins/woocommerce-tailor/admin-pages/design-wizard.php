@@ -60,6 +60,12 @@ if ( isset( $_GET['message'] ) )
 					<input type="number" step="1" min="1" name="wizard[columns]" id="wizard_columns" class="small-text" value="<?php echo (int) $desing_wizard['columns']; ?>" />
 				</td>
 			</tr>
+			<tr>
+				<th scope="row"><label for="wizard_per_page"><?php _e( 'Number of Products Per Page', WCT_DOMAIN ); ?></label></th>
+				<td>
+					<input type="number" step="1" min="1" name="wizard[per_page]" id="wizard_per_page" class="small-text" value="<?php echo (int) $desing_wizard['per_page']; ?>" />
+				</td>
+			</tr>
 		</tbody>
 	</table>
 
