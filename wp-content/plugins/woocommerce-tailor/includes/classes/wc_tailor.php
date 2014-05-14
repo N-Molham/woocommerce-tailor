@@ -40,6 +40,13 @@ class WC_Tailor
 	protected $account_updates;
 
 	/**
+	 * Design Wizard
+	 *
+	 * @var WC_Tailor_Design_Wizard
+	 */
+	protected $design_wizard;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -86,6 +93,9 @@ class WC_Tailor
 
 		// account updates instance
 		$this->account_updates = new WC_Tailor_Account_Updates();
+
+		// design wizard instance
+		$this->design_wizard = new WC_Tailor_Design_Wizard();
 
 		// templates override
 		add_filter( 'woocommerce_locate_template', array( $this, 'template_override' ), 10, 3 );
@@ -173,71 +183,32 @@ class WC_Tailor
 	 * 
 	 * @param boolean $return_object
 	 * @return array|stdClass
+	 * 
+	 * @uses WC_Tailor_Design_Wizard::get_settings
 	 */
 	public function get_design_wizard_settings( $return_object = false )
 	{
-		// defaults
-		$defaults = array ( 
-				'category' => 0,
-				'columns' => 3,
-				'filters' => array ( 
-						'color' => array ( 
-								'compare' => '=',
-								'options' => array ( 
-										__( 'Black', WCT_DOMAIN ),
-										__( 'Blue', WCT_DOMAIN ),
-										__( 'Purple', WCT_DOMAIN ),
-										__( 'Grey', WCT_DOMAIN ),
-										__( 'Light Blue', WCT_DOMAIN ),
-										__( 'Navy', WCT_DOMAIN ),
-										__( 'Orange', WCT_DOMAIN ),
-										__( 'Pink', WCT_DOMAIN ),
-										__( 'Red', WCT_DOMAIN ),
-										__( 'White', WCT_DOMAIN ),
-										__( 'Yellow', WCT_DOMAIN ),
-										__( 'Green', WCT_DOMAIN ),
-										__( 'Brown', WCT_DOMAIN ),
-										__( 'Dark Purple', WCT_DOMAIN ),
-										__( 'Aqua', WCT_DOMAIN ),
-								),
-						),
-						'pattern' => array ( 
-								'compare' => '=',
-								'options' => array ( 
-										__( 'Check', WCT_DOMAIN ),
-										__( 'Plain', WCT_DOMAIN ),
-										__( 'Stripe', WCT_DOMAIN ),
-								),
-						),
-				),
-		);
-
-		// get option
-		$design_wizard = get_option( 'wc_tailor_design_wizard' );
-		if ( false === $design_wizard )
-		{
-			// default value
-			$design_wizard = $defaults;
-
-			// set option
-			add_option( 'wc_tailor_design_wizard', $design_wizard, '', 'no' );
-		}
-
-		// filtered
-		$design_wizard = apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( $design_wizard, $defaults ) );
-		return $return_object ? (object) $design_wizard : $design_wizard;
+		return $this->design_wizard->get_settings( $return_object );
 	}
 
 	/**
+	 * Get design wizard filters labels
 	 * 
 	 * @return array
 	 */
 	public function wizard_filters_labels()
 	{
-		return array ( 
-				'color' => __( 'Color', WCT_DOMAIN ),
-				'pattern' => __( 'Pattern', WCT_DOMAIN ),
-		);
+		return $this->design_wizard->get_filters_labels();
+	}
+
+	/**
+	 * Get design wizard filters meta keys
+	 * 
+	 * @return array
+	 */
+	public function wizard_filters_meta_keys()
+	{
+		return $this->design_wizard->get_filters_meta_keys();
 	}
 
 	/**

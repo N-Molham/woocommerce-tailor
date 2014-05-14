@@ -6,9 +6,7 @@
  */
 
 $desing_wizard = WC_Tailor()->get_design_wizard_settings();
-
 $filters_labels = WC_Tailor()->wizard_filters_labels();
-
 ?>
 
 <h2><?php _e( 'Design Wizard Options', WCT_DOMAIN ); ?></h2>

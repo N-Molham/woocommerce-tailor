@@ -12,6 +12,7 @@ else
 	$design_wizard_filters = WC_Tailor()->get_design_wizard_settings( true )->filters;
 
 $filters_labels = WC_Tailor()->wizard_filters_labels();
+$filters_meta_keys = WC_Tailor()->wizard_filters_meta_keys();
 
 // panel start
 echo '<div class="panel woocommerce_options_panel">';
@@ -20,7 +21,7 @@ echo '<div class="panel woocommerce_options_panel">';
 foreach ( $design_wizard_filters as $filter_name => $filter_data )
 {
 	// input value
-	$value = (array) get_post_meta( $post->ID, 'wc_filter_'. $filter_name );
+	$value = (array) get_post_meta( $post->ID, $filters_meta_keys[$filter_name] );
 
 	// input layout
 	echo '<div class="options_group"><p class="form-field">';
