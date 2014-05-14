@@ -20,6 +20,13 @@ class WC_Tailor_Design_Wizard
 	const SHORTCODE = 'woocommerce_tailor_design_wizard';
 
 	/**
+	 * Wizard settings
+	 * 
+	 * @var array
+	 */
+	protected static $settings;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct()
@@ -40,14 +47,11 @@ class WC_Tailor_Design_Wizard
 	{
 		$settings = $this->get_settings();
 
-		// wrapper start
-		$out = '<div id="wct-design-wizard">';
-
-		// step one
-		$out .= '<h3>'. __( 'Choose your favorite fabric', WCT_DOMAIN ) .'</h3>';
-
-		// step one content start
-		$out .= '<div class="wizard-step wct-products"><div class="woocommerce columns-'. $settings['columns'] .'"><ul class="products">';
+		// filters
+		$filter_labels = $this->get_filters_labels();
+		$filter_meta_keys = $this->get_filters_meta_keys();
+		$selected_filters = array();
+		$filters_layout = '';
 
 		// products query args
 		$query_args = array ( 
@@ -72,8 +76,71 @@ class WC_Tailor_Design_Wizard
 				)
 		);
 
+		// filters loop
+		foreach ( $settings['filters'] as $filter_name => $filter_data )
+		{
+			$query_string = 'filter_'. $filter_name;
+
+			// selected value
+			$selected_filters[$query_string] = isset( $_GET[$query_string] ) ? wc_clean( $_GET[$query_string] ) : 'none';
+
+			// check value
+			if ( 'none' != $selected_filters[$query_string] && isset( $filter_data['options'][ $selected_filters[$query_string] ] ) )
+			{
+				$query_args['meta_query'][] = array ( 
+						'key' => $filter_meta_keys[$filter_name],
+						'value' => $selected_filters[$query_string],
+						'compare' => $filter_data['compare']
+				);
+			}
+
+			// filter layout
+			$filters_layout .= '<label class="filter">'. $filter_labels[$filter_name] .'&nbsp;&nbsp;';
+			$filters_layout .= '<select name="filter_'. $filter_name .'" class="filter-options">';
+
+			// default
+			$filters_layout .= '<option value="none">'. __( 'Any', WCT_DOMAIN ) .'</option>';
+
+			
+			foreach ( $filter_data['options'] as $option_index => $option_label )
+			{
+				// option value
+				$filters_layout .= '<option value="'. $option_index .'"';
+
+				// selected value
+				$filters_layout .= $option_index == $selected_filters[$query_string] ? ' selected' : '';
+
+				// option label
+				$filters_layout .= '>'. $option_label .'</option>';
+			}
+
+			// filter layout end
+			$filters_layout .= '</select></label>';
+		}
+
+		// wrapper start
+		$out = '<div id="wct-design-wizard">';
+
+		// step one
+		$out .= '<h3>'. __( 'Choose your favorite fabric', WCT_DOMAIN ) .'</h3>';
+
+		// step one content start
+		$out .= '<div class="wizard-step wct-products">';
+
+		// loading
+		$out .= '<div class="loading"><div class="loader">'. __( 'Loading', WCT_DOMAIN ) .'</div></div>';
+
+		// product filters
+		$out .= '<div class="product-filters">'. $filters_layout .'<a href="'. $_SERVER['REQUEST_URI'] .'" class="button filter-button">'. __( 'Filter', WCT_DOMAIN ) .'</a></div>';
+
+		// product wrappers
+		$out .= '<div class="products-wrapper">';
+
+		// product list
+		$out .= '<div class="woocommerce columns-'. $settings['columns'] .'"><ul class="products">';
+
 		// products query
-		$query = new WP_Query( $query_args );
+		$query = new WP_Query( apply_filters( 'woocommerce_tailor_design_wizard_products_args', $query_args ) );
 
 		// product class wrapper
 		$products = array_map( 'get_product', $query->posts ); 
@@ -106,21 +173,45 @@ class WC_Tailor_Design_Wizard
 			$out .= '</a>';
 
 			// product title
-			$out .= '<h3>'. get_the_title( $product->id ) .'</h3>';
+			$out .= '<h3>'. apply_filters( 'the_title', $product->post->post_title, $product->id ) .'</h3>';
+
+			// product short description
+			$out .= '<p class="excerpt">'. apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $product->post->post_excerpt ) ) .'</p>';
 
 			// price
 			$out .= '<span class="price">'. $product->get_price_html() .'</span>';
 
 			// select button
-			$out .= '<a href="#" rel="nofollow" data-product="'. $product->id .'" class="button">'. __( 'Select', WCT_DOMAIN ) .'</a>';
+			$out .= '<a href="#" rel="nofollow" class="button select-button">'. __( 'Select', WCT_DOMAIN ) .'</a>';
+			$out .= '<input type="radio" name="wct_wizard[fabric]" class="button" value="'. $product->id .'" />';
 
 			// product item end
 			$out .= '</li>';
 		}
 		$out .= '</ul>';
 
+		// base url with filters
+		$big = 999999999;
+		$paging_base_url = add_query_arg( $selected_filters, get_pagenum_link( $big ) );
+		$paging_base_url = str_replace( $big, '%#%', $paging_base_url );
+
+		// paging list
+		$out .= '<nav class="woocommerce-pagination">'. paginate_links( array ( 
+				'base' => $paging_base_url,
+				'format' => '&paged=%#%',
+				'current' => max( 1, get_query_var( 'paged' ) ),
+				'total' => $query->max_num_pages,
+				'prev_text' => '&larr;',
+				'next_text' => '&rarr;',
+				'type' => 'list',
+				'end_size' => 3,
+				'mid_size' => 3
+		) ) .'</nav>';
+
 		// step one content end
-		$out .= '</div></div>';
+		$out .= '</div>'; // .columns
+		$out .= '</div>'; // .products-wrapper
+		$out .= '</div>'; // .wct-products
 
 		// step two
 		$out .= '<h3>'. __( 'Select your shirt\'s characteristics', WCT_DOMAIN ) .'</h3>';
@@ -158,8 +249,12 @@ class WC_Tailor_Design_Wizard
 			wp_enqueue_script( 'wc-design-wizard', WC_TAILOR_URL .'js/design-wizard.js', array( 'jquery-steps' ), false, true );
 
 			// wizard localize
-			wp_localize_script( 'wc-design-wizard', 'wct_design_wizard', apply_filters( 'woocommerce_tailor_design_localize', array (
-					'labels' => array (
+			wp_localize_script( 'wc-design-wizard', 'wct_design_wizard', apply_filters( 'woocommerce_tailor_design_localize', array ( 
+					'product_labels' => array (
+							'selected' => __( 'Selected', WCT_DOMAIN ),
+							'select' => __( 'Select', WCT_DOMAIN ),
+					),
+					'wizard_labels' => array (
 							'cancel' => __( 'Cancel', WCT_DOMAIN ),
 							'current' => __( 'current step:', WCT_DOMAIN ),
 							'pagination' => __( 'Pagination', WCT_DOMAIN ),
@@ -217,20 +312,24 @@ class WC_Tailor_Design_Wizard
 				),
 		);
 
-		// get option
-		$design_wizard = get_option( 'wc_tailor_design_wizard' );
-		if ( false === $design_wizard )
+		// check cached first
+		if ( is_null( self::$settings ) )
 		{
-			// default value
-			$design_wizard = $defaults;
+			// get option
+			self::$settings = get_option( 'wc_tailor_design_wizard' );
+			if ( false === self::$settings )
+			{
+				// default value
+				self::$settings = $defaults;
 
-			// set option
-			add_option( 'wc_tailor_design_wizard', $design_wizard, '', 'no' );
+				// set option
+				add_option( 'wc_tailor_design_wizard', self::$settings, '', 'no' );
+			}
 		}
 
 		// filtered
-		$design_wizard = apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( $design_wizard, $defaults ) );
-		return $return_object ? (object) $design_wizard : $design_wizard;
+		self::$settings = apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( self::$settings, $defaults ) );
+		return $return_object ? (object) self::$settings : self::$settings;
 	}
 
 	/**
