@@ -682,7 +682,6 @@ class WC_Tailor_Account_Updates
 							$input_layout .= '<p class="content-holder"></p></div>';
 
 							// enqueues
-							wp_enqueue_style( 'wct-style' );
 							wp_enqueue_script( 'wct-measures-js' );
 
 							// js localize
