@@ -17,14 +17,14 @@ class WC_Tailor_Account_Updates
 	 *
 	 * @var array
 	 */
-	protected $account_details_sections;
+	var $account_details_sections;
 
 	/**
 	 * Account details fields
 	 *
 	 * @var array
 	 */
-	protected $account_details_fields;
+	var $account_details_fields;
 
 	/**
 	 * List of fields to be handled by WooCommerce by default
@@ -551,9 +551,6 @@ class WC_Tailor_Account_Updates
 		// fields loop
 		foreach ( $this->account_details_fields as $field_name => $field_args )
 		{
-			// parse args
-			$field_args = apply_filters( 'woocommerce_tailor_account_field_args', wp_parse_args( $field_args, $this->field_defaults ), $field_name, $user );
-
 			// section handler
 			$field_section = $field_args['section'];
 			if ( !in_array( $field_section, $handled_sections ) && isset( $this->account_details_sections[$field_section] ) )
@@ -589,118 +586,8 @@ class WC_Tailor_Account_Updates
 				}
 			}
 
-			// field value
-			$meta_key = $field_args['meta_key'];
-			if ( in_array( $meta_key, $this->user_class_props ) && isset( $user->$meta_key ) )
-			{
-				// from class property
-				$field_value = $user->$meta_key;
-			}
-			else
-			{
-				// from meta
-				if ( is_array( $meta_key ) && count( $meta_key ) == 2 )
-				{
-					// array value
-					$meta_value = (array) get_user_meta( $user->ID, $meta_key[0], true );
-					$field_value = isset( $meta_value[$meta_key[1]] ) ? $meta_value[$meta_key[1]] : '';
-				}
-				else
-				{
-					// non array
-					$field_value = empty( $meta_key ) ? '' : get_user_meta( $user->ID, $meta_key, true );
-				}
-			}
-
-			// value filter
-			$field_value = apply_filters( 'woocommerce_tailor_account_field_value', $field_value, $field_name, $field_args );
-
-			// wrapper
-			$output .= '<'. $field_args['wrapper_tag'] .' class="'. $field_args['wrapper_class'] .'" '. $field_args['wrapper_attrs'] .'>';
-
-			// label
-			$output .= 'none' == $field_args['label'] ? '' : '<label for="'. $field_name .'">'. $field_args['label'] . ( $field_args['required'] ? ' <span class="required">*</span>' : '' ) .'</label>';
-
-			// input layout
-			$input_layout = '';
-			switch ( $field_args['input'] )
-			{
-				case 'text':
-				case 'email':
-				case 'password':
-					$input_layout .= '<input type="'. $field_args['input'] .'" class="'. $field_args['input_class'] .'" name="'. $field_name .'" id="'. $field_name .'" value="'. esc_attr( $field_value ) .'" />';
-					break;
-
-				case 'radio':
-					// loop values
-					foreach ( $field_args['options'] as $option_value => $option_label )
-					{
-						$input_layout .= '<label class="'. $field_args['option_class'] .'"><input type="radio" class="'. $field_args['input_class'] .'" name="'. $field_name .'" value="'. $option_value .'"'. checked( $field_value, $option_value, false ) .'/> '. $option_label .'</label>';
-					}
-					break;
-
-				case 'html':
-					switch ( $field_name )
-					{
-						case 'measures_inputs':
-							if ( !is_array( $field_value ) )
-								$field_value = array();
-
-							// measure image
-							$input_layout .= '<div class="column two-third">';
-							$input_layout .= '<div class="loading"></div>';
-							$input_layout .= '<img src="" data-default="'. WC_TAILOR_URL .'images/measurements/default.jpg" alt="" class="measure-img" /></div>';
-
-							// inputs
-							$input_layout .= '<div class="column one-third">';
-
-							// measurements loop
-							foreach ( $this->body_measurements as $meausre_name => $meausre_args )
-							{
-								if ( !isset( $field_value[$meausre_name] ) )
-									$field_value[$meausre_name] = array();
-
-								$field_value[$meausre_name] = wp_parse_args( $field_value[$meausre_name], array( 'cm' => 0, 'inches' => 0 ) );
-
-								// data attributes
-								$input_layout .= '<p class="inputs-holder" data-key="'. $meausre_name .'" data-gender="'. $meausre_args['gender'] .'" data-instructions="'. esc_attr( $meausre_args['instructions'] ) .'">';
-
-								// label
-								$input_layout .= '<label>'. $meausre_args['label'] .'</label>&nbsp;&nbsp;';
-
-								// inputs
-								$input_layout .= '<input type="text" class="input-text input-cm" name="'. $field_name .'['. $meausre_name .'][cm]" value="'. floatval( $field_value[$meausre_name]['cm'] ) .'" /> cm &nbsp;';
-								$input_layout .= '<input type="text" class="input-text input-inches" name="'. $field_name .'['. $meausre_name .'][inches]" value="'. floatval( $field_value[$meausre_name]['inches'] ) .'" /> inc.';
-							}
-
-							// inputs end
-							$input_layout .= '</div>';
-
-							// instructions
-							$input_layout .= '<div class="clear"></div><div class="instructions">';
-							$input_layout .= '<h3>'. __( 'Instructions', WCT_DOMAIN ) .'</h3>';
-							$input_layout .= '<p class="content-holder"></p></div>';
-
-							// enqueues
-							wp_enqueue_script( 'wct-measures-js' );
-
-							// js localize
-							wp_localize_script( 'wct-measures-js', 'wct_measures', array ( 
-									'measure_url' => WC_TAILOR_URL .'images/measurements/',
-							) );
-							break;
-					}
-					break;
-			}
-
-			// input layout filter
-			$input_layout = apply_filters( 'woocommerce_tailor_account_field_input', $input_layout, $field_name, $field_value, $field_args );
-
-			// input + description
-			$output .= $input_layout .'<span class="description">'. $field_args['description'] .'</span>';
-
-			// wrapper end + after field
-			$output .= '</'. $field_args['wrapper_tag'] .'>'. $field_args['after'];
+			// field input layout
+			$output .= $this->render_field_output( $field_name, $field_args, $this->get_field_value( $field_name, $field_args, $user ), $user );
 		}
 
 		if ( $echo )
@@ -710,23 +597,150 @@ class WC_Tailor_Account_Updates
 	}
 
 	/**
-	 * Get account details fields
+	 * Get account detail field value
 	 * 
-	 * @return multitype:
+	 * @param string $field_name
+	 * @param array $field_args
+	 * @param WP_User $user
+	 * @return mixed
 	 */
-	public function get_account_details()
+	public function get_field_value( $field_name, $field_args, &$user = null )
 	{
-		return $this->account_details_fields;
+		// if no user passed, get the current logged in user
+		if ( !$user )
+			$user = wp_get_current_user();
+
+		// field value
+		$meta_key = $field_args['meta_key'];
+		if ( in_array( $meta_key, $this->user_class_props ) && isset( $user->$meta_key ) )
+		{
+			// from class property
+			$field_value = $user->$meta_key;
+		}
+		else
+		{
+			// from meta
+			if ( is_array( $meta_key ) && count( $meta_key ) == 2 )
+			{
+				// array value
+				$meta_value = (array) get_user_meta( $user->ID, $meta_key[0], true );
+				$field_value = isset( $meta_value[$meta_key[1]] ) ? $meta_value[$meta_key[1]] : '';
+			}
+			else
+			{
+				// non array
+				$field_value = empty( $meta_key ) ? '' : get_user_meta( $user->ID, $meta_key, true );
+			}
+		}
+
+		// value filter
+		return apply_filters( 'woocommerce_tailor_account_field_value', $field_value, $field_name, $field_args );;
 	}
+
+	/**
+	 * Render field layout
+	 * 
+	 * @param string $field_name
+	 * @param array $field_args
+	 * @param mixed $field_value
+	 * @param WP_User $user
+	 * @return string
+	 */
+	public function render_field_output( $field_name, $field_args, $field_value = null, &$user = null )
+	{
+		// get field value if not set
+		if ( is_null( $field_value ) )
+			$field_value = $this->get_field_value( $field_name, $field_args, $user );
+
+		// parse args
+		$field_args = apply_filters( 'woocommerce_tailor_account_field_args', wp_parse_args( $field_args, $this->field_defaults ), $field_name );
+
+		// wrapper
+		$output = '<'. $field_args['wrapper_tag'] .' class="'. $field_args['wrapper_class'] .'" '. $field_args['wrapper_attrs'] .'>';
+
+		// label
+		$output .= 'none' == $field_args['label'] ? '' : '<label for="'. $field_name .'">'. $field_args['label'] . ( $field_args['required'] ? ' <span class="required">*</span>' : '' ) .'</label>';
+
+		// input layout
+		switch ( $field_args['input'] )
+		{
+			case 'text':
+			case 'email':
+			case 'password':
+				$output .= '<input type="'. $field_args['input'] .'" class="'. $field_args['input_class'] .'" name="'. $field_name .'" id="'. $field_name .'" value="'. esc_attr( $field_value ) .'" />';
+				break;
+
+			case 'radio':
+				// loop values
+				foreach ( $field_args['options'] as $option_value => $option_label )
+				{
+					$output .= '<label class="'. $field_args['option_class'] .'"><input type="radio" class="'. $field_args['input_class'] .'" name="'. $field_name .'" value="'. $option_value .'"'. checked( $field_value, $option_value, false ) .'/> '. $option_label .'</label>';
+				}
+				break;
+
+			case 'html':
+				switch ( $field_name )
+				{
+					case 'measures_inputs':
+						if ( !is_array( $field_value ) )
+							$field_value = array();
+
+						// measure image
+						$output .= '<div class="column two-third">';
+						$output .= '<div class="loading"></div>';
+						$output .= '<img src="" data-default="'. WC_TAILOR_URL .'images/measurements/default.jpg" alt="" class="measure-img" /></div>';
+
+						// inputs
+						$output .= '<div class="column one-third">';
+
+						// measurements loop
+						foreach ( $this->body_measurements as $meausre_name => $meausre_args )
+						{
+							if ( !isset( $field_value[$meausre_name] ) )
+								$field_value[$meausre_name] = array();
+
+							$field_value[$meausre_name] = wp_parse_args( $field_value[$meausre_name], array( 'cm' => 0, 'inches' => 0 ) );
+
+							// data attributes
+							$output .= '<p class="inputs-holder" data-key="'. $meausre_name .'" data-gender="'. $meausre_args['gender'] .'" data-instructions="'. esc_attr( $meausre_args['instructions'] ) .'">';
+
+							// label
+							$output .= '<label>'. $meausre_args['label'] .'</label>&nbsp;&nbsp;';
+
+							// inputs
+							$output .= '<input type="text" class="input-text input-cm" name="'. $field_name .'['. $meausre_name .'][cm]" value="'. floatval( $field_value[$meausre_name]['cm'] ) .'" /> cm &nbsp;';
+							$output .= '<input type="text" class="input-text input-inches" name="'. $field_name .'['. $meausre_name .'][inches]" value="'. floatval( $field_value[$meausre_name]['inches'] ) .'" /> inc.';
+						}
+
+						// inputs end
+						$output .= '</div>';
+
+						// instructions
+						$output .= '<div class="clear"></div><div class="instructions">';
+						$output .= '<h3>'. __( 'Instructions', WCT_DOMAIN ) .'</h3>';
+						$output .= '<p class="content-holder"></p></div>';
+
+						// enqueues
+						wp_enqueue_script( 'wct-measures-js' );
+
+						// js localize
+						wp_localize_script( 'wct-measures-js', 'wct_measures', array ( 
+								'measure_url' => WC_TAILOR_URL .'images/measurements/',
+						) );
+						break;
+				}
+				break;
+		}
+
+		// input + description
+		$output .= '<span class="description">'. $field_args['description'] .'</span>';
+
+		// wrapper end + after field
+		$output .= '</'. $field_args['wrapper_tag'] .'>'. $field_args['after'];
+
+		// input layout filter
+		return apply_filters( 'woocommerce_tailor_account_field_input', $output, $field_name, $field_value, $field_args );
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
 

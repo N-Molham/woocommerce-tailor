@@ -6,47 +6,48 @@
 		// wizard init
 		var $viewport = $( 'body, html' ),
 			$wizard = $( '#wct-design-wizard' ).steps( {
-			headerTag: 'h3',
-			bodyTag: 'div.wizard-step',
-			enableKeyNavigation: false,
-			enablePagination: true,
-			labels: wct_design_wizard.wizard_labels,
-			// before changing to next step
-			onStepChanging: function( e, current_step, nex_step ) {
-				switch( current_step ) {
-					// step one
-					case 0:
-						// not product selected
-						var $error = $products_step.find( '.error-no-fabric' ).addClass( 'hidden' );
-						if ( $products_wrapper.find( 'input[type=radio]:checked' ).length != 1 ) {
-							$error.removeClass( 'hidden' );
-							return false;
-						}
-						break;
-
-					// step two
-					case 1:
-						var $error = $shirt_characters_step.find( '.error-characters' ).addClass( 'hidden' ),
-							show_error = false;
-
-						// check visible options
-						$characters_options.filter( ':visible' ).each( function() {
-							// checked ones
-							if( $( this ).find( 'input:checked' ).length != 1 ) {
-								show_error = true;
+				startIndex: 2, // for test only
+				headerTag: 'h3',
+				bodyTag: 'div.wizard-step',
+				enableKeyNavigation: false,
+				enablePagination: true,
+				labels: wct_design_wizard.wizard_labels,
+				// before changing to next step
+				onStepChanging: function( e, current_step, nex_step ) {
+					switch( current_step ) {
+						// step one
+						case 0:
+							// not product selected
+							var $error = $products_step.find( '.error-no-fabric' ).addClass( 'hidden' );
+							if ( $products_wrapper.find( 'input[type=radio]:checked' ).length != 1 ) {
+								$error.removeClass( 'hidden' );
+								return false;
 							}
-						} );
-
-						if ( show_error ) {
-							$error.removeClass( 'hidden' );
-							return false;
-						}
-						break;
+							break;
+	
+						// step two
+						case 1:
+							var $error = $shirt_characters_step.find( '.error-characters' ).addClass( 'hidden' ),
+								show_error = false;
+	
+							// check visible options
+							$gender_related_fields.filter( '.character-option:visible' ).each( function() {
+								// checked ones
+								if( $( this ).find( 'input:checked' ).length != 1 ) {
+									show_error = true;
+								}
+							} );
+	
+							if ( show_error ) {
+								$error.removeClass( 'hidden' );
+								return false;
+							}
+							break;
+					}
+	
+					// continue
+					return true;
 				}
-
-				// continue
-				return true;
-			}
 		} );
 
 		// step one
@@ -160,27 +161,33 @@
 		};
 		lightbox_setup();
 
-		// step two
+		// step two & three
 		var $shirt_characters_step = $wizard.find( '.wc-shirt-characters' ),
+			// user gender field
 			$user_gender = $shirt_characters_step.find( '.user-gender' ),
-			$selected_gender = $user_gender.filter( ':checked' );
-			$characters_options = $shirt_characters_step.find( '.character-option' );
+			// already selected gender option
+			$preselected_gender = $user_gender.filter( ':checked' ),
+			// currently selected gender key name
+			selected_gender = '',
+			// user gender related fields that change based on gender selected option
+			$gender_related_fields = $wizard.find( '.wc-shirt-characters .character-option, .body-profile-step .form-row[class*=gender]' );
 
 		// gender change
 		$user_gender.on( 'change wct-change', function( e ) {
+			selected_gender = e.currentTarget.value;
 			// hide all characters
-			$characters_options.css( 'display', 'none' )
+			$gender_related_fields.css( 'display', 'none' )
 				// show only selected gender related
-				.filter( '.gender-'+ e.currentTarget.value ).css( 'display', 'block' );
+				.filter( '.gender-'+ selected_gender ).css( 'display', 'block' );
 		} );
 
 		// default characters visible ?
-		if ( $selected_gender.length ) {
+		if ( $preselected_gender.length ) {
 			// trigger pre-selected gender
-			$selected_gender.trigger( 'wct-change' );
+			selected_gender = $preselected_gender.trigger( 'wct-change' ).val();
 		} else {
 			// trigger first option by default
-			$user_gender.filter( ':first' ).attr( 'checked', true ).trigger( 'wct-change' );
+			selected_gender = $user_gender.filter( ':first' ).attr( 'checked', true ).trigger( 'wct-change' ).val();
 		}
 
 	} );
