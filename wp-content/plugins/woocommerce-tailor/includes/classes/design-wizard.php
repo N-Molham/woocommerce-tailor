@@ -24,7 +24,7 @@ class WC_Tailor_Design_Wizard
 	 * 
 	 * @var array
 	 */
-	protected static $settings;
+	protected $settings;
 
 	/**
 	 * Constructor
@@ -55,6 +55,7 @@ class WC_Tailor_Design_Wizard
 
 		$settings = $this->get_settings();
 		$page_url = get_permalink();
+		$input_prefix = 'wct_wizard';
 
 		// filters
 		$filter_labels = $this->get_filters_labels();
@@ -133,6 +134,8 @@ class WC_Tailor_Design_Wizard
 		// wrapper start
 		$out = '<div id="wct-design-wizard">';
 
+		/*********************{{ Step One : Fabric selection }}*********************/
+
 		// step one
 		$out .= '<h3>'. __( 'Choose your favorite fabric', WCT_DOMAIN ) .'</h3>';
 
@@ -141,6 +144,9 @@ class WC_Tailor_Design_Wizard
 
 		// loading
 		$out .= '<div class="loading"><div class="loader">'. __( 'Loading', WCT_DOMAIN ) .'</div></div>';
+
+		// before products
+		$out .= apply_filters( 'woocommerce_tailor_design_wizard_products_before', '' );
 
 		// product filters
 		$out .= '<div class="product-filters">';
@@ -181,20 +187,20 @@ class WC_Tailor_Design_Wizard
 			for ( $i = 0; $i < $query->post_count; $i++ )
 			{
 				$product = &$products[$i];
-	
+
 				// first/last item class
 				$classes = array();
 				$loop = $i + 1;
-	
+
 				if ( 0 == ( $loop - 1 ) % $settings['columns'] || 1 == $settings['columns'] )
 					$classes[] = 'first';
-	
+
 				if ( 0 == $loop % $settings['columns'] )
 					$classes[] = 'last';
-	
+
 				// product item start
 				$out .= '<li class="'. join( ' ', get_post_class( $classes, $product->id ) ) .'">';
-	
+
 				// image link
 				$out .= '<a href="'. esc_attr( wp_get_attachment_url( get_post_thumbnail_id( $product->id ) ) ) .'" title="'. esc_attr( $product->post->post_title ) .'" class="lightbox" data-rel="prettyPhoto">';
 				if ( has_post_thumbnail( $product->id ) )
@@ -202,20 +208,20 @@ class WC_Tailor_Design_Wizard
 				elseif ( wc_placeholder_img_src() )
 					$out .= wc_placeholder_img( 'shop_catalog' );
 				$out .= '</a>';
-	
+
 				// product title
 				$out .= '<h3>'. apply_filters( 'the_title', $product->post->post_title, $product->id ) .'</h3>';
-	
+
 				// product short description
 				$out .= '<p class="excerpt">'. apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $product->post->post_excerpt ) ) .'</p>';
-	
+
 				// price
 				$out .= '<span class="price">'. $product->get_price_html() .'</span>';
-	
+
 				// select button
 				$out .= '<a href="#" rel="nofollow" class="button select-button">'. __( 'Select', WCT_DOMAIN ) .'</a>';
-				$out .= '<input type="radio" name="wct_wizard[fabric]" class="button" value="'. $product->id .'" />';
-	
+				$out .= '<input type="radio" name="'. $input_prefix .'[fabric]" class="button" value="'. $product->id .'" />';
+
 				// product item end
 				$out .= '</li>';
 			}
@@ -248,15 +254,78 @@ class WC_Tailor_Design_Wizard
 		// step one content end
 		$out .= '</div>'; // .columns
 		$out .= '</div>'; // .products-wrapper
-		$out .= '</div>'; // .wct-products
+
+		// before products
+		$out .= apply_filters( 'woocommerce_tailor_design_wizard_products_after', '' );
+
+		$out .= '</div>'; // .wct-products .wizard-step
+
+		/*********************{{ Step Two : Shirt's Characteristics options }}*********************/
+
+		// current logged-in user
+		$user = wp_get_current_user();
+		$user_gender = $user->exists() ? $user->gender : '';
 
 		// step two
 		$out .= '<h3>'. __( 'Select your shirt\'s characteristics', WCT_DOMAIN ) .'</h3>';
-		$out .= '<div class="wizard-step">step to</div>';
+		$out .= '<div class="wizard-step wc-shirt-characters">';
+
+		// before
+		$out .= apply_filters( 'woocommerce_tailor_design_wizard_shirt_chars_before', '' );
+
+		// not product selected error
+		$out .= '<div class="woocommerce"><p class="woocommerce-error error-characters hidden">'. __( 'There are missing options.', WCT_DOMAIN ) .'</p></div>';
+
+		// selecting gender
+		$out .= '<div class="input-field"><label class="input-label">'. __( 'Gender', WCT_DOMAIN ) .'</label>';
+		$out .= '<p class="input-options">';
+		$out .= '<label class="input-option"><input type="radio" name="'. $input_prefix .'[gender]" value="male" class="user-gender"'. ( 'male' == $user_gender ? ' checked="checked"' : '' ) .' /> '. __( 'Male', WCT_DOMAIN ) .'</label>';
+		$out .= '<label class="input-option"><input type="radio" name="'. $input_prefix .'[gender]" value="female" class="user-gender"'. ( 'female' == $user_gender ? ' checked="checked"' : '' ) .' /> '. __( 'Female', WCT_DOMAIN ) .'</label>';
+		$out .= '</p></div><hr/>';
+
+		// loop characters
+		$shit_characters = $this->get_shirt_charaters();
+		foreach ( $shit_characters as $gender => $gender_characters )
+		{
+			foreach ( $gender_characters as $charcter_index => $character_data )
+			{
+				// label
+				$out .= '<div class="input-field character-option gender-'. $gender .'">';
+				$out .= '<label class="input-label">'. $character_data['label'];
+
+				// picture & description
+				$href = "javascript:jQuery.prettyPhoto.open( '{$character_data['picture']}', '{$character_data['label']}', '". esc_sql( $character_data['desc'] ) ."' );";
+				$out .= '<br/>( <a href="'. $href .'">'. __( 'Picture', WCT_DOMAIN ) .'</a> )</label>';
+
+				$out .= '<p class="input-options">';
+				foreach ( $character_data['values']['label'] as $value_index => $value_label )
+				{
+					$out .= '<label class="input-option"><input type="radio" name="'. $input_prefix .'[shirt-characters]['. $gender .'][character-'. $charcter_index .']" value="'. $value_index .'" />'. $value_label .'</label>';
+				}
+				$out .= '</p></div>';
+			}
+		}
+
+		// after
+		$out .= apply_filters( 'woocommerce_tailor_design_wizard_shirt_chars_after', '' );
+
+		$out .= '</div>'; // .wizard-step.wc-shirt-characters
+
+		/*********************{{ Step Three : Body Profile }}*********************/
 
 		// step three
 		$out .= '<h3>'. __( 'Measure Up', WCT_DOMAIN ) .'</h3>';
-		$out .= '<div class="wizard-step">step three</div>';
+		$out .= '<div class="wizard-step body-profile">';
+
+		// before
+		$out .= apply_filters( 'woocommerce_tailor_design_wizard_body_profile_before', '' );
+
+		
+
+		// after
+		$out .= apply_filters( 'woocommerce_tailor_design_wizard_body_profile_after', '' );
+
+		$out .= '</div>'; // .body-profile
 
 		// wrapper end
 		$out .= '</div>';
@@ -362,23 +431,23 @@ class WC_Tailor_Design_Wizard
 		);
 
 		// check cached first
-		if ( is_null( self::$settings ) )
+		if ( is_null( $this->settings ) )
 		{
 			// get option
-			self::$settings = get_option( 'wc_tailor_design_wizard' );
-			if ( false === self::$settings )
+			$this->settings = get_option( 'wc_tailor_design_wizard' );
+			if ( false === $this->settings )
 			{
 				// default value
-				self::$settings = $defaults;
+				$this->settings = $defaults;
 
 				// set option
-				add_option( 'wc_tailor_design_wizard', self::$settings, '', 'no' );
+				add_option( 'wc_tailor_design_wizard', $this->settings, '', 'no' );
 			}
 		}
 
 		// filtered
-		self::$settings = apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( self::$settings, $defaults ) );
-		return $return_object ? (object) self::$settings : self::$settings;
+		$this->settings = apply_filters( 'woocommerce_tailor_design_wizard_settings', wp_parse_args( $this->settings, $defaults ) );
+		return $return_object ? (object) $this->settings : $this->settings;
 	}
 
 	/**
@@ -455,6 +524,32 @@ class WC_Tailor_Design_Wizard
 				'pattern' => 'wc_filter_pattern',
 				'max_price' => '_price',
 		) );
+	}
+
+	/**
+	 * Get shirt characteristics settings
+	 *
+	 * @return array
+	 */
+	public function get_shirt_charaters()
+	{
+		$defaults = array (
+				'male' => array(),
+				'female' => array()
+		);
+
+		// get option
+		$shirt_characters = get_option( 'wc_tailor_shirt_chars' );
+		if ( false === $shirt_characters )
+		{
+			// default value
+			$shirt_characters = $defaults;
+
+			// set option
+			add_option( 'wc_tailor_shirt_chars', $shirt_characters, '', 'no' );
+		}
+
+		return apply_filters( 'woocommerce_tailor_shirt_characteristics', wp_parse_args( $shirt_characters, $defaults ) );
 	}
 }
 

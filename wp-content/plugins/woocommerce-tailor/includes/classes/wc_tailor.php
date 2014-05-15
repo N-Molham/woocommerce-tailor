@@ -175,26 +175,12 @@ class WC_Tailor
 	 * Get shirt characteristics settings
 	 * 
 	 * @return array
+	 * 
+	 * @uses WC_Tailor_Design_Wizard::get_shirt_charaters
 	 */
 	public function get_shirt_charaters_settings()
 	{
-		$defaults = array ( 
-				'male' => array(), 
-				'female' => array() 
-		);
-
-		// get option
-		$shirt_characters = get_option( 'wc_tailor_shirt_chars' );
-		if ( false === $shirt_characters )
-		{
-			// default value
-			$shirt_characters = $defaults;
-
-			// set option
-			add_option( 'wc_tailor_shirt_chars', $shirt_characters, '', 'no' );
-		}
-
-		return apply_filters( 'woocommerce_tailor_shirt_characteristics', wp_parse_args( $shirt_characters, $defaults ) );
+		return $this->design_wizard->get_shirt_charaters();
 	}
 
 	/**
