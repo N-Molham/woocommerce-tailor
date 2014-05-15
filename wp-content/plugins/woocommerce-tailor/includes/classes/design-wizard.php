@@ -131,8 +131,11 @@ class WC_Tailor_Design_Wizard
 			$filters_layout .= '</select></label>';
 		}
 
+		// wizard form
+		$out = '<div class="woocommerce"><form action="" method="post">';
+
 		// wrapper start
-		$out = '<div id="wct-design-wizard">';
+		$out .= '<div id="wct-design-wizard">';
 
 		/*********************{{ Step One : Fabric selection }}*********************/
 
@@ -315,20 +318,33 @@ class WC_Tailor_Design_Wizard
 
 		// step three
 		$out .= '<h3>'. __( 'Measure Up', WCT_DOMAIN ) .'</h3>';
-		$out .= '<div class="wizard-step body-profile">';
+		$out .= '<div class="wizard-step body-profile-step">';
 
 		// before
 		$out .= apply_filters( 'woocommerce_tailor_design_wizard_body_profile_before', '' );
 
-		
+		// body profile fields
+		$body_profile_fields = array_filter( WC_Tailor()->get_account_updates()->account_details_fields, function( $field ) {
+			// get only fields in body profile section
+			return 'body_profile' === $field['section'];
+		} );
+
+		// fields render
+		foreach ($body_profile_fields as $field_name => $field_args )
+		{
+			$out .= WC_Tailor()->get_account_updates()->render_field_output( $field_name, $field_args, null, $user );
+		}
 
 		// after
 		$out .= apply_filters( 'woocommerce_tailor_design_wizard_body_profile_after', '' );
 
 		$out .= '</div>'; // .body-profile
 
-		// wrapper end
+		// wizard wrapper end
 		$out .= '</div>';
+
+		// wizard form end
+		$out .= '</form></div>';
 
 		// return filtered layout
 		return apply_filters( 'woocommerce_tailor_design_wizard_layout', $out );
