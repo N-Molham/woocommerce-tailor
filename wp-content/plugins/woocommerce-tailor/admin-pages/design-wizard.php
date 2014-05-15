@@ -5,7 +5,7 @@
  * @since 1.0
  */
 
-$desing_wizard = WC_Tailor()->get_design_wizard_settings();
+$settings = WC_Tailor()->get_design_wizard_settings();
 $filters_labels = WC_Tailor()->wizard_filters_labels();
 ?>
 
@@ -45,7 +45,7 @@ if ( isset( $_GET['message'] ) )
 						echo '<option value="', $categories[$i]->term_id ,'"';
 
 						// is selected
-						echo ( $categories[$i]->term_id == $desing_wizard['category'] ? ' selected' : '' );
+						echo ( $categories[$i]->term_id == $settings['category'] ? ' selected' : '' );
 
 						// category name
 						echo '>', $categories[$i]->name ,'</option>';
@@ -57,13 +57,13 @@ if ( isset( $_GET['message'] ) )
 			<tr>
 				<th scope="row"><label for="wizard_columns"><?php _e( 'Number of Columns', WCT_DOMAIN ); ?></label></th>
 				<td>
-					<input type="number" step="1" min="1" name="wizard[columns]" id="wizard_columns" class="small-text" value="<?php echo (int) $desing_wizard['columns']; ?>" />
+					<input type="number" step="1" min="1" name="wizard[columns]" id="wizard_columns" class="small-text" value="<?php echo (int) $settings['columns']; ?>" />
 				</td>
 			</tr>
 			<tr>
 				<th scope="row"><label for="wizard_per_page"><?php _e( 'Number of Products Per Page', WCT_DOMAIN ); ?></label></th>
 				<td>
-					<input type="number" step="1" min="1" name="wizard[per_page]" id="wizard_per_page" class="small-text" value="<?php echo (int) $desing_wizard['per_page']; ?>" />
+					<input type="number" step="1" min="1" name="wizard[per_page]" id="wizard_per_page" class="small-text" value="<?php echo (int) $settings['per_page']; ?>" />
 				</td>
 			</tr>
 		</tbody>
@@ -83,11 +83,12 @@ if ( isset( $_GET['message'] ) )
 					'<=' => __( 'Less Than or Equal', WCT_DOMAIN ),
 			);
 
-			foreach ( $desing_wizard['filters'] as $filter_name => $filter_data )
+			foreach ( WC_Tailor_Design_Wizard::get_filters_defaults() as $filter_name => $filter_default_data )
 			{
 				// inputs prefix
 				$input_id_prefix = 'wizard_filters_'. $filter_name .'_';
 				$input_name_prefix = 'wizard[filters]['. $filter_name .']';
+				$filter_data = isset( $settings['filters'][$filter_name] ) ? $settings['filters'][$filter_name] : $filter_default_data;
 
 				// filter label
 				echo '<tr><th scope="row"><label>', $filters_labels[$filter_name] ,'</label></th><td>';
@@ -100,7 +101,7 @@ if ( isset( $_GET['message'] ) )
 				foreach ( $compares as $compare_key => $compare_label )
 				{
 					echo '<option value="', $compare_key ,'"';
-					echo $compare_key == $filter_data['compare'] ? ' selected' : '';
+					echo htmlentities( $compare_key ) === $filter_data['compare'] ? ' selected' : '';
 					echo '>', $compare_label ,'</option>';
 				}
 				echo '</select>';
