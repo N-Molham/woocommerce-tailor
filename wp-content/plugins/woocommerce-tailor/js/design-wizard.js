@@ -4,7 +4,8 @@
 ( function( window ) {
 	jQuery( function( $ ) {
 		// wizard init
-		var $wizard = $( '#wct-design-wizard' ).steps( {
+		var $viewport = $( 'body, html' ),
+			$wizard = $( '#wct-design-wizard' ).steps( {
 			headerTag: 'h3',
 			bodyTag: 'div.wizard-step',
 			enableKeyNavigation: false,
@@ -13,10 +14,30 @@
 			// before changing to next step
 			onStepChanging: function( e, current_step, nex_step ) {
 				switch( current_step ) {
+					// step one
 					case 0:
 						// not product selected
 						var $error = $products_step.find( '.error-no-fabric' ).addClass( 'hidden' );
 						if ( $products_wrapper.find( 'input[type=radio]:checked' ).length != 1 ) {
+							$error.removeClass( 'hidden' );
+							return false;
+						}
+						break;
+
+					// step two
+					case 1:
+						var $error = $shirt_characters_step.find( '.error-characters' ).addClass( 'hidden' ),
+							show_error = false;
+
+						// check visible options
+						$characters_options.filter( ':visible' ).each( function() {
+							// checked ones
+							if( $( this ).find( 'input:checked' ).length != 1 ) {
+								show_error = true;
+							}
+						} );
+
+						if ( show_error ) {
 							$error.removeClass( 'hidden' );
 							return false;
 						}
@@ -28,11 +49,13 @@
 			}
 		} );
 
+		// step one
+		// products step
 		var $products_step = $wizard.find( '.wct-products' ),
 			// loading overlay
 			$loading = $products_step.find( '.loading' ),
 			// filters container
-			$product_filters = $wizard.find( '.product-filters' ),
+			$product_filters = $products_step.find( '.product-filters' ),
 			// filters buttons
 			$product_filter_buttons = $product_filters.find( '.button' ),
 			// filter run button
@@ -40,8 +63,7 @@
 			// filters select elements
 			$product_filter_options = $product_filters.find( '.filter-options' ),
 			// products list wrapper
-			$products_wrapper = $wizard.find( '.products-wrapper' ),
-			$viewport = $( 'body, html' ),
+			$products_wrapper = $products_step.find( '.products-wrapper' ),
 			// current selected product button
 			$selected_product_button = null;
 
@@ -97,6 +119,7 @@
 			load_products_page( e.currentTarget.href );
 		} );
 
+		// load next products page
 		function load_products_page( url ) {
 			// show loading
 			$loading.css( 'display', 'block' );
@@ -129,12 +152,36 @@
 				hook: 'data-rel',
 				social_tools: false,
 				theme: 'pp_woocommerce',
-				show_title: false,
+				show_title: true,
 				horizontal_padding: 20,
 				opacity: 0.8,
 				deeplinking: false
 			} );
 		};
 		lightbox_setup();
+
+		// step two
+		var $shirt_characters_step = $wizard.find( '.wc-shirt-characters' ),
+			$user_gender = $shirt_characters_step.find( '.user-gender' ),
+			$selected_gender = $user_gender.filter( ':checked' );
+			$characters_options = $shirt_characters_step.find( '.character-option' );
+
+		// gender change
+		$user_gender.on( 'change wct-change', function( e ) {
+			// hide all characters
+			$characters_options.css( 'display', 'none' )
+				// show only selected gender related
+				.filter( '.gender-'+ e.currentTarget.value ).css( 'display', 'block' );
+		} );
+
+		// default characters visible ?
+		if ( $selected_gender.length ) {
+			// trigger pre-selected gender
+			$selected_gender.trigger( 'wct-change' );
+		} else {
+			// trigger first option by default
+			$user_gender.filter( ':first' ).attr( 'checked', true ).trigger( 'wct-change' );
+		}
+
 	} );
 } )( window );
