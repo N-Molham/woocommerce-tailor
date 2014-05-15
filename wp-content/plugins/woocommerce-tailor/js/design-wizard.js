@@ -9,11 +9,28 @@
 			bodyTag: 'div.wizard-step',
 			enableKeyNavigation: false,
 			enablePagination: true,
-			labels: wct_design_wizard.wizard_labels
+			labels: wct_design_wizard.wizard_labels,
+			// before changing to next step
+			onStepChanging: function( e, current_step, nex_step ) {
+				switch( current_step ) {
+					case 0:
+						// not product selected
+						var $error = $products_step.find( '.error-no-fabric' ).addClass( 'hidden' );
+						if ( $products_wrapper.find( 'input[type=radio]:checked' ).length != 1 ) {
+							$error.removeClass( 'hidden' );
+							return false;
+						}
+						break;
+				}
+
+				// continue
+				return true;
+			}
 		} );
 
-		// loading overlay
-		var $loading = $wizard.find( '.wct-products .loading' ),
+		var $products_step = $wizard.find( '.wct-products' ),
+			// loading overlay
+			$loading = $products_step.find( '.loading' ),
 			// filters container
 			$product_filters = $wizard.find( '.product-filters' ),
 			// filters buttons
