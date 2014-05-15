@@ -132,6 +132,10 @@
 	visibility: hidden;
 }
 
+.hidden {
+	display: none;
+}
+
 .wizard,
 .wizard * {
 	-webkit-box-sizing: border-box;

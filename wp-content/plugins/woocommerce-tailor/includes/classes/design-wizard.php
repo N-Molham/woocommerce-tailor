@@ -97,7 +97,7 @@ class WC_Tailor_Design_Wizard
 			// check value
 			if ( 'none' != $selected_filters[$query_string] && isset( $filter_data['options'][ $selected_filters[$query_string] ] ) )
 			{
-				// add meta query params
+				// add meta query parameters
 				$query_args['meta_query'][] = apply_filters( 'woocommerce_tailor_design_wizard_meta_query', array ( 
 						'key' => $filter_meta_keys[$filter_name],
 						'value' => $selected_filters[$query_string],
@@ -156,6 +156,9 @@ class WC_Tailor_Design_Wizard
 
 		// product filters end
 		$out .= '</div>';
+
+		// not product selected error
+		$out .= '<div class="woocommerce"><p class="woocommerce-error error-no-fabric hidden">'. __( 'Please select a fabric first.', WCT_DOMAIN ) .'</p></div>';
 
 		// product wrappers
 		$out .= '<div class="products-wrapper">';
