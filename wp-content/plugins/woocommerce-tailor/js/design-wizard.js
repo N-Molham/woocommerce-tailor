@@ -12,27 +12,51 @@
 			labels: wct_design_wizard.wizard_labels
 		} );
 
+		// loading overlay
 		var $loading = $wizard.find( '.wct-products .loading' ),
+			// filters container
 			$product_filters = $wizard.find( '.product-filters' ),
-			$product_filter_button = $wizard.find( '.filter-button' ),
+			// filters buttons
+			$product_filter_buttons = $product_filters.find( '.button' ),
+			// filter run button
+			$product_filter_run_button = $product_filter_buttons.filter( '.filter-button' ),
+			// filters select elements
+			$product_filter_options = $product_filters.find( '.filter-options' ),
+			// products list wrapper
 			$products_wrapper = $wizard.find( '.products-wrapper' ),
 			$viewport = $( 'body, html' ),
+			// current selected product button
 			$selected_product_button = null;
 
 		// products filtering options
-		$product_filters.find( '.filter-options' ).on( 'change', function( e ){
+		$product_filter_options.on( 'change', function( e ) {
+			// show filters buttons
+			$product_filter_buttons.removeClass( 'invisible' );
+
 			// update filter button URL link
-			$product_filter_button.attr( 'href', update_query_value( $product_filter_button.attr( 'href' ), e.currentTarget.name, e.currentTarget.value ) )
-			// trigger click
-			.trigger( 'wct-click' );
+			$product_filter_run_button.attr( 'href', update_query_value( $product_filter_run_button.attr( 'href' ), e.currentTarget.name, e.currentTarget.value ) )
+				// trigger click
+				.trigger( 'wct-click' );
 		} );
 
 		// products filtering button
-		$product_filter_button.on( 'click wct-click', function( e ) {
+		$product_filter_buttons.on( 'click wct-click', function( e ) {
 			e.preventDefault();
 
 			// load products
 			load_products_page( e.currentTarget.href );
+
+			// if clear button
+			if ( $( this ).hasClass( 'clear-button' ) ) {
+				// hide buttons
+				$product_filter_buttons.addClass( 'invisible' );
+
+				// reset run button
+				$product_filter_run_button.attr( 'href', this.href );
+
+				// reset filter options
+				$product_filter_options.val( 'none' );
+			}
 		} );
 
 		// selecting product

@@ -42,6 +42,23 @@ class WC_Tailor_Utiles
 {
 	static $text_domain = WCT_DOMAIN;
 
+	public static function wp_parse_args_r( &$a, $b ) 
+	{
+		$a = (array) $a;
+		$b = (array) $b;
+		$r = $b;
+
+		foreach ( $a as $k => &$v ) {
+			if ( is_array( $v ) && isset( $r[ $k ] ) ) {
+				$r[ $k ] = self::wp_parse_args_r( $v, $r[ $k ] );
+			} else {
+				$r[ $k ] = $v;
+			}
+		}
+
+		return $r;
+	}
+
 	public static function wp_datetime_format( $datetime, $str_format = '%s %s' )
 	{
 		$datetime = strtotime( $datetime );
