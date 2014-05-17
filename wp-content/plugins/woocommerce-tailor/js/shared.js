@@ -22,7 +22,28 @@
 				$ajax_loading.remove();
 		}
 
-	});
+		window.animate_scroll_to = function( $target, offset, speed ) {
+			if ( !window.$viewport ) {
+				// viewport 
+				window.$viewport = $( 'body, html' );
+			}
+
+			// check target
+			if ( typeof $target == 'undefined' || !$target.length )
+				return;
+
+			// check offset
+			offset = isNaN( offset ) ? 0 : parseFloat( offset );
+			
+			// check speed
+			speed = isNaN( speed ) ? 500 : parseFloat( speed );
+
+			// scroll viewport
+			$viewport.animate( {
+				scrollTop: $target.offset().top - offset
+			}, speed );
+		};
+	} );
 
 	window.call_func = function( cb ) {
 		var func;

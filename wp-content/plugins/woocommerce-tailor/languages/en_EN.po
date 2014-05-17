@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Tailor Store\n"
-"POT-Creation-Date: 2014-05-14 19:50+0200\n"
-"PO-Revision-Date: 2014-05-14 19:50+0200\n"
+"POT-Creation-Date: 2014-05-17 21:31+0200\n"
+"PO-Revision-Date: 2014-05-17 21:31+0200\n"
 "Last-Translator: \n"
 "Language-Team: Nabeel Molham <n.molham@gmail.com>\n"
 "Language: en\n"
@@ -71,29 +71,29 @@ msgstr ""
 msgid "Less Than or Equal"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:96
+#: ../admin-pages/design-wizard.php:97
 msgid "Comparison"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:109
+#: ../admin-pages/design-wizard.php:110
 msgid "Options"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:113
+#: ../admin-pages/design-wizard.php:114
 #: ../admin-pages/shirt-characteristics.php:51
 msgid "Are Your Sure ?"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:116
+#: ../admin-pages/design-wizard.php:117
 msgid "Option Name"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:117
+#: ../admin-pages/design-wizard.php:118
 #: ../admin-pages/shirt-characteristics.php:89
 msgid "Remove"
 msgstr ""
 
-#: ../admin-pages/design-wizard.php:134
+#: ../admin-pages/design-wizard.php:135
 #: ../admin-pages/shirt-characteristics.php:101
 msgid "Save Changes"
 msgstr ""
@@ -183,148 +183,148 @@ msgstr ""
 msgid "Body Profile"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:95
+#: ../includes/classes/account-updates.php:93
+#, php-format
+msgid ""
+"&nbsp;( <a href=\"%s\" title=\"%s\" target=\"_blank\" class=\"bp-image "
+"fancybox\">picture</a> )"
+msgstr ""
+
+#: ../includes/classes/account-updates.php:98
 msgid "First name"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:105
+#: ../includes/classes/account-updates.php:108
 msgid "Last name"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:115
+#: ../includes/classes/account-updates.php:118
 msgid "Email address"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:125
+#: ../includes/classes/account-updates.php:128
 msgid "Password (leave blank to leave unchanged)"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:135
+#: ../includes/classes/account-updates.php:138
 msgid "Confirm new password"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:145
+#: ../includes/classes/account-updates.php:148
 msgid "Telephone Number"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:155
+#: ../includes/classes/account-updates.php:158
+#: ../includes/classes/design-wizard.php:199
+#: ../includes/classes/design-wizard.php:518
 msgid "Gender"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:162
+#: ../includes/classes/account-updates.php:165
+#: ../includes/classes/design-wizard.php:520
 msgid "Male"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:163
+#: ../includes/classes/account-updates.php:166
+#: ../includes/classes/design-wizard.php:521
 msgid "Female"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:182
+#: ../includes/classes/account-updates.php:185
 msgid "Chest"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:182
-#: ../includes/classes/account-updates.php:197
-#: ../includes/classes/account-updates.php:212
-#: ../includes/classes/account-updates.php:227
-#: ../includes/classes/account-updates.php:242
-#, php-format
-msgid ""
-" ( <a href=\"%s\" title=\"%s\" target=\"_blank\" class=\"bp-image fancybox"
-"\">picture</a> )"
-msgstr ""
-
-#: ../includes/classes/account-updates.php:189
+#: ../includes/classes/account-updates.php:192
 msgid "Muscular"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:190
-#: ../includes/classes/account-updates.php:206
+#: ../includes/classes/account-updates.php:193
+#: ../includes/classes/account-updates.php:210
 msgid "Large"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:191
-#: ../includes/classes/account-updates.php:204
-#: ../includes/classes/account-updates.php:221
+#: ../includes/classes/account-updates.php:194
+#: ../includes/classes/account-updates.php:208
+#: ../includes/classes/account-updates.php:226
 msgid "Average"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:197
-#: ../includes/classes/account-updates.php:242
+#: ../includes/classes/account-updates.php:201
+#: ../includes/classes/account-updates.php:249
 msgid "Body Shape"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:205
+#: ../includes/classes/account-updates.php:209
 msgid "Flat"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:212
+#: ../includes/classes/account-updates.php:217
 msgid "Shoulders"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:219
+#: ../includes/classes/account-updates.php:224
 msgid "Square"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:220
+#: ../includes/classes/account-updates.php:225
 msgid "Sloping"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:227
+#: ../includes/classes/account-updates.php:233
 msgid "Figure"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:234
+#: ../includes/classes/account-updates.php:240
 msgid "Apple"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:235
+#: ../includes/classes/account-updates.php:241
 msgid "Pear"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:236
+#: ../includes/classes/account-updates.php:242
 msgid "Hour Glass"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:242
+#: ../includes/classes/account-updates.php:249
 msgid "Body Shape ( Female )"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:249
+#: ../includes/classes/account-updates.php:256
 msgid "Slim"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:250
+#: ../includes/classes/account-updates.php:257
 msgid "Fuller Midriff"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:251
+#: ../includes/classes/account-updates.php:258
 msgid "Fuller Bottom"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:257
+#: ../includes/classes/account-updates.php:265
 msgid "Height"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:268
+#: ../includes/classes/account-updates.php:277
 msgid "Weight"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:284
+#: ../includes/classes/account-updates.php:294
 msgid ""
 "Place the tape measure around the body over the largest part of the chest as "
 "shown in the diagram. To ensure the right fit take the chest measurement "
 "with one finger inside the tape measure."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:289
+#: ../includes/classes/account-updates.php:299
 msgid ""
 "Place the tape measure around the body over the smallest part of the waist "
 "area as shown in the diagram. To ensure a comfortable fit, take the "
 "measurement with one finger inside the tape measure."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:294
+#: ../includes/classes/account-updates.php:304
 msgid ""
 "Place the tape measure around the body at the point where you would like the "
 "shirt length to finish. To ensure a more comfortable fit, take the hip "
@@ -332,7 +332,7 @@ msgid ""
 "the reference point when entering your shirt length."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:299
+#: ../includes/classes/account-updates.php:309
 msgid ""
 "Place the tape measure at the top of the shirt level with the collar seam, "
 "and then measure the length of the shirt. This measurement will determine "
@@ -341,14 +341,14 @@ msgid ""
 "be taken at point level with the base of the trouser crotch."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:304
+#: ../includes/classes/account-updates.php:314
 msgid ""
 "Place the tape measure across the top of the shoulders and measure from one "
 "shoulder edge to the other, ensuring you take the curved contour over the "
 "top of the shoulders as seen in the diagram."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:309
+#: ../includes/classes/account-updates.php:319
 msgid ""
 "Place the tape measure at the top of the sleeve level with the edge of the "
 "shoulder, and then measure the length of the sleeve. This measurement will "
@@ -357,20 +357,20 @@ msgid ""
 "level with the top of the V between the thumb and forefinger."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:314
+#: ../includes/classes/account-updates.php:324
 msgid ""
 "Place the tape measure around your bicep over the largest part of your upper "
 "arm. To ensure a comfortable fit take the bicep measurement with one finger "
 "inside the tape measure."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:319
+#: ../includes/classes/account-updates.php:329
 msgid ""
 "Place the tape measure around the entire wrist. To ensure the right fit, "
 "take the wrist measurement with one finger inside the tape measure."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:324
+#: ../includes/classes/account-updates.php:334
 msgid ""
 "Place the tape measure around the entire neck. To ensure a comfortable fit "
 "take the neck measurement with one finger inside the tape measure, ensuring "
@@ -378,7 +378,7 @@ msgid ""
 "seen in the diagram."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:329
+#: ../includes/classes/account-updates.php:339
 msgid ""
 "Place the tape measure at the crease in the top of the arm where the arm and "
 "chest meet. Measure the length across the chest to the equal and opposite "
@@ -386,7 +386,7 @@ msgid ""
 "the crease where the relevant body parts meet."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:334
+#: ../includes/classes/account-updates.php:344
 msgid ""
 "Place the tape measure at the crease in the top of the arm where the arm and "
 "back meet. Measure the length across the back to the equal and opposite "
@@ -394,27 +394,27 @@ msgid ""
 "the crease where the relevant body parts meet."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:339
+#: ../includes/classes/account-updates.php:349
 msgid ""
 "Place the tape measure around the entire forearm and take the forearm "
 "measurement. To ensure the best fit, take the measurement with one finger "
 "inside the tape measure."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:344
+#: ../includes/classes/account-updates.php:354
 msgid ""
 "Place the tape measure at the top of the shirt level with the collar seam, "
 "then measure the distance down to the bust point as shown above. If possible "
 "ensure you are wearing a bra that you would normally wear under your shirts."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:349
+#: ../includes/classes/account-updates.php:359
 msgid ""
 "Place the tape measure on the left bust point and measure across to the "
 "equal and opposite bust point as shown."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:354
+#: ../includes/classes/account-updates.php:364
 msgid ""
 "Place the tape measure at the top of the shirt level with the collar seam, "
 "then measure the distance over the bust point down to the high waistline as "
@@ -422,7 +422,7 @@ msgid ""
 "actual waist itself."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:359
+#: ../includes/classes/account-updates.php:369
 msgid ""
 "Place the tape measure at the top of the shirt level with the collar seam, "
 "then measure the distance down the back to the high waistline as shown. "
@@ -430,19 +430,20 @@ msgid ""
 "waist itself."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:457
-#: ../includes/classes/account-updates.php:481
+#: ../includes/classes/account-updates.php:505
+#: ../includes/classes/account-updates.php:527
+#: ../includes/classes/design-wizard.php:183
 #, php-format
 msgid "%s is required"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:468
-#: ../includes/classes/account-updates.php:489
+#: ../includes/classes/account-updates.php:517
+#: ../includes/classes/account-updates.php:532
 #, php-format
 msgid "%s is not valid"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:681
+#: ../includes/classes/account-updates.php:750
 msgid "Instructions"
 msgstr ""
 
@@ -458,128 +459,191 @@ msgstr ""
 msgid "Target page not found."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:47
-msgid "Choose your favorite fabric"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:115
-msgid "Select"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:126
-msgid "Select your shirt's characteristics"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:130
-msgid "Measure Up"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:163
-msgid "Cancel"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:164
-msgid "current step:"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:165
-msgid "Pagination"
+#: ../includes/classes/design-wizard.php:142
+msgid "There are missing fields, please try again."
 msgstr ""
 
 #: ../includes/classes/design-wizard.php:166
-msgid "Finish"
+msgid "Your order added successfully to the cart"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:167
-msgid "Next"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:168
-msgid "Previous"
-msgstr ""
-
-#: ../includes/classes/design-wizard.php:169
-msgid "Loading ..."
+#: ../includes/classes/design-wizard.php:184
+#, php-format
+msgid "Invalid %s selection."
 msgstr ""
 
 #: ../includes/classes/design-wizard.php:192
+msgid "Sorry, this product cannot be purchased."
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:238
+msgid "Shirt's Characteristics options are not selected yet."
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:346
+msgid "Any"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:376
+msgid "Loading"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:381
+msgid "Choose your favorite fabric"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:396
+msgid "Filter"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:399
+msgid "CLear"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:405
+msgid "Please select a fabric first."
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:460
+#: ../includes/classes/design-wizard.php:662
+msgid "Select"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:471
+msgid "No Match Found"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:508
+msgid "Select your shirt's characteristics"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:515
+#: ../includes/classes/design-wizard.php:562
+msgid "There are missing options."
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:536
+msgid "Picture"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:555
+msgid "Measure Up"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:661
+msgid "Selected"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:665
+msgid "Cancel"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:666
+msgid "current step:"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:667
+msgid "Pagination"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:668
+msgid "Finish"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:669
+msgid "Next"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:670
+msgid "Previous"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:671
+msgid "Loading ..."
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:724
 msgid "Black"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:193
+#: ../includes/classes/design-wizard.php:725
 msgid "Blue"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:194
+#: ../includes/classes/design-wizard.php:726
 msgid "Purple"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:195
+#: ../includes/classes/design-wizard.php:727
 msgid "Grey"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:196
+#: ../includes/classes/design-wizard.php:728
 msgid "Light Blue"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:197
+#: ../includes/classes/design-wizard.php:729
 msgid "Navy"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:198
+#: ../includes/classes/design-wizard.php:730
 msgid "Orange"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:199
+#: ../includes/classes/design-wizard.php:731
 msgid "Pink"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:200
+#: ../includes/classes/design-wizard.php:732
 msgid "Red"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:201
+#: ../includes/classes/design-wizard.php:733
 msgid "White"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:202
+#: ../includes/classes/design-wizard.php:734
 msgid "Yellow"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:203
+#: ../includes/classes/design-wizard.php:735
 msgid "Green"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:204
+#: ../includes/classes/design-wizard.php:736
 msgid "Brown"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:205
+#: ../includes/classes/design-wizard.php:737
 msgid "Dark Purple"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:206
+#: ../includes/classes/design-wizard.php:738
 msgid "Aqua"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:212
+#: ../includes/classes/design-wizard.php:744
 msgid "Check"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:213
+#: ../includes/classes/design-wizard.php:745
 msgid "Plain"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:214
+#: ../includes/classes/design-wizard.php:746
 msgid "Stripe"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:244
+#: ../includes/classes/design-wizard.php:769
 msgid "Color"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:245
+#: ../includes/classes/design-wizard.php:770
 msgid "Pattern"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:771
+msgid "Maximum Price"
 msgstr ""
 
 #: ../includes/classes/meta-boxes.php:98
@@ -590,84 +654,84 @@ msgstr ""
 msgid "Meta box not found."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:267
+#: ../includes/classes/wc_tailor.php:243
 msgid "WooCommerce Plugin must be installed and activated first."
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:268
+#: ../includes/classes/wc_tailor.php:244
 msgid "Required Plugin"
 msgstr ""
 
-#: ../includes/classes/wc_tailor.php:269
+#: ../includes/classes/wc_tailor.php:245
 msgid "Back"
 msgstr ""
 
-#: ../includes/utils.php:228
+#: ../includes/utils.php:245
 #, php-format
 msgid "%s is not valid numeric value"
 msgstr ""
 
-#: ../includes/utils.php:231
+#: ../includes/utils.php:248
 #, php-format
 msgid "%s must be must be at least %s"
 msgstr ""
 
-#: ../includes/utils.php:243
+#: ../includes/utils.php:260
 msgid "Passwords does not match"
 msgstr ""
 
-#: ../includes/utils.php:250
+#: ../includes/utils.php:267
 msgid "Invalid email address"
 msgstr ""
 
-#: ../includes/utils.php:264
+#: ../includes/utils.php:281
 msgid "Error saving uploaded file, please try again later"
 msgstr ""
 
-#: ../includes/utils.php:269
+#: ../includes/utils.php:286
 msgid "Invalid file type"
 msgstr ""
 
-#: ../includes/utils.php:272
+#: ../includes/utils.php:289
 #, php-format
 msgid "%s size is too big"
 msgstr ""
 
-#: ../includes/utils.php:291
+#: ../includes/utils.php:308
 #, php-format
 msgid "%s is not a valid selection"
 msgstr ""
 
-#: ../includes/utils.php:297
+#: ../includes/utils.php:314
 #, php-format
 msgid "%s required"
 msgstr ""
 
-#: ../includes/utils.php:302
+#: ../includes/utils.php:319
 #, php-format
 msgid "%s character length must be between %d and %d"
 msgstr ""
 
-#: ../includes/utils.php:304
+#: ../includes/utils.php:321
 #, php-format
 msgid "%s character length must be at least %d"
 msgstr ""
 
-#: ../includes/utils.php:306
+#: ../includes/utils.php:323
 #, php-format
 msgid "%s character length must be less than %d"
 msgstr ""
 
-#: ../includes/utils.php:1107
+#: ../includes/utils.php:1124
 msgid "Could not read image size"
 msgstr ""
 
-#: ../includes/utils.php:1112
+#: ../includes/utils.php:1129
 msgid "Could not calculate resized image dimensions"
 msgstr ""
 
-#: ../includes/utils.php:1139 ../includes/utils.php:1142
-#: ../includes/utils.php:1150
+#: ../includes/utils.php:1156 ../includes/utils.php:1159
+#: ../includes/utils.php:1167
 msgid "Resize path invalid"
 msgstr ""
 

@@ -15,7 +15,7 @@
 			// option value layout
 			var value_layout = '<li class="option-value">';
 			value_layout += '<p><label class="value-label">'+ $add_value_button.data( 'input-label' ) +'</label> <input name="'+ $add_value_button.data( 'input-name' ) +'[label][{value_index}]" type="text" class="regular-text" value="{value_label}" /></p>';
-			value_layout += '<p><label class="value-label">'+ $add_value_button.data( 'input-price' ) +'</label> <input name="'+ $add_value_button.data( 'input-name' ) +'[price][{value_index}]" type="number" class="small-text code" value="{value_price}" />';
+			value_layout += '<p><label class="value-label">'+ $add_value_button.data( 'input-price' ) +'</label> <input name="'+ $add_value_button.data( 'input-name' ) +'[price][{value_index}]" type="number" min="0" step="0.1" class="small-text code" value="{value_price}" />';
 			value_layout += '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="button button-remove value-remove" data-remove-confirm="'+ $add_value_button.data( 'remove-confirm' ) +'">'+ $add_value_button.data( 'remove-label' ) +'</a>';
 			value_layout += '</p><hr/></li>';
 

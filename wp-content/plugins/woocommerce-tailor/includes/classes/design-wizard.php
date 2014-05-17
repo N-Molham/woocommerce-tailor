@@ -20,6 +20,34 @@ class WC_Tailor_Design_Wizard
 	const SHORTCODE = 'woocommerce_tailor_design_wizard';
 
 	/**
+	 * Wizard input fields names prefix
+	 * 
+	 * @var string
+	 */
+	const INPUTS_PREFIX = 'wct_wizard';
+
+	/**
+	 * AJAX action name
+	 * 
+	 * @var string
+	 */
+	const AJAX_HANDLER_ACTION = 'wct_add_to_cart';
+
+	/**
+	 * AJAX action nonce key
+	 * 
+	 * @var string
+	 */
+	const AJAX_HANDLER_NONCE = 'wct_wizard_add_to_cart';
+
+	/**
+	 * Session order data storage key
+	 * 
+	 * @var string
+	 */
+	const SESSION_ORDER_KEY = 'wct_order_info';
+
+	/**
 	 * Wizard settings
 	 * 
 	 * @var array
@@ -31,6 +59,9 @@ class WC_Tailor_Design_Wizard
 	 */
 	public function __construct()
 	{
+		// remove cross sell from cart
+		remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
+
 		// enqueues
 		add_action( 'template_redirect', array( &$this, 'enqueues' ) );
 
@@ -42,6 +73,206 @@ class WC_Tailor_Design_Wizard
 
 		// specific filter option label override
 		add_filter( 'woocommerce_tailor_design_wizard_option_label', array( &$this, 'filter_options_label_max_price_label' ), 10, 3 );
+
+		// validate wizard values action
+		add_filter( 'woocommerce_tailor_design_wizard_validate', array( &$this, 'validate_field_values' ) );
+
+		// cart additional fees
+		add_filter( 'woocommerce_cart_calculate_fees', array( &$this, 'cart_additional_fees' ) );
+
+		// AJAX action handler
+		add_action( 'wp_ajax_'. self::AJAX_HANDLER_ACTION, array( &$this, 'add_to_cart_handler' ) );
+		add_action( 'wp_ajax_nopriv_'. self::AJAX_HANDLER_ACTION, array( &$this, 'add_to_cart_handler' ) );
+	}
+
+	/**
+	 * Add additional fees to cart
+	 * 
+	 * @param WC_Cart $cart
+	 * @return void
+	 */
+	public function cart_additional_fees( $cart )
+	{
+		// skip empty cart
+		if ( $cart->cart_contents_count != 1 )
+			return;
+
+		// order info
+		$order_info = WC()->session->get( self::SESSION_ORDER_KEY, false );
+
+		// skip non related orders
+		if ( false === $order_info || !isset( $cart->cart_contents[ $order_info['cart_item_key'] ] ) )
+			return;
+
+		
+		// additional fees
+		foreach ( $order_info['shirt-characters'] as $selected_character )
+		{
+			$cart->add_fee( $selected_character['label'] .' : '. $selected_character['value_label'], $selected_character['value_price'], true );
+		}
+	}
+
+	/**
+	 * AJAX action handler
+	 * 
+	 * @return void
+	 */
+	public function add_to_cart_handler()
+	{
+		check_ajax_referer( self::AJAX_HANDLER_NONCE, 'nonce' );
+
+		// check values
+		if( isset( $_REQUEST[ self::INPUTS_PREFIX ] ) )
+		{
+			// sanitize values
+			$wizard_values = WC_Tailor_Utiles::array_map_recursive( $_REQUEST[ self::INPUTS_PREFIX ], 'wc_clean' );
+
+			// default values
+			$wizard_values = wp_parse_args( $wizard_values, array ( 
+					'fabric' => 0,
+					'gender' => '',
+					'body_profile' => array(),
+					'shirt-characters' => array( 'male' => array(), 'female' => array() ),
+			) );
+
+			// validate values
+			$wizard_values = apply_filters( 'woocommerce_tailor_design_wizard_validate', $wizard_values );
+		}
+		else
+			wc_add_notice( __( 'There are missing fields, please try again.', WCT_DOMAIN ), 'error' );
+
+		// clear cart content first
+		WC()->cart->empty_cart();
+
+		// add fabric to cart
+		$wizard_values['in_cart'] = WC()->cart->add_to_cart( $wizard_values['fabric'], 1, '', '', $wizard_values );
+
+		// check errors
+		if ( wc_notice_count( 'error' ) )
+		{
+			// buffer notices
+			ob_start();
+			wc_print_notices();
+			wct_ajax_error( 'error', ob_get_clean() );
+		}
+
+		// save cart item key
+		$wizard_values['cart_item_key'] = current( array_keys( WC()->cart->cart_contents ) );
+
+		// save order information
+		WC()->session->set( self::SESSION_ORDER_KEY, $wizard_values );
+
+		// add success message
+		wc_add_notice( __( 'Your order added successfully to the cart', WCT_DOMAIN ) );
+
+		// response with cart page url
+		wct_ajax_response( WC()->cart->get_cart_url() );
+	}
+
+	/**
+	 * Validate wizard field values
+	 * 
+	 * @param array $wizard
+	 * @return void
+	 */
+	public function validate_field_values( $wizard_values )
+	{
+		// test invalid value
+		// $wizard_values['gender'] = 'asdasdas';
+
+		$reuiqred_field_template = __( '%s is required', WCT_DOMAIN );
+		$invalid_value_template = __( 'Invalid %s selection.', WCT_DOMAIN );
+
+		// check product ( fabric )
+		$fabric = get_product( $wizard_values['fabric'] );
+
+		// is it available to purchase
+		if ( !$fabric || false === $fabric->is_purchasable() )
+		{
+			wc_add_notice( __( 'Sorry, this product cannot be purchased.', WCT_DOMAIN ), 'error' );
+			return false;
+		}
+
+		// check gender
+		if ( !in_array( $wizard_values['gender'], array( 'male', 'female' ) ) )
+		{
+			wc_add_notice( sprintf( $invalid_value_template, __( 'Gender', WCT_DOMAIN ) ), 'error' );
+			return false;
+		}
+
+		// check body profile values
+		$body_profile_fields = WC_Tailor()->account_updates->get_account_details_by_section( 'body_profile' );
+		foreach ( $body_profile_fields as $field_name => $field_args )
+		{
+			$input_name = str_replace( 'body_profile_', '', $field_name );
+			$field_args['label'] = preg_replace( '/<span.+/', '', $field_args['label'] );
+
+			// gender related
+			if ( !in_array( $wizard_values['gender'], $field_args['gender'] ) )
+			{
+				if ( isset( $wizard_values['body_profile'][$input_name] ) )
+					unset( $wizard_values['body_profile'][$input_name] );
+
+				continue;
+			}
+
+			// is value exists
+			if ( !isset( $wizard_values['body_profile'][$input_name] ) )
+			{
+				wc_add_notice( sprintf( $reuiqred_field_template, $field_args['label'] ), 'error' );
+				continue;
+			}
+
+			// parse value
+			$value = WC_Tailor()->account_updates->parse_field_value( $field_name, $field_args, $wizard_values['body_profile'][$input_name] );
+			if ( is_wp_error( $value ) )
+			{
+				wc_add_notice( $value->get_error_message(), 'error' );
+				continue;
+			}
+		}
+
+		// check shirt characters related to selected gender
+		if ( !isset( $wizard_values['shirt-characters'][ $wizard_values['gender'] ] ) )
+		{
+			wc_add_notice( __( 'Shirt\'s Characteristics options are not selected yet.', WCT_DOMAIN ), 'error' );
+			return false;
+		}
+
+		// selected characters
+		$wizard_values['shirt-characters'] = $wizard_values['shirt-characters'][ $wizard_values['gender'] ];
+
+		// registered ones
+		$shirt_characters = $this->get_shirt_charaters();
+
+		foreach ( $shirt_characters[ $wizard_values['gender'] ] as $character_index => $character_info )
+		{
+			$field_name = 'character-'. $character_index;
+
+			// check existence
+			if ( !isset( $wizard_values['shirt-characters'][$field_name] ) )
+			{
+				wc_add_notice( sprintf( $reuiqred_field_template, $character_info['label'] ), 'error' );
+				continue;
+			}
+
+			// check value
+			$field_value = (int) $wizard_values['shirt-characters'][$field_name];
+			if ( !isset( $character_info['values']['price'][$field_value] ) || !isset( $character_info['values']['label'][$field_value] ) )
+			{
+				wc_add_notice( sprintf( $invalid_value_template, $character_info['label'] ), 'error' );
+				continue;
+			}
+
+			$wizard_values['shirt-characters'][$field_name] = array (
+					'label' => $character_info['label'],
+					'value_index' => $field_value,
+					'value_label' => $character_info['values']['label'][$field_value],
+					'value_price' => (float) $character_info['values']['price'][$field_value],
+			);
+		}
+
+		return $wizard_values;
 	}
 
 	/**
@@ -55,7 +286,6 @@ class WC_Tailor_Design_Wizard
 
 		$settings = $this->get_settings();
 		$page_url = get_permalink();
-		$input_prefix = 'wct_wizard';
 
 		// filters
 		$filter_labels = $this->get_filters_labels();
@@ -131,11 +361,19 @@ class WC_Tailor_Design_Wizard
 			$filters_layout .= '</select></label>';
 		}
 
+		// wc wrapper
+		$out = '<div class="woocommerce">';
+
 		// wizard form
-		$out = '<div class="woocommerce"><form action="" method="post">';
+		$out .= '<form action="" method="post" id="wizard-form">';
+
+		$out .= '<div id="wct-ajax-errors"></div>';
 
 		// wrapper start
 		$out .= '<div id="wct-design-wizard">';
+
+		// loading
+		$out .= '<div class="loading"><div class="loader">'. __( 'Loading', WCT_DOMAIN ) .'</div></div>';
 
 		/*********************{{ Step One : Fabric selection }}*********************/
 
@@ -144,9 +382,6 @@ class WC_Tailor_Design_Wizard
 
 		// step one content start
 		$out .= '<div class="wizard-step wct-products">';
-
-		// loading
-		$out .= '<div class="loading"><div class="loader">'. __( 'Loading', WCT_DOMAIN ) .'</div></div>';
 
 		// before products
 		$out .= apply_filters( 'woocommerce_tailor_design_wizard_products_before', '' );
@@ -167,7 +402,7 @@ class WC_Tailor_Design_Wizard
 		$out .= '</div>';
 
 		// not product selected error
-		$out .= '<div class="woocommerce"><p class="woocommerce-error error-no-fabric hidden">'. __( 'Please select a fabric first.', WCT_DOMAIN ) .'</p></div>';
+		$out .= '<div class="wizard-errors"><p class="woocommerce-error error-no-fabric hidden">'. __( 'Please select a fabric first.', WCT_DOMAIN ) .'</p></div>';
 
 		// product wrappers
 		$out .= '<div class="products-wrapper">';
@@ -223,7 +458,7 @@ class WC_Tailor_Design_Wizard
 
 				// select button
 				$out .= '<a href="#" rel="nofollow" class="button select-button">'. __( 'Select', WCT_DOMAIN ) .'</a>';
-				$out .= '<input type="radio" name="'. $input_prefix .'[fabric]" class="button" value="'. $product->id .'" />';
+				$out .= '<input type="radio" name="'. self::INPUTS_PREFIX .'[fabric]" class="button" value="'. $product->id .'" />';
 
 				// product item end
 				$out .= '</li>';
@@ -276,14 +511,14 @@ class WC_Tailor_Design_Wizard
 		// before
 		$out .= apply_filters( 'woocommerce_tailor_design_wizard_shirt_chars_before', '' );
 
-		// not product selected error
-		$out .= '<div class="woocommerce"><p class="woocommerce-error error-characters hidden">'. __( 'There are missing options.', WCT_DOMAIN ) .'</p></div>';
+		// missing selections errors
+		$out .= '<div class="wizard-errors"><p class="woocommerce-error error-characters hidden">'. __( 'There are missing options.', WCT_DOMAIN ) .'</p></div>';
 
 		// selecting gender
 		$out .= '<div class="input-field"><label class="input-label">'. __( 'Gender', WCT_DOMAIN ) .'</label>';
 		$out .= '<p class="input-options">';
-		$out .= '<label class="input-option"><input type="radio" name="'. $input_prefix .'[gender]" value="male" class="user-gender"'. ( 'male' == $user_gender ? ' checked="checked"' : '' ) .' /> '. __( 'Male', WCT_DOMAIN ) .'</label>';
-		$out .= '<label class="input-option"><input type="radio" name="'. $input_prefix .'[gender]" value="female" class="user-gender"'. ( 'female' == $user_gender ? ' checked="checked"' : '' ) .' /> '. __( 'Female', WCT_DOMAIN ) .'</label>';
+		$out .= '<label class="input-option"><input type="radio" name="'. self::INPUTS_PREFIX .'[gender]" value="male" class="user-gender"'. ( 'male' == $user_gender ? ' checked="checked"' : '' ) .' /> '. __( 'Male', WCT_DOMAIN ) .'</label>';
+		$out .= '<label class="input-option"><input type="radio" name="'. self::INPUTS_PREFIX .'[gender]" value="female" class="user-gender"'. ( 'female' == $user_gender ? ' checked="checked"' : '' ) .' /> '. __( 'Female', WCT_DOMAIN ) .'</label>';
 		$out .= '</p></div><hr/>';
 
 		// loop characters
@@ -303,7 +538,7 @@ class WC_Tailor_Design_Wizard
 				$out .= '<p class="input-options">';
 				foreach ( $character_data['values']['label'] as $value_index => $value_label )
 				{
-					$out .= '<label class="input-option"><input type="radio" name="'. $input_prefix .'[shirt-characters]['. $gender .'][character-'. $charcter_index .']" value="'. $value_index .'" />'. $value_label .'</label>';
+					$out .= '<label class="input-option"><input type="radio" name="'. self::INPUTS_PREFIX .'[shirt-characters]['. $gender .'][character-'. $charcter_index .']" value="'. $value_index .'" />'. $value_label .'</label>';
 				}
 				$out .= '</p></div>';
 			}
@@ -323,16 +558,20 @@ class WC_Tailor_Design_Wizard
 		// before
 		$out .= apply_filters( 'woocommerce_tailor_design_wizard_body_profile_before', '' );
 
+		// missing selections errors
+		$out .= '<div class="wizard-errors"><p class="woocommerce-error error-body-profile hidden">'. __( 'There are missing options.', WCT_DOMAIN ) .'</p></div>';
+
 		// body profile fields
-		$body_profile_fields = array_filter( WC_Tailor()->get_account_updates()->account_details_fields, function( $field ) {
-			// get only fields in body profile section
-			return 'body_profile' === $field['section'];
-		} );
+		$body_profile_fields = WC_Tailor()->account_updates->get_account_details_by_section( 'body_profile' );
 
 		// fields render
-		foreach ($body_profile_fields as $field_name => $field_args )
+		foreach ( $body_profile_fields as $field_name => $field_args )
 		{
-			$out .= WC_Tailor()->get_account_updates()->render_field_output( $field_name, $field_args, null, $user );
+			// change inputs names
+			$field_args['input_name'] = str_replace( 'body_profile_', self::INPUTS_PREFIX .'[body_profile][', $field_name ) .']';
+
+			// field layout
+			$out .= WC_Tailor()->account_updates->render_field_output( $field_name, $field_args, null, $user );
 		}
 
 		// after
@@ -342,6 +581,10 @@ class WC_Tailor_Design_Wizard
 
 		// wizard wrapper end
 		$out .= '</div>';
+
+		// hidden inputs
+		$out .= '<input type="hidden" name="action" value="'. self::AJAX_HANDLER_ACTION .'" />';
+		$out .= wp_nonce_field( self::AJAX_HANDLER_NONCE, 'nonce', false, false );
 
 		// wizard form end
 		$out .= '</form></div>';
@@ -413,6 +656,7 @@ class WC_Tailor_Design_Wizard
 
 			// wizard localize
 			wp_localize_script( 'wc-design-wizard', 'wct_design_wizard', apply_filters( 'woocommerce_tailor_design_localize', array ( 
+					'ajax_url' => admin_url( 'admin-ajax.php', is_ssl() ? 'https' : 'http' ),
 					'product_labels' => array (
 							'selected' => __( 'Selected', WCT_DOMAIN ),
 							'select' => __( 'Select', WCT_DOMAIN ),
