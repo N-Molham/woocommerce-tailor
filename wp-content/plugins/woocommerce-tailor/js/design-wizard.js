@@ -3,58 +3,123 @@
  */
 ( function( window ) {
 	jQuery( function( $ ) {
-		// wizard init
-		var $viewport = $( 'body, html' ),
-			$wizard = $( '#wct-design-wizard' ).steps( {
-				startIndex: 2, // for test only
-				headerTag: 'h3',
-				bodyTag: 'div.wizard-step',
-				enableKeyNavigation: false,
-				enablePagination: true,
-				labels: wct_design_wizard.wizard_labels,
+
+		// inits
+		var wizard_has_error = false,
+			// wizard global error holder
+			$wizard_ajax_errors = $( '#wct-ajax-errors' );
+
+		// wizard events
+		var wizard_events = {
 				// before changing to next step
-				onStepChanging: function( e, current_step, nex_step ) {
+				before_next_step: function( e, current_step, next_step ) { 
+					// skip going back
+					if ( !isNaN( next_step ) && current_step > next_step )
+						return true;
+
+					// witch step
 					switch( current_step ) {
-						// step one
-						case 0:
-							// not product selected
-							var $error = $products_step.find( '.error-no-fabric' ).addClass( 'hidden' );
-							if ( $products_wrapper.find( 'input[type=radio]:checked' ).length != 1 ) {
-								$error.removeClass( 'hidden' );
-								return false;
+					// step one
+					case 0:
+						wizard_has_error = false;
+						$wizard_error = $( '.wizard-errors .error-no-fabric' ).addClass( 'hidden' );
+
+						// check if there is a product selected
+						if ( $products_wrapper.find( 'input[type=radio]:checked' ).length != 1 ) {
+							$wizard_error.removeClass( 'hidden' );
+							return false;
+						}
+						break;
+
+					// step two
+					case 1:
+					// step three
+					case 2:
+						// which error message
+						if ( current_step == 1 ) {
+							// step two
+							$wizard_error = $( '.wizard-errors .error-characters' );
+						} else {
+							// step three
+							$wizard_error = $( '.wizard-errors .error-body-profile' );
+						}
+
+						$wizard_error.addClass( 'hidden' );
+						wizard_has_error = false;
+
+						// check visible options
+						$gender_related_fields.filter( ':visible' ).each( function() {
+							// checked ones
+							if( $( this ).find( 'input:checked' ).length != 1 ) {
+								wizard_has_error = true;
 							}
-							break;
-	
-						// step two
-						case 1:
-							var $error = $shirt_characters_step.find( '.error-characters' ).addClass( 'hidden' ),
-								show_error = false;
-	
-							// check visible options
-							$gender_related_fields.filter( '.character-option:visible' ).each( function() {
-								// checked ones
-								if( $( this ).find( 'input:checked' ).length != 1 ) {
-									show_error = true;
+						} );
+
+						// step three text fields
+						if ( current_step == 2 ) {
+							$( '.body-profile-step .input-text' ).each( function( index, element ) {
+								element.value = trim( element.value );
+								if ( !element.value.length || isNaN( element.value ) ) {
+									wizard_has_error = true;
 								}
 							} );
-	
-							if ( show_error ) {
-								$error.removeClass( 'hidden' );
-								return false;
-							}
-							break;
+						}
+
+						if ( wizard_has_error ) {
+							$wizard_error.removeClass( 'hidden' );
+							return false;
+						}
+						break;
 					}
-	
+
 					// continue
 					return true;
+				},
+				// wizard finished
+				on_finish: function ( e, current_index ) {
+					// loading overlay view
+					$loading.css( 'display', 'block' );
+
+					// clear previous errors
+					$wizard_ajax_errors.empty();
+
+					$.post( wct_design_wizard.ajax_url, $( '#wizard-form' ).serialize(), function( result, status, response ) {
+						// hide loading overlay
+						$loading.css( 'display', 'none' );
+
+						if ( result.status ) {
+							// redirect to target
+							location.href = result.data;
+						} else {
+							// show errors if there are
+							$wizard_ajax_errors.html( result.error.message );
+						}
+					}, 'json' );
 				}
+		};
+
+		// wizard start
+		var $wizard = $( '#wct-design-wizard' ).steps( {
+			//startIndex: 2, // test only
+			headerTag: 'h3',
+			bodyTag: 'div.wizard-step',
+			enableKeyNavigation: false,
+			enablePagination: true,
+			enableAllSteps: true,
+			labels: wct_design_wizard.wizard_labels,
+			// before changing to next step
+			onStepChanging: wizard_events.before_next_step,
+			// before finishing the last step
+			onFinishing: wizard_events.before_next_step,
+			// wizard finished
+			onFinished: wizard_events.on_finish
 		} );
 
 		// step one
 		// products step
 		var $products_step = $wizard.find( '.wct-products' ),
 			// loading overlay
-			$loading = $products_step.find( '.loading' ),
+			$loading = $wizard.find( '.loading' ),
 			// filters container
 			$product_filters = $products_step.find( '.product-filters' ),
 			// filters buttons
@@ -139,9 +204,7 @@
 						lightbox_setup();
 
 						// scroll
-						$viewport.animate( {
-							scrollTop: $wizard.offset().top - 20
-						}, 500 );
+						animate_scroll_to( $wizard, 20 );
 					}
 				}
 			} );

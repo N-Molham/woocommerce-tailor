@@ -27,6 +27,7 @@ define( 'WCT_DOMAIN', 'wc-tailor' );
  * Includes
  */
 require WC_TAILOR_DIR .'includes/utils.php';
+require WC_TAILOR_DIR .'includes/ajax.php';
 
 spl_autoload_register( 'wc_tailor_autoload' );
 /**

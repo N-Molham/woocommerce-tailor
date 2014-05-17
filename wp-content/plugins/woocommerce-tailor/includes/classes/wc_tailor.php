@@ -23,28 +23,28 @@ class WC_Tailor
 	 *
 	 * @var WC_Tailor_Admin_Pages
 	 */
-	protected $admin_pages;
+	var $admin_pages;
 
 	/**
 	 * Admin Meta boxes
 	 *
 	 * @var WC_Tailor_Meta_Boxes
 	 */
-	protected $meta_boxes;
+	var $meta_boxes;
 
 	/**
 	 * Account Updates
 	 *
 	 * @var WC_Tailor_Account_Updates
 	 */
-	protected $account_updates;
+	var $account_updates;
 
 	/**
 	 * Design Wizard
 	 *
 	 * @var WC_Tailor_Design_Wizard
 	 */
-	protected $design_wizard;
+	var $design_wizard;
 
 	/**
 	 * Constructor
@@ -224,16 +224,6 @@ class WC_Tailor
 	public function load_languages()
 	{
 		load_plugin_textdomain( WCT_DOMAIN, false, dirname( plugin_basename( WC_TAILOR_PLUGIN_FILE ) ) . '/languages/' );
-	}
-
-	/**
-	 * Get account updates instance
-	 * 
-	 * @return WC_Tailor_Account_Updates
-	 */
-	public function get_account_updates()
-	{
-		return $this->account_updates;
 	}
 
 	/**

@@ -89,6 +89,9 @@ class WC_Tailor_Account_Updates
 				),
 		) );
 
+		// body profile field picture template
+		$body_profile_pic_template = '<span class="field-picture">'. __( '&nbsp;( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ) .'</span>';
+
 		// set fields info
 		$this->account_details_fields = apply_filters( 'woocommerce_tailor_account_details_fields', array ( 
 				'account_first_name' => array ( 
@@ -179,7 +182,7 @@ class WC_Tailor_Account_Updates
 						'after' => '<div class="clear"></div>',
 				),
 				'body_profile_chest' => array ( 
-						'label' => __( 'Chest', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/chest.gif' ), __( 'Chest', WCT_DOMAIN ) ),
+						'label' => __( 'Chest', WCT_DOMAIN ) . sprintf( $body_profile_pic_template, esc_attr( $image_dir .'body-profile/chest.gif' ), __( 'Chest', WCT_DOMAIN ) ),
 						'meta_key' => array( 'body_profile', 'chest' ),
 						'input' => 'radio',
 						'input_class' => 'input-radio',
@@ -192,9 +195,10 @@ class WC_Tailor_Account_Updates
 						),
 						'required' => false,
 						'section' => 'body_profile',
+						'gender' => array( 'male' ),
 				),
 				'body_profile_bshape' => array ( 
-						'label' => __( 'Body Shape', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/bodyshape_m.gif' ), __( 'Body Shape', WCT_DOMAIN ) ),
+						'label' => __( 'Body Shape', WCT_DOMAIN ) . sprintf( $body_profile_pic_template, esc_attr( $image_dir .'body-profile/bodyshape_m.gif' ), __( 'Body Shape', WCT_DOMAIN ) ),
 						'meta_key' => array( 'body_profile', 'body_shape' ),
 						'input' => 'radio',
 						'input_class' => 'input-radio',
@@ -207,9 +211,10 @@ class WC_Tailor_Account_Updates
 						),
 						'required' => false,
 						'section' => 'body_profile',
+						'gender' => array( 'male' ),
 				),
 				'body_profile_shoulders' => array ( 
-						'label' => __( 'Shoulders', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/shoulders.gif' ), __( 'Shoulders', WCT_DOMAIN ) ),
+						'label' => __( 'Shoulders', WCT_DOMAIN ) . sprintf( $body_profile_pic_template, esc_attr( $image_dir .'body-profile/shoulders.gif' ), __( 'Shoulders', WCT_DOMAIN ) ),
 						'meta_key' => array( 'body_profile', 'shoulders' ),
 						'input' => 'radio',
 						'input_class' => 'input-radio',
@@ -222,9 +227,10 @@ class WC_Tailor_Account_Updates
 						),
 						'required' => false,
 						'section' => 'body_profile',
+						'gender' => array( 'male', 'female' ),
 				),
 				'body_profile_figure' => array ( 
-						'label' => __( 'Figure', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/figure.gif' ), __( 'Figure', WCT_DOMAIN ) ),
+						'label' => __( 'Figure', WCT_DOMAIN ) . sprintf( $body_profile_pic_template, esc_attr( $image_dir .'body-profile/figure.gif' ), __( 'Figure', WCT_DOMAIN ) ),
 						'meta_key' => array( 'body_profile', 'figure' ),
 						'input' => 'radio',
 						'input_class' => 'input-radio',
@@ -237,9 +243,10 @@ class WC_Tailor_Account_Updates
 						),
 						'required' => false,
 						'section' => 'body_profile',
+						'gender' => array( 'female' ),
 				),
 				'body_profile_bshapef' => array (
-						'label' => __( 'Body Shape', WCT_DOMAIN ) . sprintf( __( ' ( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ), esc_attr( $image_dir .'body-profile/bodyshape_f.gif' ), __( 'Body Shape ( Female )', WCT_DOMAIN ) ),
+						'label' => __( 'Body Shape', WCT_DOMAIN ) . sprintf( $body_profile_pic_template, esc_attr( $image_dir .'body-profile/bodyshape_f.gif' ), __( 'Body Shape ( Female )', WCT_DOMAIN ) ),
 						'meta_key' => array( 'body_profile', 'body_shapef' ),
 						'input' => 'radio',
 						'input_class' => 'input-radio',
@@ -252,6 +259,7 @@ class WC_Tailor_Account_Updates
 						),
 						'required' => false,
 						'section' => 'body_profile',
+						'gender' => array( 'female' ),
 				),
 				'body_profile_height' => array (
 						'label' => __( 'Height', WCT_DOMAIN ),
@@ -260,9 +268,10 @@ class WC_Tailor_Account_Updates
 						'input_class' => 'input-text input-small',
 						'wrapper_class' => 'form-row column one-fourth',
 						'data_type' => 'float',
-						'required' => false,
+						'required' => true,
 						'section' => 'body_profile',
-						'description' => '&nbsp;&nbsp;cm',
+						'description' => '&nbsp;cm',
+						'gender' => array( 'male', 'female' ),
 				),
 				'body_profile_weight' => array (
 						'label' => __( 'Weight', WCT_DOMAIN ),
@@ -271,9 +280,10 @@ class WC_Tailor_Account_Updates
 						'input_class' => 'input-text input-small',
 						'wrapper_class' => 'form-row column one-fourth',
 						'data_type' => 'float',
-						'required' => false,
+						'required' => true,
 						'section' => 'body_profile',
-						'description' => '&nbsp;&nbsp;kg',
+						'description' => '&nbsp;kg',
+						'gender' => array( 'male', 'female' ),
 				),
 		) );
 
@@ -394,6 +404,7 @@ class WC_Tailor_Account_Updates
 				'meta_key' => '',
 				'input' => 'text',
 				'input_class' => 'input-text',
+				'input_name' => '',
 				'wrapper_attrs' => '',
 				'wrapper_tag' => 'p',
 				'wrapper_class' => 'form-row form-row-wide',
@@ -427,72 +438,12 @@ class WC_Tailor_Account_Updates
 			if ( in_array( $field_name, $this->handled_fields ) )
 				continue;
 
-			// sanitizing value
-			$value = wc_clean( filter_input( INPUT_POST, $field_name ) );
-
-			// data type sanitizing
-			switch ( $field_args['data_type'] )
+			// parse value
+			$value = $this->parse_field_value( $field_name, $field_args );
+			if ( is_wp_error( $value ) )
 			{
-				case 'int':
-				case 'integer':
-					$value = intval( $value );
-					break;
-
-				case 'float':
-					$value = floatval( $value );
-					break;
-
-				case 'email':
-					$value = is_email( sanitize_email( $value ) );
-					break;
-
-				case 'key':
-					$value = sanitize_key( $value );
-					break;
-			}
-
-			// check required
-			if ( empty( $value ) && $field_args['required'] )
-			{
-				$errors->add( $field_name .'_required', sprintf( __( '%s is required', WCT_DOMAIN ), $field_args['label'] ) );
+				$errors->add( $value->get_error_code(), $value->get_error_message() );
 				continue;
-			}
-
-			// data input validation
-			switch( $field_args['input'] )
-			{
-				case 'radio':
-					if ( !isset( $field_args['options'][$value] ) )
-					{
-						if ( $field_args['required'] )
-							$errors->add( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
-
-						continue;
-					}
-					break;
-			}
-
-			// specific field handling
-			switch ( $field_name )
-			{
-				case 'measures_inputs':
-					if ( !isset( $_REQUEST[$field_name] ) || !is_array( $_REQUEST[$field_name] ) )
-					{
-						$errors->add( $field_name .'_required', sprintf( __( '%s is required', WCT_DOMAIN ), $field_args['label'] ) );
-						continue;
-					}
-
-					// check keys
-					$value = $_REQUEST[$field_name];
-					if ( array_keys( $value ) !== array_keys( $this->body_measurements ) )
-					{
-						$errors->add( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
-						continue;
-					}
-
-					// parse values
-					$value = array_map( array( &$this, 'parse_meausre' ), $_REQUEST[$field_name] );
-					break;
 			}
 
 			// meta key
@@ -509,8 +460,84 @@ class WC_Tailor_Account_Updates
 			}
 
 			// update values
-			update_user_meta( $user->ID, $meta_key, apply_filters( 'woocommerce_tailor_account_field_value', $value, $field_name, $field_args ) );
+			update_user_meta( $user->ID, $meta_key, apply_filters( 'woocommerce_tailor_account_save_field_value', $value, $field_name, $field_args ) );
 		}
+	}
+
+	/**
+	 * Parse field value
+	 * 
+	 * @param string $field_name
+	 * @param array $field_args
+	 * @param mixed $field_value
+	 * @return mixed|WP_Error
+	 */
+	public function parse_field_value( $field_name, $field_args, $field_value = null )
+	{
+		// sanitizing value
+		$value = is_null( $field_value ) ? wc_clean( filter_input( INPUT_POST, $field_name ) ) : wc_clean( $field_value );
+
+		// data type sanitizing
+		switch ( $field_args['data_type'] )
+		{
+			case 'int':
+			case 'integer':
+				$value = intval( $value );
+				break;
+
+			case 'float':
+				$value = floatval( $value );
+				break;
+
+			case 'email':
+				$value = is_email( sanitize_email( $value ) );
+				break;
+
+			case 'key':
+				$value = sanitize_key( $value );
+				break;
+		}
+
+		$is_empty = empty( $value );
+
+		// check required
+		if ( $is_empty && $field_args['required'] )
+			return new WP_Error( $field_name .'_required', sprintf( __( '%s is required', WCT_DOMAIN ), $field_args['label'] ) );
+
+		// data input validation
+		switch( $field_args['input'] )
+		{
+			case 'radio':
+				if ( !$is_empty && !isset( $field_args['options'][$value] ) )
+				{
+					// clear value
+					$value = '';
+
+					// return error
+					return new WP_Error( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
+				}
+				break;
+		}
+
+		// specific field handling
+		switch ( $field_name )
+		{
+			case 'measures_inputs':
+				if ( !isset( $_REQUEST[$field_name] ) || !is_array( $_REQUEST[$field_name] ) )
+					return new WP_Error( $field_name .'_required', sprintf( __( '%s is required', WCT_DOMAIN ), $field_args['label'] ) );
+
+				// check keys
+				$value = $_REQUEST[$field_name];
+				if ( array_keys( $value ) !== array_keys( $this->body_measurements ) )
+					return new WP_Error( $field_name .'_invalid', sprintf( __( '%s is not valid', WCT_DOMAIN ), $field_args['label'] ) );
+
+				// parse values
+				$value = array_map( array( &$this, 'parse_meausre' ), $_REQUEST[$field_name] );
+				break;
+		}
+
+		// return filtered value
+		return apply_filters( 'woocommerce_tailor_account_parse_field_value', $value, $field_name, $field_args );
 	}
 
 	/**
@@ -655,6 +682,9 @@ class WC_Tailor_Account_Updates
 		// parse args
 		$field_args = apply_filters( 'woocommerce_tailor_account_field_args', wp_parse_args( $field_args, $this->field_defaults ), $field_name );
 
+		// input name
+		$input_name = empty( $field_args['input_name'] ) ? $field_name : $field_args['input_name'];
+
 		// wrapper
 		$output = '<'. $field_args['wrapper_tag'] .' class="'. $field_args['wrapper_class'] .'" '. $field_args['wrapper_attrs'] .'>';
 
@@ -667,14 +697,14 @@ class WC_Tailor_Account_Updates
 			case 'text':
 			case 'email':
 			case 'password':
-				$output .= '<input type="'. $field_args['input'] .'" class="'. $field_args['input_class'] .'" name="'. $field_name .'" id="'. $field_name .'" value="'. esc_attr( $field_value ) .'" />';
+				$output .= '<input type="'. $field_args['input'] .'" class="'. $field_args['input_class'] .'" name="'. $input_name .'" id="'. $field_name .'" value="'. esc_attr( $field_value ) .'" />';
 				break;
 
 			case 'radio':
 				// loop values
 				foreach ( $field_args['options'] as $option_value => $option_label )
 				{
-					$output .= '<label class="'. $field_args['option_class'] .'"><input type="radio" class="'. $field_args['input_class'] .'" name="'. $field_name .'" value="'. $option_value .'"'. checked( $field_value, $option_value, false ) .'/> '. $option_label .'</label>';
+					$output .= '<label class="'. $field_args['option_class'] .'"><input type="radio" class="'. $field_args['input_class'] .'" name="'. $input_name .'" value="'. $option_value .'"'. checked( $field_value, $option_value, false ) .'/> '. $option_label .'</label>';
 				}
 				break;
 
@@ -708,8 +738,8 @@ class WC_Tailor_Account_Updates
 							$output .= '<label>'. $meausre_args['label'] .'</label>&nbsp;&nbsp;';
 
 							// inputs
-							$output .= '<input type="text" class="input-text input-cm" name="'. $field_name .'['. $meausre_name .'][cm]" value="'. floatval( $field_value[$meausre_name]['cm'] ) .'" /> cm &nbsp;';
-							$output .= '<input type="text" class="input-text input-inches" name="'. $field_name .'['. $meausre_name .'][inches]" value="'. floatval( $field_value[$meausre_name]['inches'] ) .'" /> inc.';
+							$output .= '<input type="text" class="input-text input-cm" name="'. $input_name .'['. $meausre_name .'][cm]" value="'. floatval( $field_value[$meausre_name]['cm'] ) .'" /> cm &nbsp;';
+							$output .= '<input type="text" class="input-text input-inches" name="'. $input_name .'['. $meausre_name .'][inches]" value="'. floatval( $field_value[$meausre_name]['inches'] ) .'" /> inc.';
 						}
 
 						// inputs end
@@ -742,5 +772,17 @@ class WC_Tailor_Account_Updates
 		return apply_filters( 'woocommerce_tailor_account_field_input', $output, $field_name, $field_value, $field_args );
 	}
 
+	/**
+	 * Get account details by section
+	 * 
+	 * @return array
+	 */
+	public function get_account_details_by_section( $section )
+	{
+		return array_filter( $this->account_details_fields, function( $field ) use ( $section ) {
+			// get only fields in body profile section
+			return $section === $field['section'];
+		} );
+	}
 }
 
