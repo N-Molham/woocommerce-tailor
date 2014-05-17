@@ -78,11 +78,37 @@ class WC_Tailor_Design_Wizard
 		add_filter( 'woocommerce_tailor_design_wizard_validate', array( &$this, 'validate_field_values' ) );
 
 		// cart additional fees
-		add_filter( 'woocommerce_cart_calculate_fees', array( &$this, 'cart_additional_fees' ) );
+		add_action( 'woocommerce_cart_calculate_fees', array( &$this, 'cart_additional_fees' ) );
+
+		// remove designed item from cart
+		add_action( 'woocommerce_before_cart_item_quantity_zero', array( &$this, 'remove_item_from_cart' ) );
 
 		// AJAX action handler
 		add_action( 'wp_ajax_'. self::AJAX_HANDLER_ACTION, array( &$this, 'add_to_cart_handler' ) );
 		add_action( 'wp_ajax_nopriv_'. self::AJAX_HANDLER_ACTION, array( &$this, 'add_to_cart_handler' ) );
+	}
+
+	/**
+	 * Remove designed item from cart
+	 * 
+	 * @param string $cart_item_key
+	 * @return void
+	 */
+	public function remove_item_from_cart( $cart_item_key )
+	{
+		// skip empty cart
+		if ( WC()->cart->cart_contents_count > 1 )
+			return;
+
+		// order info
+		$order_info = WC()->session->get( self::SESSION_ORDER_KEY, false );
+
+		// skip non related orders
+		if ( false === $order_info || ( isset( $order_info['cart_item_key'] ) && $cart_item_key !== $order_info['cart_item_key'] ) )
+			return;
+
+		// clear session
+		WC()->session->__unset( self::SESSION_ORDER_KEY );
 	}
 
 	/**
