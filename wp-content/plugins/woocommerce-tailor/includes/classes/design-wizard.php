@@ -97,14 +97,14 @@ class WC_Tailor_Design_Wizard
 	public function remove_item_from_cart( $cart_item_key )
 	{
 		// skip empty cart
-		if ( WC()->cart->cart_contents_count > 1 )
+		if ( !WC()->cart->cart_contents_count )
 			return;
 
 		// order info
-		$order_info = WC()->session->get( self::SESSION_ORDER_KEY, false );
+		$order_info = self::get_order_data();
 
 		// skip non related orders
-		if ( false === $order_info || ( isset( $order_info['cart_item_key'] ) && $cart_item_key !== $order_info['cart_item_key'] ) )
+		if ( $cart_item_key !== $order_info['cart_item_key'] )
 			return;
 
 		// clear session
@@ -120,17 +120,16 @@ class WC_Tailor_Design_Wizard
 	public function cart_additional_fees( $cart )
 	{
 		// skip empty cart
-		if ( $cart->cart_contents_count != 1 )
+		if ( !$cart->cart_contents_count )
 			return;
 
 		// order info
-		$order_info = WC()->session->get( self::SESSION_ORDER_KEY, false );
+		$order_info = self::get_order_data();
 
 		// skip non related orders
-		if ( false === $order_info || !isset( $cart->cart_contents[ $order_info['cart_item_key'] ] ) )
+		if ( !isset( $cart->cart_contents[ $order_info['cart_item_key'] ] ) )
 			return;
 
-		
 		// additional fees
 		foreach ( $order_info['shirt-characters'] as $selected_character )
 		{
@@ -167,8 +166,8 @@ class WC_Tailor_Design_Wizard
 		else
 			wc_add_notice( __( 'There are missing fields, please try again.', WCT_DOMAIN ), 'error' );
 
-		// clear cart content first
-		WC()->cart->empty_cart();
+		// clear previous order if there are 
+		self::clear_previous_order();
 
 		// add fabric to cart
 		$wizard_values['in_cart'] = WC()->cart->add_to_cart( $wizard_values['fabric'], 1, '', '', $wizard_values );
@@ -782,6 +781,42 @@ class WC_Tailor_Design_Wizard
 						),
 				),
 		);
+	}
+
+	/**
+	 * Clear previous designed order if there are one
+	 * 
+	 * @return void
+	 */
+	public static function clear_previous_order()
+	{
+		$order_info = self::get_order_data();
+
+		if ( !empty( $order_info['cart_item_key'] ) )
+		{
+			// remove from cart
+			WC()->cart->set_quantity( $order_info['cart_item_key'], 0 );
+
+			// destroy session data
+			WC()->session->__unset( self::SESSION_ORDER_KEY );
+		}
+	}
+
+	/**
+	 * Get order ( wizard ) data from session
+	 * 
+	 * @return array
+	 */
+	public static function get_order_data()
+	{
+		return apply_filters( 'woocommerce_tailor_design_wizard_session_data', WC()->session->get( self::SESSION_ORDER_KEY, array ( 
+				'fabric' => 0,
+				'gender' => '',
+				'body_profile' => array(),
+				'shirt-characters' => array( 'male' => array(), 'female' => array() ),
+				'in_cart' => false,
+				'cart_item_key' => '',
+		) ) );
 	}
 
 	/**
