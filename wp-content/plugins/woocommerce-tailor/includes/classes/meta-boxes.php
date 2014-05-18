@@ -87,6 +87,11 @@ class WC_Tailor_Meta_Boxes
 	{
 		switch ( $post_type )
 		{
+			// order details
+			case 'shop_order':
+				add_meta_box( 'wc_tailor_designed_item_details', __( 'Designed Item Details', WCT_DOMAIN ), array( &$this, 'meta_box_layout' ), $post_type, 'normal', 'default' );
+				break;
+
 			// product meta boxes
 			case 'product':
 				// enqueues

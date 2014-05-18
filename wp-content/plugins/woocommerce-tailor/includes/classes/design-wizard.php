@@ -99,26 +99,98 @@ class WC_Tailor_Design_Wizard
 
 		// override cart thumbnail
 		add_filter( 'woocommerce_cart_item_thumbnail', array( &$this, 'woocommerce_cart_item_thumbnail' ), 10, 3 );
+
+		// save order data
+		add_action( 'woocommerce_add_order_item_meta', array( &$this, 'save_order_data_meta' ), 10, 3 );
+
+		// override order details item data
+		add_filter( 'woocommerce_order_item_product', array( &$this, 'override_order_item_data' ), 10, 2 );
+
+		// override order details item name
+		add_filter( 'woocommerce_order_item_name', array( &$this, 'override_order_item_name' ), 10, 2 );
+	}
+
+	/**
+	 * Save order data in order meta
+	 * 
+	 * @param integer $item_id
+	 * @param mixed $values
+	 * @param string $cart_item_key
+	 * @return void
+	 */
+	public function save_order_data_meta( $item_id, $values, $cart_item_key )
+	{
+		$order_info = self::get_order_data();
+		if ( $cart_item_key === $order_info['cart_item_key'] )
+		{
+			// mark as designed item
+			wc_add_order_item_meta( $item_id, '_wct_designed_item', 'yes' );
+
+			// save in meta
+			wc_add_order_item_meta( $item_id, '_wct_order_info', $order_info );
+
+			// clear order data from session
+			WC()->session->__unset( self::SESSION_ORDER_KEY );
+		}
+	}
+
+	/**
+	 * Override order item name
+	 * 
+	 * @param string $item_name
+	 * @param array $item
+	 * @return string
+	 */
+	public function override_order_item_name( $item_name, $item )
+	{
+		if ( isset( $item['item_meta'] ) && isset( $item['item_meta']['_wct_designed_item'] ) && 'yes' === $item['item_meta']['_wct_designed_item'][0] ) 
+		{
+			// remove link
+			return sprintf( __( 'Designed Item\'s Fabric : <strong>%s</strong>', WCT_DOMAIN ), $item_name );
+		}
+
+		return $item_name;
+	}
+
+	/**
+	 * Override order item data
+	 * 
+	 * @param WC_Product $product
+	 * @param array $item
+	 * @return WC_Product
+	 */
+	public function override_order_item_data( $product, $item )
+	{
+		if ( isset( $item['item_meta'] ) && isset( $item['item_meta']['_wct_designed_item'] ) && 'yes' === $item['item_meta']['_wct_designed_item'][0] ) 
+		{
+			// remove link
+			$product->visibility = 'hidden';
+		}
+
+		return $product;
 	}
 
 	/**
 	 * Override cart item data
 	 * 
 	 * @param WC_Product $product
-	 * @param array $cart_item
+	 * @param array $item
 	 * @param string $cart_item_key
 	 * @return WC_Product
 	 */
-	public function override_cart_item_data( $product, $cart_item, $cart_item_key )
+	public function override_cart_item_data( $product, $item, $cart_item_key = false )
 	{
 		$order_info = self::get_order_data();
-		if ( $cart_item_key === $order_info['cart_item_key'] )
+		if ( 
+			$cart_item_key === $order_info['cart_item_key'] || 
+			( isset( $item['item_meta'] ) && isset( $item['item_meta']['_wct_designed_item'] ) && 'yes' === $item['item_meta']['_wct_designed_item'][0] ) 
+		)
 		{
 			// remove link
 			$product->visibility = 'hidden';
 
 			// change title
-			$product->post->post_title = __( 'Designed Item Selected Fabric', WCT_DOMAIN );
+			$product->post->post_title = sprintf( __( 'Designed Item\'s Fabric : <strong>%s</strong>', WCT_DOMAIN ), $product->get_title() );
 		}
 
 		return $product;
@@ -191,7 +263,7 @@ class WC_Tailor_Design_Wizard
 		$fee_data = null;
 
 		// additional fees
-		foreach ( $order_info['shirt-characters'] as $selected_character )
+		foreach ( $order_info['shirt-characters'] as $character_index => $selected_character )
 		{
 			$fee_data = array ( 
 					'name' => $selected_character['label'] .' : '. $selected_character['value_label'],
@@ -881,7 +953,7 @@ class WC_Tailor_Design_Wizard
 			WC()->cart->set_quantity( $order_info['cart_item_key'], 0 );
 
 			// destroy session data
-			WC()->session->__unset( self::SESSION_ORDER_KEY );
+			// WC()->session->__unset( self::SESSION_ORDER_KEY );
 		}
 	}
 
