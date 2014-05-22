@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Tailor Store\n"
-"POT-Creation-Date: 2014-05-17 21:31+0200\n"
-"PO-Revision-Date: 2014-05-17 21:31+0200\n"
+"POT-Creation-Date: 2014-05-22 18:56+0200\n"
+"PO-Revision-Date: 2014-05-22 18:56+0200\n"
 "Last-Translator: \n"
 "Language-Team: Nabeel Molham <n.molham@gmail.com>\n"
 "Language: en\n"
@@ -98,9 +98,41 @@ msgstr ""
 msgid "Save Changes"
 msgstr ""
 
+#: ../admin-pages/meta-box-designed-item-details.php:49
+msgid "Fabric"
+msgstr ""
+
+#: ../admin-pages/meta-box-designed-item-details.php:51
+#, php-format
+msgid "<a href=\"%s\" target=\"_blank\">%s</a>"
+msgstr ""
+
+#: ../admin-pages/meta-box-designed-item-details.php:56
+#: ../includes/classes/account-updates.php:158
+#: ../includes/classes/design-wizard.php:381
+#: ../includes/classes/design-wizard.php:715
+msgid "Gender"
+msgstr ""
+
+#: ../admin-pages/meta-box-designed-item-details.php:63
+#: ../includes/classes/account-updates.php:83
+msgid "Body Profile"
+msgstr ""
+
+#: ../admin-pages/meta-box-designed-item-details.php:87
+#: ../includes/classes/account-updates.php:79
+#: ../includes/classes/design-wizard.php:391
+msgid "Measurements"
+msgstr ""
+
+#: ../admin-pages/meta-box-designed-item-details.php:106
 #: ../admin-pages/shirt-characteristics.php:25
-#: ../includes/classes/admin-pages.php:46
+#: ../includes/classes/admin-pages.php:49
 msgid "Shirt's Characteristics"
+msgstr ""
+
+#: ../admin-pages/meta-box-designed-item-details.php:121
+msgid "No Designed item in this order."
 msgstr ""
 
 #: ../admin-pages/shirt-characteristics.php:33
@@ -175,14 +207,6 @@ msgid ""
 "more finely crafted My Bespoke Tailor custom shirts."
 msgstr ""
 
-#: ../includes/classes/account-updates.php:79
-msgid "Measurements"
-msgstr ""
-
-#: ../includes/classes/account-updates.php:83
-msgid "Body Profile"
-msgstr ""
-
 #: ../includes/classes/account-updates.php:93
 #, php-format
 msgid ""
@@ -214,19 +238,13 @@ msgstr ""
 msgid "Telephone Number"
 msgstr ""
 
-#: ../includes/classes/account-updates.php:158
-#: ../includes/classes/design-wizard.php:199
-#: ../includes/classes/design-wizard.php:518
-msgid "Gender"
-msgstr ""
-
 #: ../includes/classes/account-updates.php:165
-#: ../includes/classes/design-wizard.php:520
+#: ../includes/classes/design-wizard.php:717
 msgid "Male"
 msgstr ""
 
 #: ../includes/classes/account-updates.php:166
-#: ../includes/classes/design-wizard.php:521
+#: ../includes/classes/design-wizard.php:718
 msgid "Female"
 msgstr ""
 
@@ -432,7 +450,7 @@ msgstr ""
 
 #: ../includes/classes/account-updates.php:505
 #: ../includes/classes/account-updates.php:527
-#: ../includes/classes/design-wizard.php:183
+#: ../includes/classes/design-wizard.php:364
 #, php-format
 msgid "%s is required"
 msgstr ""
@@ -447,11 +465,11 @@ msgstr ""
 msgid "Instructions"
 msgstr ""
 
-#: ../includes/classes/admin-pages.php:43
+#: ../includes/classes/admin-pages.php:46
 msgid "WooCommerce Tailor"
 msgstr ""
 
-#: ../includes/classes/admin-pages.php:49
+#: ../includes/classes/admin-pages.php:52
 msgid "Design Wizard"
 msgstr ""
 
@@ -459,198 +477,213 @@ msgstr ""
 msgid "Target page not found."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:142
+#: ../includes/classes/design-wizard.php:149
+#: ../includes/classes/design-wizard.php:193
+#, php-format
+msgid "Designed Item's Fabric : <strong>%s</strong>"
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:317
 msgid "There are missing fields, please try again."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:166
+#: ../includes/classes/design-wizard.php:347
 msgid "Your order added successfully to the cart"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:184
+#: ../includes/classes/design-wizard.php:365
 #, php-format
 msgid "Invalid %s selection."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:192
+#: ../includes/classes/design-wizard.php:374
 msgid "Sorry, this product cannot be purchased."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:238
+#: ../includes/classes/design-wizard.php:391
+#, php-format
+msgid "Invalid %s values."
+msgstr ""
+
+#: ../includes/classes/design-wizard.php:433
 msgid "Shirt's Characteristics options are not selected yet."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:346
+#: ../includes/classes/design-wizard.php:541
 msgid "Any"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:376
+#: ../includes/classes/design-wizard.php:571
 msgid "Loading"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:381
+#: ../includes/classes/design-wizard.php:576
 msgid "Choose your favorite fabric"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:396
+#: ../includes/classes/design-wizard.php:591
 msgid "Filter"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:399
+#: ../includes/classes/design-wizard.php:594
 msgid "CLear"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:405
+#: ../includes/classes/design-wizard.php:600
 msgid "Please select a fabric first."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:460
-#: ../includes/classes/design-wizard.php:662
+#: ../includes/classes/design-wizard.php:655
+#: ../includes/classes/design-wizard.php:864
 msgid "Select"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:471
+#: ../includes/classes/design-wizard.php:666
 msgid "No Match Found"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:508
+#: ../includes/classes/design-wizard.php:705
 msgid "Select your shirt's characteristics"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:515
-#: ../includes/classes/design-wizard.php:562
+#: ../includes/classes/design-wizard.php:712
+#: ../includes/classes/design-wizard.php:759
 msgid "There are missing options."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:536
+#: ../includes/classes/design-wizard.php:733
 msgid "Picture"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:555
+#: ../includes/classes/design-wizard.php:752
 msgid "Measure Up"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:661
+#: ../includes/classes/design-wizard.php:863
 msgid "Selected"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:665
+#: ../includes/classes/design-wizard.php:867
 msgid "Cancel"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:666
+#: ../includes/classes/design-wizard.php:868
 msgid "current step:"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:667
+#: ../includes/classes/design-wizard.php:869
 msgid "Pagination"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:668
+#: ../includes/classes/design-wizard.php:870
 msgid "Finish"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:669
+#: ../includes/classes/design-wizard.php:871
 msgid "Next"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:670
+#: ../includes/classes/design-wizard.php:872
 msgid "Previous"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:671
+#: ../includes/classes/design-wizard.php:873
 msgid "Loading ..."
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:724
+#: ../includes/classes/design-wizard.php:926
 msgid "Black"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:725
+#: ../includes/classes/design-wizard.php:927
 msgid "Blue"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:726
+#: ../includes/classes/design-wizard.php:928
 msgid "Purple"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:727
+#: ../includes/classes/design-wizard.php:929
 msgid "Grey"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:728
+#: ../includes/classes/design-wizard.php:930
 msgid "Light Blue"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:729
+#: ../includes/classes/design-wizard.php:931
 msgid "Navy"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:730
+#: ../includes/classes/design-wizard.php:932
 msgid "Orange"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:731
+#: ../includes/classes/design-wizard.php:933
 msgid "Pink"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:732
+#: ../includes/classes/design-wizard.php:934
 msgid "Red"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:733
+#: ../includes/classes/design-wizard.php:935
 msgid "White"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:734
+#: ../includes/classes/design-wizard.php:936
 msgid "Yellow"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:735
+#: ../includes/classes/design-wizard.php:937
 msgid "Green"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:736
+#: ../includes/classes/design-wizard.php:938
 msgid "Brown"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:737
+#: ../includes/classes/design-wizard.php:939
 msgid "Dark Purple"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:738
+#: ../includes/classes/design-wizard.php:940
 msgid "Aqua"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:744
+#: ../includes/classes/design-wizard.php:946
 msgid "Check"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:745
+#: ../includes/classes/design-wizard.php:947
 msgid "Plain"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:746
+#: ../includes/classes/design-wizard.php:948
 msgid "Stripe"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:769
+#: ../includes/classes/design-wizard.php:1031
 msgid "Color"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:770
+#: ../includes/classes/design-wizard.php:1032
 msgid "Pattern"
 msgstr ""
 
-#: ../includes/classes/design-wizard.php:771
+#: ../includes/classes/design-wizard.php:1033
 msgid "Maximum Price"
 msgstr ""
 
-#: ../includes/classes/meta-boxes.php:98
+#: ../includes/classes/meta-boxes.php:96
+msgid "Designed Item Details"
+msgstr ""
+
+#: ../includes/classes/meta-boxes.php:107
 msgid "Product Filter Options"
 msgstr ""
 
-#: ../includes/classes/meta-boxes.php:125
+#: ../includes/classes/meta-boxes.php:134
 msgid "Meta box not found."
 msgstr ""
 

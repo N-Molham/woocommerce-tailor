@@ -29,6 +29,9 @@ class WC_Tailor_Admin_Pages
 
 		// Setup admin pages
 		add_action( 'admin_menu', array( &$this, 'setup_admin_pages' ) );
+
+		// global enqueues
+		add_action( 'admin_enqueue_scripts', array( &$this, 'enqueue_scripts_styles' ) );
 	}
 
 	/**
@@ -50,9 +53,6 @@ class WC_Tailor_Admin_Pages
 
 		foreach ( $this->pages_hooks as $page_name => $page_hook )
 		{
-			// global enqueue styles
-			add_action( 'admin_print_styles-'.$page_hook, array( &$this, 'enqueue_scripts_styles' ) );
-
 			// page actions
 			if ( method_exists( $this, 'page_action_'. $page_name ) )
 				add_action( 'load-'. $page_hook, array( &$this, 'page_action_'. $page_name ) );
