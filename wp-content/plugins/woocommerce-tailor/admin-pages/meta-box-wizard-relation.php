@@ -20,6 +20,10 @@ echo '<div class="panel woocommerce_options_panel">';
 // filters loop
 foreach ( $design_wizard_filters as $filter_name => $filter_data )
 {
+	// skip price filter
+	if ( 'max_price' == $filter_name )
+		continue;
+
 	// input value
 	$value = (array) get_post_meta( $post->ID, $filters_meta_keys[$filter_name] );
 

@@ -54,6 +54,10 @@ class WC_Tailor_Meta_Boxes
 
 				foreach ( $design_wizard_filters as $filter_name => $filter_data )
 				{
+					// skip price filter
+					if ( 'max_price' == $filter_name )
+						continue;
+
 					// clean old values
 					delete_post_meta( $post_id, $meta_keys[$filter_name] );
 

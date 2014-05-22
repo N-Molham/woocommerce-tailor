@@ -619,6 +619,9 @@ class WC_Tailor_Design_Wizard
 				// product item start
 				$out .= '<li class="'. join( ' ', get_post_class( $classes, $product->id ) ) .'">';
 
+				// product title
+				$out .= '<h3>'. apply_filters( 'the_title', $product->post->post_title, $product->id ) .'</h3>';
+
 				// image link
 				$out .= '<a href="'. esc_attr( wp_get_attachment_url( get_post_thumbnail_id( $product->id ) ) ) .'" title="'. esc_attr( $product->post->post_title ) .'" class="lightbox" data-rel="prettyPhoto">';
 				if ( has_post_thumbnail( $product->id ) )
@@ -627,11 +630,8 @@ class WC_Tailor_Design_Wizard
 					$out .= wc_placeholder_img( 'shop_catalog' );
 				$out .= '</a>';
 
-				// product title
-				$out .= '<h3>'. apply_filters( 'the_title', $product->post->post_title, $product->id ) .'</h3>';
-
 				// product short description
-				$out .= '<p class="excerpt">'. apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $product->post->post_excerpt ) ) .'</p>';
+				$out .= '<div class="excerpt">'. apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $product->post->post_excerpt ) ) .'</div>';
 
 				// price
 				$out .= '<span class="price">'. $product->get_price_html() .'</span>';
@@ -683,6 +683,8 @@ class WC_Tailor_Design_Wizard
 		// current logged-in user
 		$user = wp_get_current_user();
 		$user_gender = $user->exists() ? $user->gender : '';
+		if ( '' == $user_gender || empty( $user_gender ) )
+			$user_gender = 'male';
 
 		// step two
 		$out .= '<h3>'. __( 'Select your shirt\'s characteristics', WCT_DOMAIN ) .'</h3>';
