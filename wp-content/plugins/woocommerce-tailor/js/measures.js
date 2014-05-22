@@ -3,7 +3,7 @@
  */
 ( function( window ) {
 	jQuery( function( $ ) {
-		$account_details = $( '#account-details' );
+		$account_details = $( '#account-details, #wct-design-wizard' );
 		if ( $account_details.length ) {
 			// gender value holder
 			var selected_gender = '',
@@ -15,7 +15,7 @@
 				$instructions = $measures.find( '.instructions' );
 
 			// gender change
-			var $genders = $account_details.find( 'input[name=account_gender]' ).on( 'change measure-change', function( e ) {
+			var $genders = $account_details.find( 'input[name=account_gender], input[type=radio].user-gender' ).on( 'change measure-change', function( e ) {
 				// save selected
 				selected_gender = e.target.value;
 

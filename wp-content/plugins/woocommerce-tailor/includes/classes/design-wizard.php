@@ -302,19 +302,21 @@ class WC_Tailor_Design_Wizard
 					'fabric' => 0,
 					'gender' => '',
 					'body_profile' => array(),
+					'measures' => array(),
 					'shirt-characters' => array( 'male' => array(), 'female' => array() ),
 			) );
 
 			// validate values
+			// see self::validate_field_values
 			$wizard_values = apply_filters( 'woocommerce_tailor_design_wizard_validate', $wizard_values );
 
 			// check validation errors
-			$no_errors = wc_notice_count( 'error' ) > 0;
+			$no_errors = wc_notice_count( 'error' ) == 0;
 		}
 		else
 			wc_add_notice( __( 'There are missing fields, please try again.', WCT_DOMAIN ), 'error' );
 
-		if ( !$no_errors )
+		if ( $no_errors )
 		{
 			// clear previous order if there are 
 			self::clear_previous_order();
@@ -379,6 +381,19 @@ class WC_Tailor_Design_Wizard
 			wc_add_notice( sprintf( $invalid_value_template, __( 'Gender', WCT_DOMAIN ) ), 'error' );
 			return false;
 		}
+
+		// check measurements
+		$measurements = WC_Tailor()->account_updates->account_details_fields['measures_inputs'];
+
+		// measures list
+		if ( array_keys( $wizard_values['measures'] ) !== array_keys( WC_Tailor()->account_updates->body_measurements ) )
+		{
+			wc_add_notice( sprintf( __( 'Invalid %s values.', WCT_DOMAIN ), __( 'Measurements', WCT_DOMAIN ) ), 'error' );
+			return false;
+		}
+
+		// sanitize measures values
+		$wizard_values['measures'] = array_map( array( &WC_Tailor()->account_updates, 'parse_meausre' ), $wizard_values['measures'] );
 
 		// check body profile values
 		$body_profile_fields = WC_Tailor()->account_updates->get_account_details_by_section( 'body_profile' );
@@ -743,6 +758,11 @@ class WC_Tailor_Design_Wizard
 		// missing selections errors
 		$out .= '<div class="wizard-errors"><p class="woocommerce-error error-body-profile hidden">'. __( 'There are missing options.', WCT_DOMAIN ) .'</p></div>';
 
+		// measurements fields
+		$measurements = WC_Tailor()->account_updates->account_details_fields['measures_inputs'];
+		$measurements['input_name'] = self::INPUTS_PREFIX .'[measures]';
+		$out .= WC_Tailor()->account_updates->render_field_output( 'measures_inputs', $measurements, null, $user );
+
 		// body profile fields
 		$body_profile_fields = WC_Tailor()->account_updates->get_account_details_by_section( 'body_profile' );
 
@@ -974,6 +994,7 @@ class WC_Tailor_Design_Wizard
 					'fabric' => 0,
 					'gender' => '',
 					'body_profile' => array(),
+					'measures' => array(),
 					'shirt-characters' => array(),
 					'in_cart' => false,
 					'cart_item_key' => '',

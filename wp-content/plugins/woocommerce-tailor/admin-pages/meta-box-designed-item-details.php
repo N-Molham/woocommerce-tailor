@@ -24,6 +24,17 @@ foreach ( $order_items as $order_item_id => $order_item_data )
 	if ( !is_array( $item_data ) )
 		continue;
 
+	// default values
+	$item_data = wp_parse_args( $item_data, array ( 
+			'fabric' => 0,
+			'gender' => '',
+			'body_profile' => array(),
+			'measures' => array(),
+			'shirt-characters' => array(),
+			'in_cart' => false,
+			'cart_item_key' => '',
+	) );
+
 	// it has a designed item
 	$has_designed_item = true;
 
@@ -40,15 +51,17 @@ foreach ( $order_items as $order_item_id => $order_item_data )
 	printf( __( '<a href="%s" target="_blank">%s</a>', WCT_DOMAIN ), admin_url( 'post.php?post='. $fabic_product->id .'&action=edit' ), $fabic_product->get_title() );
 	echo '</p></div>';
 
-	// 
+	// gender
 	echo '<div class="options_group"><p class="form-field">';
 	echo '<label>', __( 'Gender', WCT_DOMAIN ) ,'</label>';
 	echo ucwords( $item_data['gender'] );
 	echo '</p></div>';
 
 	// body profile
-	echo '<div class="options_group"><p class="form-field">';
-	echo '<label>', __( 'Body Profile', WCT_DOMAIN ) ,'</label>';
+	echo '<div class="options_group"><br/>';
+	echo '<table class="wc_status_table widefat wct-focus-table">';
+	echo '<thead><tr><th colspan="2">', __( 'Body Profile', WCT_DOMAIN ) ,'</th></tr></thead>';
+	echo '<tbody>';
 	foreach ( $body_profile_fields as $field_name => $field_args )
 	{
 		$option_key = str_replace( 'body_profile_', '', $field_name );
@@ -56,7 +69,7 @@ foreach ( $order_items as $order_item_id => $order_item_data )
 			continue;
 
 		// option name
-		echo '<strong>', preg_replace( '/<span.+/', '', $field_args['label'] ) ,'</strong> : ';
+		echo '<tr><td>', preg_replace( '/<span.+/', '', $field_args['label'] ) ,'</td><td>';
 
 		// option selected value
 		if ( 'radio' === $field_args['input'] )
@@ -64,22 +77,41 @@ foreach ( $order_items as $order_item_id => $order_item_data )
 		elseif ( 'text' === $field_args['input'] )
 			echo number_format( $item_data['body_profile'][$option_key], 2 ), $field_args['description'];
 
-		echo '<br />';
+		echo '</td></tr>';
 	}
-	echo '</p></div>';
+	echo '</tbody></table><br/></div>';
 
-	// 
-	echo '<div class="options_group"><p class="form-field">';
-	echo '<label>', __( 'Shirt\'s Characteristics', WCT_DOMAIN ) ,'</label>';
+	// measurements
+	echo '<div class="options_group"><br/>';
+	echo '<table class="wc_status_table widefat wct-focus-table">';
+	echo '<thead><tr><th colspan="3">', __( 'Measurements', WCT_DOMAIN ) ,'</th></tr></thead>';
+	echo '<tbody>';
+	foreach ( WC_Tailor()->account_updates->body_measurements as $measure_name => $measure_info )
+	{
+		if ( !isset( $item_data['measures'][$measure_name] ) )
+			continue;
+
+		// measure label
+		echo '<tr><td>', $measure_info['label'] ,'</td>';
+		echo '<td>', $item_data['measures'][$measure_name]['cm'], ' cm</td>';
+		echo '<td>', $item_data['measures'][$measure_name]['inches'], ' inches</td>';
+
+		echo '</tr>';
+	}
+	echo '</tbody></table><br/></div>';
+
+	// shirt characteristics
+	echo '<div class="options_group"><br/>';
+	echo '<table class="wc_status_table widefat wct-focus-table">';
+	echo '<thead><tr><th colspan="2">', __( 'Shirt\'s Characteristics', WCT_DOMAIN ) ,'</th></tr></thead>';
+	echo '<tbody>';
 	foreach ( $item_data['shirt-characters'] as $character )
 	{
-		// name
-		echo '<strong>', $character['label'] ,'</strong> : ';
-
-		// selected value
-		echo $character['value_label'], '<br />';
+		echo '<tr><td>', $character['label'] ,'</td>';
+		echo '<td>', $character['value_label'], '</td>';
+		echo '</tr>';
 	}
-	echo '</p></div>';
+	echo '</tbody></table><br/></div>';
 
 	// panel end
 	echo '</div>';

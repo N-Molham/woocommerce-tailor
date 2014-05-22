@@ -1,5 +1,11 @@
 @CHARSET "UTF-8";
 
+.wct-focus-table tbody tr:hover,
+table.wc_status_table tr:nth-child(2n):hover td {
+	background-color: #F1F1F1;
+	font-weight: bold;
+}
+
 .shirt-chars .form-table textarea {
 	height: 8em;
 }
