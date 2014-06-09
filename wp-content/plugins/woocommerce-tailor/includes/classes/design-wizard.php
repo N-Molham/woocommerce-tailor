@@ -534,7 +534,7 @@ class WC_Tailor_Design_Wizard
 			}
 
 			// filter layout
-			$filters_layout .= '<label class="filter">'. $filter_labels[$filter_name] .'&nbsp;&nbsp;';
+			$filters_layout .= '<label class="filter"><span>'. $filter_labels[$filter_name] .'</span>';
 			$filters_layout .= '<select name="filter_'. $filter_name .'" class="filter-options">';
 
 			// default
