@@ -135,6 +135,23 @@ class WC_Tailor
 
 		// front-end global enqueues
 		add_action( 'template_redirect', array( &$this, 'frontend_global_enqueues' ) );
+
+		// add top mnu
+		add_action( 'wp_footer', array( &$this, 'top_navigation_menu' ) );
+	}
+
+	/**
+	 * Top navigation menu
+	 * 
+	 * @return void
+	 */
+	public function top_navigation_menu()
+	{
+		echo '<div id="top-menu"><div class="container"><div class="sixteen columns"><ul class="menu">';
+		echo '<li><a href="', get_permalink( wc_get_page_id( 'myaccount' ) ) ,'">', __( 'My Account', WCT_DOMAIN ) ,'</a></li>';
+		echo '<li><a href="', get_permalink( wc_get_page_id( 'cart' ) ) ,'">', __( 'Cart', WCT_DOMAIN ) ,' ( ', WC()->cart->cart_contents_count ,' )</a></li>';
+		echo '<li><a href="', get_permalink( wc_get_page_id( 'checkout' ) ) ,'">', __( 'Checkout', WCT_DOMAIN ) ,'</a></li>';
+		echo '</ul></div></div></div>';
 	}
 
 	/**

@@ -500,6 +500,30 @@
 	text-align: left;
 }
 
+#Wrapper {
+	margin-top: 1.6em;
+}
+
+#top-menu {
+	position: absolute;
+	top: 6px;
+	left: 50%;
+	-webkit-transform: translateX(-50%);
+	-moz-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+	-o-transform: translateX(-50%);
+	transform: translateX(-50%);
+}
+
+#top-menu ul {
+	text-align: right;
+}
+
+#top-menu li {
+	display: inline-block;
+	margin-left: 0.6em;
+}
+
 @media only screen and ( max-width: 959px ) {
 
 	#Content .content {
