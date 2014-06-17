@@ -524,6 +524,19 @@
 	margin-left: 0.6em;
 }
 
+.woocommerce .cart .button-fees {
+	float: right !important;
+	visibility: hidden;
+}
+ 
+.woocommerce .shop_table tr.cart_item:hover .button-fees {
+	visibility: visible;
+}
+
+#cart-fees .fee-highlight {
+	background: rgba(0, 0, 0, 0.1);
+}
+
 @media only screen and ( max-width: 959px ) {
 
 	#Content .content {
