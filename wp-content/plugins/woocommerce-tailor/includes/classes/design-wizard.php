@@ -625,7 +625,8 @@ class WC_Tailor_Design_Wizard
 
 		if ( $query->post_count )
 		{
-			$out .= '<ul class="products">';
+			$out .= woocommerce_product_loop_start( false );
+
 			// products loop
 			/* @var $product WC_Product */
 			for ( $i = 0; $i < $query->post_count; $i++ )
@@ -644,6 +645,10 @@ class WC_Tailor_Design_Wizard
 
 				// product item start
 				$out .= '<li class="'. join( ' ', get_post_class( $classes, $product->id ) ) .'">';
+
+				// flash sale
+				if ( $product->is_on_sale() )
+					$out .= apply_filters( 'woocommerce_sale_flash', '<span class="onsale">' . __( 'Sale!', 'woocommerce' ) . '</span>', $product->post, $product );
 
 				// product title
 				$out .= '<h3>'. apply_filters( 'the_title', $product->post->post_title, $product->id ) .'</h3>';
@@ -669,7 +674,8 @@ class WC_Tailor_Design_Wizard
 				// product item end
 				$out .= '</li>';
 			}
-			$out .= '</ul>';
+
+			$out .= woocommerce_product_loop_end( false );
 		}
 		else
 		{

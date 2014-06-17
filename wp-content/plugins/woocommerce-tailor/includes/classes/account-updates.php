@@ -89,6 +89,9 @@ class WC_Tailor_Account_Updates
 				),
 		) );
 
+		// add edit billing & orders link
+		$this->account_details_sections['personal_info']['description'] .= '<p><a href="'. get_permalink( wc_get_page_id( 'myaccount' ) ) .'" class="button">'. __( 'Billing &amp; Orders Details', WCT_DOMAIN ) .'</a></p>';
+
 		// body profile field picture template
 		$body_profile_pic_template = '<span class="field-picture">'. __( '&nbsp;( <a href="%s" title="%s" target="_blank" class="bp-image fancybox">picture</a> )', WCT_DOMAIN ) .'</span>';
 
