@@ -419,6 +419,35 @@ class WC_Tailor_Account_Updates
 
 		// register js & css enqueues
 		wp_register_script( 'wct-measures-js', WC_TAILOR_URL .'js/measures.js', array( 'wct-shared-js' ), false, true );
+
+		// save new order measures
+		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'save_new_order_meaures' ) );
+	}
+
+	/**
+	 * Save newly created order measures to account details profile 
+	 * 
+	 * @param integer $order_id
+	 * @return void
+	 */
+	public function save_new_order_meaures( $order_id )
+	{
+		$orders_info = WC_Tailor_Design_Wizard::get_orders_data();
+		if ( empty( $orders_info ) )
+			return;
+
+		$last_item_key = end( array_keys( $orders_info ) );
+		if ( !$last_item_key || !isset( $orders_info[ $last_item_key ] ) )
+			return;
+
+		$order = new WC_Order( $order_id );
+		$customer_id = $order->customer_user;
+
+		// update measurements
+		update_user_meta( $customer_id, 'measurements', $orders_info[ $last_item_key ]['measures'] );
+
+		// update body profile
+		update_user_meta( $customer_id, 'body_profile', $orders_info[ $last_item_key ]['body_profile'] );
 	}
 
 	/**
