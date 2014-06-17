@@ -19,7 +19,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 <?php do_action( 'woocommerce_before_cart_table' ); ?>
 
-<table class="shop_table cart" cellspacing="0">
+<table id="cart-table" class="shop_table cart" cellspacing="0">
 	<thead>
 		<tr>
 			<th class="product-remove">&nbsp;</th>
@@ -59,7 +59,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 						?>
 					</td>
 
-					<td class="product-name">
+					<td class="product-name clearfix">
 						<?php
 							if ( ! $_product->is_visible() )
 								echo apply_filters( 'woocommerce_cart_item_name', $_product->get_title(), $cart_item, $cart_item_key );

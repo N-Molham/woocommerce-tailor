@@ -120,14 +120,14 @@ class WC_Tailor_Design_Wizard
 	 */
 	public function save_order_data_meta( $item_id, $values, $cart_item_key )
 	{
-		$order_info = self::get_order_data();
-		if ( $cart_item_key === $order_info['cart_item_key'] )
+		$orders_info = self::get_orders_data();
+		if ( isset( $orders_info[ $cart_item_key ] ) )
 		{
 			// mark as designed item
 			wc_add_order_item_meta( $item_id, '_wct_designed_item', 'yes' );
 
 			// save in meta
-			wc_add_order_item_meta( $item_id, '_wct_order_info', $order_info );
+			wc_add_order_item_meta( $item_id, '_wct_order_info', $orders_info[ $cart_item_key ] );
 
 			// clear order data from session
 			WC()->session->__unset( self::SESSION_ORDER_KEY );
@@ -180,9 +180,9 @@ class WC_Tailor_Design_Wizard
 	 */
 	public function override_cart_item_data( $product, $item, $cart_item_key = false )
 	{
-		$order_info = self::get_order_data();
+		$orders_info = self::get_orders_data();
 		if ( 
-			$cart_item_key === $order_info['cart_item_key'] || 
+			isset( $orders_info[ $cart_item_key ] ) || 
 			( isset( $item['item_meta'] ) && isset( $item['item_meta']['_wct_designed_item'] ) && 'yes' === $item['item_meta']['_wct_designed_item'][0] ) 
 		)
 		{
@@ -191,13 +191,16 @@ class WC_Tailor_Design_Wizard
 
 			// change title
 			$product->post->post_title = sprintf( __( 'Designed Item\'s Fabric : <strong>%s</strong>', WCT_DOMAIN ), $product->get_title() );
+
+			// highlight fees
+			$product->post->post_title .= '&nbsp;&nbsp;<input type="button" class="button button-fees" data-product="'. $product->id .'" value="'. __( 'Show Fees', WCT_DOMAIN ) .'" />';
 		}
 
 		return $product;
 	}
 
 	/**
-	 * Override cart item data
+	 * Override cart item thumbnail image
 	 * 
 	 * @param string $thumbnail
 	 * @param array $cart_item
@@ -206,8 +209,8 @@ class WC_Tailor_Design_Wizard
 	 */
 	public function woocommerce_cart_item_thumbnail( $thumbnail, $cart_item, $cart_item_key )
 	{
-		$order_info = self::get_order_data();
-		if ( $cart_item_key === $order_info['cart_item_key'] )
+		$orders_info = self::get_orders_data();
+		if ( isset( $orders_info[ $cart_item_key ] ) )
 		{
 			// add fancybox lightbox to full size fabric image
 			return '<a href="'. esc_attr( wp_get_attachment_url( get_post_thumbnail_id( $cart_item['data']->id ) ) ) .'" title="'. esc_attr( $cart_item['data']->post_title ) .'" class="fancybox">'. $thumbnail .'</a>';
@@ -229,15 +232,8 @@ class WC_Tailor_Design_Wizard
 		if ( !WC()->cart->cart_contents_count )
 			return;
 
-		// order info
-		$order_info = self::get_order_data();
-
-		// skip non related orders
-		if ( $cart_item_key !== $order_info['cart_item_key'] )
-			return;
-
-		// clear session
-		WC()->session->__unset( self::SESSION_ORDER_KEY );
+		// clear order data from session
+		self::remove_order_data( $cart_item_key );
 	}
 
 	/**
@@ -252,31 +248,42 @@ class WC_Tailor_Design_Wizard
 		if ( !$cart->cart_contents_count )
 			return;
 
-		// order info
-		$order_info = self::get_order_data();
+		// orders info
+		$orders_info = self::get_orders_data();
 
-		// skip non related orders
-		if ( !isset( $cart->cart_contents[ $order_info['cart_item_key'] ] ) )
-			return;
-
-		$cart_item = $cart->cart_contents[ $order_info['cart_item_key'] ];
-		$fee_data = null;
-
-		// additional fees
-		foreach ( $order_info['shirt-characters'] as $character_index => $selected_character )
+		// loop orders
+		foreach ( $orders_info as $order_cart_key => $order_info )
 		{
-			$fee_data = array ( 
-					'name' => $selected_character['label'] .' : '. $selected_character['value_label'],
-					'amount' => $cart_item['quantity'] * $selected_character['value_price'],
-					'taxable' => false,
-					'tax_class' => '',
-			);
+			// skip non related orders
+			if ( !isset( $cart->cart_contents[ $order_cart_key ] ) )
+				return;
 
-			$fee_data = apply_filters( 'woocommerce_tailor_design_wizard_cart_add_data', $fee_data, $selected_character, $cart_item );
-			if ( false === $fee_data )
-				continue;
+			$cart_item = &$cart->cart_contents[ $order_cart_key ];
+			$fee_data = null;
 
-			$cart->add_fee( $fee_data['name'], $fee_data['amount'], $fee_data['taxable'], $fee_data['tax_class'] );
+			// additional fees
+			foreach ( $order_info['shirt-characters'] as $character_index => $selected_character )
+			{
+				$fee_data = array ( 
+						'name' => $selected_character['label'] .' : '. $selected_character['value_label'],
+						'amount' => $cart_item['quantity'] * $selected_character['value_price'],
+						'taxable' => false,
+						'tax_class' => '',
+				);
+
+				// allow plugins to discard fee
+				$fee_data = apply_filters( 'woocommerce_tailor_design_wizard_cart_add_data', $fee_data, $selected_character, $cart_item );
+				if ( false === $fee_data )
+					continue;
+
+				$cart->add_fee( $fee_data['name'], $fee_data['amount'], $fee_data['taxable'], $fee_data['tax_class'] );
+
+				// get added fee key index
+				$fee_index = max( array_keys( $cart->fees ) );
+
+				// relate fee to product item id
+				$cart->fees[ $fee_index ]->product_id = $order_info['fabric'];
+			}
 		}
 	}
 
@@ -319,7 +326,7 @@ class WC_Tailor_Design_Wizard
 		if ( $no_errors )
 		{
 			// clear previous order if there are 
-			self::clear_previous_order();
+			// self::clear_previous_order();
 
 			// add fabric to cart
 			$wizard_values['in_cart'] = WC()->cart->add_to_cart( $wizard_values['fabric'], 1, '', '', $wizard_values );
@@ -341,7 +348,7 @@ class WC_Tailor_Design_Wizard
 		$wizard_values['cart_item_key'] = current( array_keys( $cart_content ) );
 
 		// save order information
-		self::set_order_data( $wizard_values );
+		self::add_order_data( $wizard_values );
 
 		// add success message
 		wc_add_notice( __( 'Your order added successfully to the cart', WCT_DOMAIN ) );
@@ -961,44 +968,17 @@ class WC_Tailor_Design_Wizard
 	}
 
 	/**
-	 * Clear previous designed order if there are one
-	 * 
-	 * @return void
-	 */
-	public static function clear_previous_order()
-	{
-		$order_info = self::get_order_data();
-
-		if ( !empty( $order_info['cart_item_key'] ) )
-		{
-			// remove from cart
-			WC()->cart->set_quantity( $order_info['cart_item_key'], 0 );
-
-			// destroy session data
-			// WC()->session->__unset( self::SESSION_ORDER_KEY );
-		}
-	}
-
-	/**
-	 * Get order ( wizard ) data from session
+	 * Get orders ( wizard ) data from session
 	 * 
 	 * @param boolean $force_session
 	 * @return array
 	 */
-	public static function get_order_data( $force_session = false )
+	public static function get_orders_data( $force_session = false )
 	{
 		if ( $force_session || is_null( self::$_order_info ) )
 		{
 			// get from session
-			self::$_order_info = WC()->session->get( self::SESSION_ORDER_KEY, array ( 
-					'fabric' => 0,
-					'gender' => '',
-					'body_profile' => array(),
-					'measures' => array(),
-					'shirt-characters' => array(),
-					'in_cart' => false,
-					'cart_item_key' => '',
-			) );
+			self::$_order_info = WC()->session->get( self::SESSION_ORDER_KEY, array() );
 		}
 
 		// return filters one
@@ -1006,18 +986,38 @@ class WC_Tailor_Design_Wizard
 	}
 
 	/**
-	 * Set order ( wizard ) data from session
+	 * Add order ( wizard ) data from session
 	 * 
 	 * @param array $order_data
 	 * @return void
 	 */
-	public static function set_order_data( $order_data )
+	public static function add_order_data( $order_data )
 	{
+		self::$_order_info = self::get_orders_data( true );
+
 		// set instence variable
-		self::$_order_info = $order_data;
+		self::$_order_info[ $order_data['cart_item_key'] ] = $order_data;
 
 		// set session
-		WC()->session->set( self::SESSION_ORDER_KEY, $order_data );
+		WC()->session->set( self::SESSION_ORDER_KEY, self::$_order_info );
+	}
+
+	/**
+	 * Remove order data from session
+	 * 
+	 * @param string $cart_item_key
+	 * @return void
+	 */
+	public static function remove_order_data( $cart_item_key )
+	{
+		self::$_order_info = self::get_orders_data();
+ 
+		// remove data order data
+		if ( isset( self::$_order_info[ $cart_item_key ] ) )
+			unset( self::$_order_info[ $cart_item_key ] );
+
+		// set session
+		WC()->session->set( self::SESSION_ORDER_KEY, self::$_order_info );
 	}
 
 	/**

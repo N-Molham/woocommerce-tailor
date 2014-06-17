@@ -165,6 +165,10 @@ class WC_Tailor
 		 * Styles
 		 */
 		wp_enqueue_style( 'wct-style' );
+
+		// cart page
+		if ( get_post()->ID == wc_get_page_id( 'cart' ) )
+			wp_enqueue_script( 'wct-cart', WC_TAILOR_URL .'js/cart.js', array( 'wct-shared-js' ), false, true );
 	}
 
 	/**
