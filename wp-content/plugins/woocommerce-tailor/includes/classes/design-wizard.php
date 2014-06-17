@@ -180,7 +180,7 @@ class WC_Tailor_Design_Wizard
 	 */
 	public function override_cart_item_data( $product, $item, $cart_item_key = false )
 	{
-		$orders_info = self::get_orders_data();
+		$orders_info = self::get_orders_data(); // dump_data( $orders_info );
 		if ( 
 			isset( $orders_info[ $cart_item_key ] ) || 
 			( isset( $item['item_meta'] ) && isset( $item['item_meta']['_wct_designed_item'] ) && 'yes' === $item['item_meta']['_wct_designed_item'][0] ) 
@@ -192,8 +192,12 @@ class WC_Tailor_Design_Wizard
 			// change title
 			$product->post->post_title = sprintf( __( 'Designed Item\'s Fabric : <strong>%s</strong>', WCT_DOMAIN ), $product->get_title() );
 
-			// highlight fees
-			$product->post->post_title .= '&nbsp;&nbsp;<input type="button" class="button button-fees" data-product="'. $product->id .'" value="'. __( 'Show Fees', WCT_DOMAIN ) .'" />';
+			$current_page = get_post();
+			if ( $current_page && $current_page->ID == wc_get_page_id( 'cart' ) )
+			{
+				// highlight fees
+				$product->post->post_title .= '&nbsp;&nbsp;<input type="button" class="button button-fees" data-product="'. $product->id .'" value="'. __( 'Show Fees', WCT_DOMAIN ) .'" />';
+			}
 		}
 
 		return $product;
