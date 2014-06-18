@@ -762,8 +762,8 @@ class WC_Tailor_Design_Wizard
 				$out .= '<label class="input-label">'. $character_data['label'];
 
 				// picture & description
-				$href = "javascript:jQuery.prettyPhoto.open( '{$character_data['picture']}', '{$character_data['label']}', '". esc_sql( $character_data['desc'] ) ."' );";
-				$out .= '<br/>( <a href="'. $href .'">'. __( 'Picture', WCT_DOMAIN ) .'</a> )</label>';
+				$on_click = "javascript:jQuery.prettyPhoto.open( '{$character_data['picture']}', '{$character_data['label']}', '". esc_sql( $character_data['desc'] ) ."' );";
+				$out .= '<br/>( <a href="javascript:void(0)" onclick="'. $on_click .'">'. __( 'Picture', WCT_DOMAIN ) .'</a> )</label>';
 
 				$out .= '<p class="input-options">';
 				foreach ( $character_data['values']['label'] as $value_index => $value_label )
