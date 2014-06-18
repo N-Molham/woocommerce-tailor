@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 		<?php foreach ( WC()->cart->get_fees() as $fee ) : ?>
 			<tr class="fee <?php echo isset( $fee->product_id ) ? esc_attr( 'design-fee product-'. $fee->product_id ) : ''; ?>">
-				<th><?php echo esc_html( $fee->name ); ?></th>
+				<th><?php echo htmlspecialchars_decode( $fee->name ); ?></th>
 				<td><?php wc_cart_totals_fee_html( $fee ); ?></td>
 			</tr>
 		<?php endforeach; ?>
