@@ -202,7 +202,7 @@ class WC_Tailor_Account_Updates
 				),
 				'body_profile_bshape' => array ( 
 						'label' => __( 'Body Shape', WCT_DOMAIN ) . sprintf( $body_profile_pic_template, esc_attr( $image_dir .'body-profile/bodyshape_m.gif' ), __( 'Body Shape', WCT_DOMAIN ) ),
-						'meta_key' => array( 'body_profile', 'body_shape' ),
+						'meta_key' => array( 'body_profile', 'bshape' ),
 						'input' => 'radio',
 						'input_class' => 'input-radio',
 						'wrapper_class' => 'form-row form-row-wide gender-male body-profile',

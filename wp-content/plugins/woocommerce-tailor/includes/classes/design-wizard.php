@@ -265,11 +265,15 @@ class WC_Tailor_Design_Wizard
 			$cart_item = &$cart->cart_contents[ $order_cart_key ];
 			$fee_data = null;
 
+			// fabrics product name
+			$product = get_product( $order_info['fabric'] );
+			$product_name = $product->get_title();
+
 			// additional fees
 			foreach ( $order_info['shirt-characters'] as $character_index => $selected_character )
 			{
 				$fee_data = array ( 
-						'name' => $selected_character['label'] .' : '. $selected_character['value_label'],
+						'name' => '<p><strong>( '. $product_name .' )</strong></p>'. $selected_character['label'] .' : '. $selected_character['value_label'],
 						'amount' => $cart_item['quantity'] * $selected_character['value_price'],
 						'taxable' => false,
 						'tax_class' => '',
@@ -712,9 +716,21 @@ class WC_Tailor_Design_Wizard
 
 		/*********************{{ Step Two : Shirt's Characteristics options }}*********************/
 
+		// last order design
+		$last_order = self::get_last_orders_data();
+
 		// current logged-in user
 		$user = wp_get_current_user();
-		$user_gender = $user->exists() ? $user->gender : '';
+		if ( $last_order )
+		{
+			// get gender from last order
+			$user_gender = $last_order['gender'];
+		}
+		else
+		{
+			// get gender from user data
+			$user_gender = $user->exists() ? $user->gender : '';
+		}
 		if ( '' == $user_gender || empty( $user_gender ) )
 			$user_gender = 'male';
 
@@ -778,7 +794,10 @@ class WC_Tailor_Design_Wizard
 		// measurements fields
 		$measurements = WC_Tailor()->account_updates->account_details_fields['measures_inputs'];
 		$measurements['input_name'] = self::INPUTS_PREFIX .'[measures]';
-		$out .= WC_Tailor()->account_updates->render_field_output( 'measures_inputs', $measurements, null, $user );
+		if ( $last_order )
+			$out .= WC_Tailor()->account_updates->render_field_output( 'measures_inputs', $measurements, $last_order['measures'] );
+		else
+			$out .= WC_Tailor()->account_updates->render_field_output( 'measures_inputs', $measurements, null, $user );
 
 		// body profile fields
 		$body_profile_fields = WC_Tailor()->account_updates->get_account_details_by_section( 'body_profile' );
@@ -788,9 +807,13 @@ class WC_Tailor_Design_Wizard
 		{
 			// change inputs names
 			$field_args['input_name'] = str_replace( 'body_profile_', self::INPUTS_PREFIX .'[body_profile][', $field_name ) .']';
+			$last_order_field_key = $field_args['meta_key'][1];
 
 			// field layout
-			$out .= WC_Tailor()->account_updates->render_field_output( $field_name, $field_args, null, $user );
+			if ( $last_order && isset( $last_order['body_profile'][ $last_order_field_key ] ) )
+				$out .= WC_Tailor()->account_updates->render_field_output( $field_name, $field_args, $last_order['body_profile'][ $last_order_field_key ] );
+			else
+				$out .= WC_Tailor()->account_updates->render_field_output( $field_name, $field_args, null, $user );
 		}
 
 		// after
@@ -993,6 +1016,22 @@ class WC_Tailor_Design_Wizard
 
 		// return filters one
 		return apply_filters( 'woocommerce_tailor_design_wizard_session_data', self::$_order_info );
+	}
+
+	/**
+	 * Get last orders data
+	 * 
+	 * @return array|boolean
+	 */
+	public static function get_last_orders_data()
+	{
+		$orders = self::get_orders_data();
+
+		$last_order_key = end( array_keys( $orders ) );
+		if ( !$last_order_key )
+			return false;
+
+		return apply_filters( 'woocommerce_tailor_last_order_data', $orders[ $last_order_key ] );
 	}
 
 	/**
