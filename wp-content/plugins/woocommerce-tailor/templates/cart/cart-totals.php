@@ -39,11 +39,30 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 		<?php endif; ?>
 
+		<?php $fee_headers = array(); ?>
 		<?php foreach ( WC()->cart->get_fees() as $fee ) : ?>
-			<tr class="fee <?php echo isset( $fee->product_id ) ? esc_attr( 'design-fee product-'. $fee->product_id ) : ''; ?>">
-				<th><?php echo htmlspecialchars_decode( $fee->name ); ?></th>
-				<td><?php wc_cart_totals_fee_html( $fee ); ?></td>
-			</tr>
+			<?php if ( isset( $fee->product_id ) ) : ?>
+			<!-- Wizard fee -->
+				<?php if ( !in_array( $fee->product_id, $fee_headers ) ) : ?>
+					<tr class="fee fee-header <?php echo esc_attr( 'design-fee product-'. $fee->product_id ); ?>">
+						<th><?php 
+						echo '<strong>( ', $fee->product_name ,' )</strong>';
+						$fee_headers[] = $fee->product_id;
+						?></th>
+						<td>-</td>
+					</tr>
+				<?php endif; ?>
+				<tr class="fee <?php echo esc_attr( 'design-fee product-'. $fee->product_id ); ?>">
+					<th><?php echo $fee->fee_name; ?></th>
+					<td><?php wc_cart_totals_fee_html( $fee ); ?></td>
+				</tr>
+			<?php else: ?>
+			<!-- Normal fee -->
+				<tr class="fee">
+					<th><?php echo esc_html( $fee->name ); ?></th>
+					<td><?php wc_cart_totals_fee_html( $fee ); ?></td>
+				</tr>
+			<?php endif; ?>
 		<?php endforeach; ?>
 
 		<?php if ( WC()->cart->tax_display_cart == 'excl' ) : ?>

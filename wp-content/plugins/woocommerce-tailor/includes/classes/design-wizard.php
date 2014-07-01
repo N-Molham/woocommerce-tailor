@@ -273,7 +273,7 @@ class WC_Tailor_Design_Wizard
 			foreach ( $order_info['shirt-characters'] as $character_index => $selected_character )
 			{
 				$fee_data = array ( 
-						'name' => '<p><strong>( '. $product_name .' )</strong></p>'. $selected_character['label'] .' : '. $selected_character['value_label'],
+						'name' => $order_info['fabric'] .'|'. $selected_character['label'] .'|'. $selected_character['value_label'],
 						'amount' => $cart_item['quantity'] * $selected_character['value_price'],
 						'taxable' => false,
 						'tax_class' => '',
@@ -291,6 +291,8 @@ class WC_Tailor_Design_Wizard
 
 				// relate fee to product item id
 				$cart->fees[ $fee_index ]->product_id = $order_info['fabric'];
+				$cart->fees[ $fee_index ]->product_name = $product_name;
+				$cart->fees[ $fee_index ]->fee_name = $selected_character['label'] .' : '. $selected_character['value_label'];
 			}
 		}
 	}
